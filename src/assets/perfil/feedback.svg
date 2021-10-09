@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="19px" height="18px" viewBox="0 0 19 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    
+    <g id="área-de-usuario" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="Menu-superpuesto" transform="translate(-10.000000, -335.000000)" stroke="#858585" stroke-width="0.8">
+            <g id="Group-507" transform="translate(10.000000, 335.000000)">
+                <polygon id="Stroke-281" points="9.2 2.8 10.296 6.1736 13.844 6.1736 10.9736 8.2592 12 11.6 9.2 9.5472 6.4 11.6 7.4264 8.2592 4.556 6.1736 8.104 6.1736"></polygon>
+                <path d="M9.2,0.4 C4.34,0.4 0.4,3.6232 0.4,7.6 C0.4,9.6904 1.4952,11.5664 3.2336,12.8816 L2,17.2 L5.628,14.1768 C6.7208,14.5744 7.9272,14.8 9.2,14.8 C14.06,14.8 18,11.5768 18,7.6 C18,3.6232 14.06,0.4 9.2,0.4 L9.2,0.4 Z" id="Stroke-282"></path>
+            </g>
+        </g>
+    </g>
+</svg>

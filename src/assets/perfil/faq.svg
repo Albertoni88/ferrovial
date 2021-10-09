@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="16px" viewBox="0 0 20 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    
+    <g id="área-de-usuario" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="Menu-superpuesto" transform="translate(-9.000000, -384.000000)" stroke="#858585" stroke-width="0.8">
+            <g id="Group-86" transform="translate(9.000000, 384.000000)">
+                <path d="M18.8,10.4 C18.8,7.9696 16.2928,6 13.2,6 C10.1072,6 7.6,7.9696 7.6,10.4 C7.6,12.8304 10.1072,14.8 13.2,14.8 C13.8608,14.8 14.492,14.7056 15.0808,14.54 L17.2,15.6 L16.532,13.9304 C17.9056,13.1288 18.8,11.848 18.8,10.4 L18.8,10.4 Z" id="Stroke-82"></path>
+                <path d="M7.6,11.6 L6.1352,11.5456 C5.4824,11.472 4.8576,11.3208 4.2792,11.0976 L2,12.4 L2.9824,10.436 C1.4144,9.412 0.4,7.808 0.4,6 C0.4,2.9072 3.3552,0.4 7,0.4 C9.9912,0.4 12.5144,2.0904 13.3248,4.4056 L13.6,6" id="Stroke-84"></path>
+            </g>
+        </g>
+    </g>
+</svg>
