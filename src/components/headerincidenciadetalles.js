@@ -7,7 +7,7 @@ import {
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { height } from 'styled-system';
-
+import SVG from './svg';
 
 
 const windowWidth = Dimensions.get('window').width;
@@ -25,7 +25,7 @@ export default function HeaderIncidenciaDetalles({ navigation, filtrar }) {
                 style={styles.iconBackContainer}
                 onPress={() => navigation.goBack()}
             >
-                <Icon
+                {/* <Icon
                     style={{
                         flex: 0.2
                     }}
@@ -35,7 +35,15 @@ export default function HeaderIncidenciaDetalles({ navigation, filtrar }) {
                     name="chevron-back-outline"
                     color={COLORS.primary}
                     size={30}
-                />
+                /> */}
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.goBack()
+                    }}
+                    style={styles.containerSVGBack}
+                >
+                    <SVG nombre={'VolverPrimario'} width={22} height={18} />
+                </TouchableOpacity>
                 <Text
                     style={{
                         flex: 1,
@@ -47,7 +55,7 @@ export default function HeaderIncidenciaDetalles({ navigation, filtrar }) {
                     }}>
                     Valdepeñas
                 </Text>
-                <Icon
+                {/* <Icon
                     style={{
                         flex: 0.2
                     }}
@@ -57,16 +65,51 @@ export default function HeaderIncidenciaDetalles({ navigation, filtrar }) {
                     name="cloud-upload-outline"
                     color={COLORS.primary}
                     size={40}
-                />
+                /> */}
+                <TouchableOpacity
+                    onPress={() => {
+
+                    }}
+                    style={styles.containerSVGSubir}
+                >
+                    <SVG nombre={'Subir'} width={22} height={25} />
+                </TouchableOpacity>
             </TouchableOpacity>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
+    containerSVGBack: {
+        alignContent: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'center',
+        // left: 15,
+        marginLeft: (windowWidth * 4) / 100,
+        zIndex: 1111111,
+        width: 22,
+        height: 18,
+        borderStyle: "solid",
+        borderColor: COLORS.primary
+    },
+    containerSVGSubir: {
+        // alignContent: 'center',
+        // justifyContent: 'center',
+        // alignItems: 'center',
+        // alignSelf: 'center',
+        left: -15,
+        marginLeft: 10,
+        zIndex: 1111111,
+        width: 22,
+        height: 25,
+        borderStyle: "solid",
+        borderColor: COLORS.primary
+    },
     containerWebView: {
-        top: 12,
-        width: '100%',
+        // flexDirection : 'row',
+        // width : '100%',
+        top: 12,        
         height: 65,
         zIndex: 9999,
     },

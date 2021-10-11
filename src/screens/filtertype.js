@@ -31,25 +31,17 @@ export default function FilterType({ navigation, route, props }) {
 
     const dispatch = useReduxDispatch();
 
-    // const [filtros, setFiltros] = useState(useReduxSelector((state) => state.user.filtros));
-    // const [filtrosOriginals, setFiltrosOriginals] = useState(useReduxSelector((state) => state.user.filtrosOriginals));
-    // const [marcados, setMarcados] = useState(useReduxSelector((state) => state.user.marcados));
-    // const [marcadosAuxiliar, setMarcadosAuxiliar] = useState(useReduxSelector((state) => state.user.marcadosOriginals));
+    
 
-    const filtros = useState(useReduxSelector((state) => state.user.filtros));
-    const filtrosOriginals = useState(useReduxSelector((state) => state.user.filtrosOriginals));
-    const marcados = useState(useReduxSelector((state) => state.user.marcados));
-    const marcadosAuxiliar = useState(useReduxSelector((state) => state.user.marcadosOriginals));
+    const filtros = useReduxSelector((state) => state.user.filtros);
+    const filtrosOriginals = useReduxSelector((state) => state.user.filtrosOriginals);
+    const marcados = useReduxSelector((state) => state.user.marcados);
+    const marcadosAuxiliar = useReduxSelector((state) => state.user.marcadosOriginals);
 
     const token = useReduxSelector((state) => state.user.access_token);
     //const filtros = useState(useReduxSelector((state) => state.user.filtros));
 
     useEffect(() => {
-        // const token = await AsyncStorage.getItem('@access_token');
-        //alert("JSON.stringify(state)" + JSON.stringify(token));
-        // const token = useSelector((state) => state.access_token)
-
-        // alert("token " + JSON.stringify(token))
         if (route.params.filtro === 'tipo') {
             axios
                 .get(URL_SERVER + 'rest/tipo-incidencia?_format=json&nombre=ad',
@@ -60,31 +52,38 @@ export default function FilterType({ navigation, route, props }) {
                     }
                 )
                 .then(async response => {
-                    //alert("response.tipo " + JSON.stringify(response))  
-                    // if (response.status === 200) {
-
-                    // setFiltros(response.data);
                     dispatch(guardarFiltros(response.data))
                     dispatch(guardarFiltrosOriginals(response.data))
                     dispatch(guardarMarcados(true))
                     dispatch(guardarMarcadosOriginals(false))
-                    //alert("filtrossss " + JSON.stringify(filtros))  
-
-
-                    // } else {
-                    //     //alert("else")
-                    // }
                 })
                 .catch(error => {
                     alert("error1 " + error)
                 });
         }
-        // alert("filtros " + JSON.stringify(marcados))
+        if (route.params.filtro === 'estado') {
+            axios
+                .get(URL_SERVER + 'rest/tipo-incidencia?_format=json&nombre=ad',
+                    {
+                        headers: {
+                            'Authorization': 'Bearer ' + token,
+                        }
+                    }
+                )
+                .then(async response => {
+                    dispatch(guardarFiltros(response.data))
+                    dispatch(guardarFiltrosOriginals(response.data))
+                    dispatch(guardarMarcados(true))
+                    dispatch(guardarMarcadosOriginals(false))
+                })
+                .catch(error => {
+                    alert("error1 " + error)
+                });
+        }
     }, []);
     const Filtrar = (searchString) => {
         if (searchString === '') {
-            // setFiltros(filtrosOriginals);
-            dispatch(guardarFiltros(useReduxSelector((state) => state.user.filtrosOriginals)))
+            dispatch(guardarFiltros(filtrosOriginals))
             dispatch(guardarMarcados(true))
         } else {
             var filtrados = [];
@@ -101,42 +100,32 @@ export default function FilterType({ navigation, route, props }) {
         var array = [];
         if (marcado === false) {
 
-            marcadosAuxiliar.forEach((element, index) => {
+            marcados.forEach((element, index) => {
                 if (indice === index) {
-                    //alert("indice " + indice + " marcado " + marcado)
                     array.push(true);
                 }
                 else {
-                    array.push(marcadosAuxiliar[index])
+                    array.push(marcados[index])
                 }
             });
-            //setMarcadosAuxiliar(array);
-            // setMarcados(array);
             dispatch(guardarMarcadosArray(array));
         }
         if (marcado === true) {
-
-            marcadosAuxiliar.forEach((element, index) => {
+            marcados.forEach((element, index) => {
                 if (indice === index) {
-                    //alert("indice " + indice + " marcado " + marcado)
                     array.push(false);
                 }
                 else {
-                    if (marcadosAuxiliar[index] === false) {
+                    if (marcados[index] === false) {
                         cantidadMarcados++;
                     }
-                    array.push(marcadosAuxiliar[index])
+                    array.push(marcados[index])
                 }
             });
-            if (cantidadMarcados === marcadosAuxiliar.length - 1) {
-                // setMarcadosAuxiliar([false, false, false, false]);
-                // setMarcados([true, true, true, true]);
-                const marcadosOriginals = useReduxSelector((state) => state.user.marcadosOriginals)
-                setMarcadosAuxiliar(marcadosOriginals);
-                setMarcados(Array(marcadosOriginals.length).fill(true));
+            if (cantidadMarcados === marcados.length - 1) {
+                const marcadosOriginals = marcadosAuxiliar
+                dispatch(guardarMarcados(true));
             } else {
-                //setMarcadosAuxiliar(array);
-                // setMarcados(array);
                 dispatch(guardarMarcadosArray(array));
             }
         }
@@ -146,15 +135,13 @@ export default function FilterType({ navigation, route, props }) {
             <HeaderFilterType filtrar={Filtrar} navigation={navigation} />
             <View style={{ marginBottom: 27 }}></View>
             {
-                (filtros !== null && filtros !== undefined) &&
-                <View>
+                (filtros !== null && filtros !== undefined && marcadosAuxiliar !== null && marcadosAuxiliar !==undefined) &&
+                <View style = {{ width : '100%'}}>
                     {
                         filtros.map((fil, indice) => {
-                            // alert("filtros " + JSON.stringify(filtros))
-                            //alert("marcados " + JSON.stringify(marcados))
                             return (
                                 <View key = {indice}>
-                                    <CardFilterType filter={fil} changemarcado={ChangeMarcado} indice={indice} marcadoauxiliar={marcadosAuxiliar[indice]} marcado={marcados[indice]} />
+                                    <CardFilterType filter={fil} changemarcado={ChangeMarcado} indice={indice} marcadoauxiliar={marcados[indice]} marcado={marcados[indice]} />
                                 </View>
                             );
                         })}
@@ -180,8 +167,7 @@ const styles = StyleSheet.create({
         height: 50,
         fontSize: 15,
         borderRadius: 10,
-        backgroundColor: 'white',
-        //marginLeft: 15
+        backgroundColor: 'white',        
     },
     descripcion: {
         marginTop: 15,

@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="25px" height="25px" viewBox="0 0 25 25" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="21px" height="17px" viewBox="0 0 21 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     
-    <g id="Iconos-/-Visibilidad-/-No-visible" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Group-3" transform="translate(3.000000, 5.000313)" stroke="#979797">
-            <g id="Group-2" transform="translate(0.000000, 1.999687)">
-                <g id="Group" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M0,5.54010695 C6.15698242,12.7580431 12.4810791,12.7513587 18.97229,5.52005348" id="Path-2"></path>
-                    <path d="M0,0.0200534759 C6.15698242,7.23798967 12.4810791,7.23130518 18.97229,0" id="Path-2-Copy" transform="translate(9.486145, 2.714248) scale(1, -1) translate(-9.486145, -2.714248) "></path>
-                </g>
-                <circle id="Oval" cx="9.5" cy="5.5" r="3.5"></circle>
-            </g>
-            <line x1="16.4994141" y1="0" x2="1.49984375" y2="14.9995703" id="Path-4" stroke-linecap="round"></line>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group" transform="translate(1.000000, 1.000313)" stroke="#979797">
+            <path d="M0,7.53979395 C6.15698242,14.7577301 12.4810791,14.7510457 18.97229,7.51974048" id="Path-2" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M0,2.01973958 C6.15698242,9.23767578 12.4810791,9.23099129 18.97229,1.99968611" id="Path-2-Copy" stroke-linecap="round" stroke-linejoin="round" transform="translate(9.486145, 4.713935) scale(-1, 1) rotate(-180.000000) translate(-9.486145, -4.713935) "></path>
+            <circle id="Oval" cx="9.5" cy="7.499687" r="3.5"></circle>
+            <line x1="16.4994141" y1="8.8817842e-16" x2="1.49984375" y2="14.9995703" id="Path-4" stroke-linecap="round"></line>
         </g>
     </g>
 </svg>

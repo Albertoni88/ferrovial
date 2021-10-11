@@ -1,4 +1,9 @@
 import React, { useState, useEffect, useRef, createRef } from 'react';
+import {
+    useDispatch as useReduxDispatch,
+    useSelector as useReduxSelector
+} from 'react-redux';
+import axios from 'axios';
 import { Button, Dimensions, Image, TextInput, View, Text, TouchableOpacity, Alert, Platform, StyleSheet } from 'react-native';
 import { Thumbnail, List, ListItem, Separator } from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -10,7 +15,7 @@ import {
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { height } from 'styled-system';
-
+import { URL_SERVER } from '../constants/urls';
 
 
 const windowWidth = Dimensions.get('window').width;
@@ -20,53 +25,72 @@ export default function PreguntasFrecuentes({ navigation, props }) {
 
     const [toggleCheckBox, setToggleCheckBox] = useState(false);
     const [checked, setChecked] = React.useState(false);
-    const SECTIONS = [
-        {
-            title: '¿Cuando tengo que pagar mi cuota?',
-            content: 'Al final de cada mes se te cobrará el importe correspondiente a tu suscripción.',
-        },
-        {
-            title: 'Second',
-            content: 'Lorem ipsum...',
-        },
-    ];
+    const [SECTIONS, SetSections] = useState([]);
     const [acordiones, setAcordiones] = useState(Array(SECTIONS.length).fill(false));
     const [acordionesOriginals, setAcordionesOriginals] = useState(Array(SECTIONS.length).fill(false));
+    const token = useReduxSelector((state) => state.user.access_token);
 
     const [activeSections, setActiveSections] = useState([]);
+
+    useEffect(() => {
+        axios.get(URL_SERVER + 'rest/faqs?_format=json',
+            {
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                }
+            }
+        )
+            .then(response => {
+                //alert("response faqs " + JSON.stringify(response.data))
+                SetSections(response.data);
+                setAcordiones(Array(SECTIONS.length).fill(false));
+                alert("acordiones " + JSON.stringify(acordiones));
+            })
+            .catch(error => {
+                alert("error1 " + error)
+            });
+    }, [SECTIONS]);
 
 
     const _renderSectionTitle = (section) => {
         return null;
-        // return (
-        //     <View style={{ marginVertical: 5 }}>
-        //         <Text style={{ fontWeight: 'bold' }}>{section.content}</Text>
-        //     </View>
-        // );
     };
 
     const _renderHeader = (section, index) => {
-        //alert("header section " + JSON.stringify(section) + " index " + index);
-        //alert("acordiones[index] " + acordiones[index]);
+        
         if (acordiones[index] === false) {
             return (
                 <View style={{
-                    width: 343,
+                    marginTop: 12,
+                    //marginBottom: 12,
+                    // width: 343,
+                    width: (windowWidth * 93.6) / 100,
                     height: 44,
                     borderRadius: 8,
                     backgroundColor: "rgba(255, 255, 255, 0.25)",
-                    shadowColor: "rgba(0, 0, 0, 0.1)",
-                    shadowOffset: {
-                        width: 0,
-                        height: 5
-                    },
-                    shadowRadius: 10,
-                    shadowOpacity: 1,
+                    // shadowColor: "rgba(0, 0, 0, 0.1)",
+                    // shadowOffset: {
+                    //     width: 0,
+                    //     height: 5
+                    // },
+                    // shadowRadius: 10,
+                    // shadowOpacity: 1,
                     textAlign: 'center',
                     justifyContent: 'center',
                     alignItems: 'center',
                     alignSelf: 'center',
-                    //marginBottom: 12
+                    alignSelf: 'center',
+                    // height: (windowHeight * 9.35) / 100,
+                    // width: (windowWidth * 93.6) / 100,
+                    borderRadius: 12,
+                    backgroundColor: 'white',
+                    shadowColor: "rgba(0, 0, 0, 0.2)",
+                    shadowOffset: {
+                        width: 0,
+                        height: 0
+                    },
+                    shadowRadius: 15,
+                    shadowOpacity: 1,
 
                 }}>
                     <Text style={{
@@ -82,14 +106,16 @@ export default function PreguntasFrecuentes({ navigation, props }) {
                         justifyContent: 'center',
                         alignItems: 'center',
                         alignSelf: 'center'
-                    }}>{section.title}</Text>
+                    }}>{section.nombre}</Text>
                 </View>
             );
         } else {
             return (
                 <View style={{
-                    width: 343,
+                    // width: 343,
+                    width: (windowWidth * 93.6) / 100,
                     height: 43,
+                    marginTop: 12,
                     borderRadius: 8,
                     backgroundColor: COLORS.primary,
                     textAlign: 'center',
@@ -112,7 +138,7 @@ export default function PreguntasFrecuentes({ navigation, props }) {
                         alignItems: 'center',
                         alignSelf: 'center',
                         //marginBottom: 12
-                    }}>{section.title}</Text>
+                    }}>{section.nombre}</Text>
                 </View>
             );
         }
@@ -121,17 +147,47 @@ export default function PreguntasFrecuentes({ navigation, props }) {
     const _renderContent = (section) => {
         return (
             <View style={{
-                width: 343,
+                // zindex : 1111,
+                width: (windowWidth * 93.6) / 100,
                 height: 107,
+                marginTop: 12,
+                // borderRadius: 8,
+                // backgroundColor: "rgba(255, 255, 255, 0.25)",
+                // shadowColor: "rgba(0, 0, 0, 0.2)",
+                // shadowOffset: {
+                //     width: 0,
+                //     height: 0
+                // },
+                // shadowRadius: 10,
+                // shadowOpacity: 1,
                 borderRadius: 8,
-                backgroundColor: "rgba(255, 255, 255, 0.25)",
-                shadowColor: "rgba(0, 0, 0, 0.1)",
+                backgroundColor: 'white',
+                shadowColor: "rgba(0, 0, 0, 0.2)",
                 shadowOffset: {
                     width: 0,
-                    height: 5
+                    height: 0
                 },
-                shadowRadius: 10,
-                shadowOpacity: 1,
+                shadowRadius: 8,
+                shadowOpacity: 0.5,
+
+                alignSelf: 'center',
+                marginTop: 12,
+                height: (windowHeight * 9.35) / 100,
+                width: (windowWidth * 93.6) / 100,
+
+                // alignSelf: 'center',
+                //marginTop: 12,
+                // // height: (windowHeight * 9.35) / 100,
+                // // width: (windowWidth * 93.6) / 100,
+                // borderRadius: 12,
+                // backgroundColor: 'white',
+                // shadowColor: "rgba(0, 0, 0, 0.2)",
+                // shadowOffset: {
+                //     width: 0,
+                //     height: 0
+                // },
+                // shadowRadius: 15,
+                // shadowOpacity: 1,
             }}>
                 <Text style={{
                     width: 305,
@@ -148,7 +204,7 @@ export default function PreguntasFrecuentes({ navigation, props }) {
                     alignItems: 'center',
                     alignSelf: 'center',
                     marginTop: 12
-                }}>{section.content}</Text>
+                }}>{section.descripcion}</Text>
             </View>
         );
     };
@@ -162,11 +218,6 @@ export default function PreguntasFrecuentes({ navigation, props }) {
         setAcordiones(aux);
         setActiveSections(activeSections)
     };
-
-
-    useEffect(() => {
-        // alert("navigation " + JSON.stringify(navigation))
-    }, []);
 
     return (
         <View style={{ backgroundColor: 'rgb(247, 247, 247)', textAlign: 'center', alignItems: 'center', flex: 1, }}>
@@ -207,23 +258,41 @@ export default function PreguntasFrecuentes({ navigation, props }) {
                 </View>
             </View>
 
+            {/* <View style={[styles.card, styles.shadowProp]}>
+                <View>
+                    <Text style={styles.heading}>
+                        React Native Box Shadow (Shadow Props)
+                    </Text>
+                </View>
+                <Text>
+                    Using the elevation style prop to apply box-shadow for iOS devices
+                </Text>
+            </View> */}
+
         </View>
-        // <View style={{ backgroundColor: 'white', textAlign: 'center', alignItems: 'center', flex: 1, }}>
-        //     <SideBarHeader texto={'Preguntas frecuentes'} navigation={navigation} />
-        //     <View style={{ alignContent: 'center', marginTop: 10, flexDirection: 'row' }}>
-        //         <View style={{ flexDirection: 'column', }}>
-        // <AccordionList
-        //     list={list}
-        //     header={_head}
-        //     body={_body}
-        //     keyExtractor={item => `${item.id}`}
-        // />
-        //         </View>
-        //     </View>
-        // </View>
     );
 }
 const styles = StyleSheet.create({
+
+    heading: {
+        fontSize: 18,
+        fontWeight: '600',
+        marginBottom: 13,
+    },
+    card: {
+        backgroundColor: 'white',
+        borderRadius: 8,
+        paddingVertical: 45,
+        paddingHorizontal: 25,
+        width: '100%',
+        marginVertical: 10,
+    },
+    shadowProp: {
+        shadowColor: '#171717',
+        shadowOffset: { width: -2, height: 4 },
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
+    },
     checkbox: {
         alignSelf: "center",
     },

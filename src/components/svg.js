@@ -120,6 +120,22 @@ export default function SVG({ navigation, width, height, nombre }) {
                     source={require('../assets/perfil/infoprod.svg')}
                 />
             }
+            {
+                nombre === 'Corazon' &&
+                <SvgUri
+                    width={width}
+                    height={height}
+                    source={require('../assets/Corazon.svg')}
+                />
+            }
+            {
+                nombre === 'Subir' &&
+                <SvgUri
+                    width={width}
+                    height={height}
+                    source={require('../assets/Subir.svg')}
+                />
+            }
         </View>
     )
 

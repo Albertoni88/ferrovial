@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import * as Progress from 'react-native-progress';
 import { marginTop } from 'styled-system';
-
+import SVG from '../svg';
 import { COLORS } from '../../constants';
 import {
     widthPercentageToDP as wp,
@@ -33,10 +33,10 @@ export default function CarIncidenciaMapa({ navigation, props, incidencia }) {
                 <TouchableOpacity
                     style={styles.container}
                     onPress={() => {
-                        navigation.navigate('IncidenciaDetalles', { incidencia: incidencia });
+                        //navigation.navigate('IncidenciaDetalles', { incidencia: incidencia });
                     }}>
                     <ImageBackground
-                        source={require('../../assets/1.png')}
+                        source={{ uri: incidencia.imagen }}
                         style={styles.imageContainer}
                         imageStyle={styles.image}>
                         <View style={{ flexDirection: 'row' }}>
@@ -64,10 +64,7 @@ export default function CarIncidenciaMapa({ navigation, props, incidencia }) {
                                     size={15}
                                 />
                                 <Text style={{
-                                    // color: 'white',
-                                    // fontSize: 15,
                                     textAlign: 'left',
-                                    // marginTop: 5
                                     width: 54,
                                     height: 14,
                                     fontFamily: "nunito-regular",
@@ -84,20 +81,13 @@ export default function CarIncidenciaMapa({ navigation, props, incidencia }) {
                                     {incidencia.fecha}
                                 </Text>
                             </View>
-                            <Icon
+                            <TouchableOpacity
                                 onPress={() => {
 
                                 }}
-                                style={{
-                                    flex: 1,
-                                    textAlign: 'right',
-                                    marginRight: 11,
-                                    marginTop: 8
-                                }}
-                                name="heart-outline"
-                                color="white"
-                                size={30}
-                            />
+                                style={styles.containerSVGheart}>
+                                <SVG nombre={'Corazon'} width={22} height={18} />
+                            </TouchableOpacity>
                         </View>
                     </ImageBackground>
                 </TouchableOpacity>
@@ -124,14 +114,15 @@ export default function CarIncidenciaMapa({ navigation, props, incidencia }) {
                         letterSpacing: 0,
                         color: COLORS.browngrey
                     }}>
-                        {incidencia.autor}
+                        {incidencia.autor_username}
                     </Text>
                     <Icon
                         onPress={() => {
 
                         }}
                         style={{
-                            marginLeft: 100,
+                            marginLeft: 40,
+                            marginLeft: Platform.OS === 'ios' ? 50 : 40,
                         }}
                         name="location-outline"
                         color="grey"
@@ -147,7 +138,7 @@ export default function CarIncidenciaMapa({ navigation, props, incidencia }) {
                         letterSpacing: 0,
                         color: COLORS.browngrey
                     }}>
-                        {incidencia.categoria}
+                        {incidencia.tipo_incidencia}
                     </Text>
                     <Icon
                         onPress={() => {
@@ -155,9 +146,7 @@ export default function CarIncidenciaMapa({ navigation, props, incidencia }) {
                         }}
                         style={{
                             marginLeft: 8,
-                            // marginTop: 10,
                             textAlign: 'right',
-                            // flex: 3,
                         }}
                         name="location-outline"
                         color="grey"
@@ -178,9 +167,6 @@ export default function CarIncidenciaMapa({ navigation, props, incidencia }) {
                 </View>
                 <View
                     style={{
-                        // borderBottomColor: 'black',
-                        // borderBottomWidth: 1,
-                        // marginHorizontal: 10,
                         alignSelf: 'center',
                         marginTop: 6,
                         width: (windowWidth * 95.7) / 100,
@@ -214,7 +200,6 @@ export default function CarIncidenciaMapa({ navigation, props, incidencia }) {
                             marginLeft: 12,
                             marginTop: 10,
                             textAlign: 'left',
-                            // flex: 1,
                         }}
                         name="location-outline"
                         color="grey"
@@ -223,7 +208,6 @@ export default function CarIncidenciaMapa({ navigation, props, incidencia }) {
                     <Text style={{
                         color: 'grey',
                         fontSize: 15,
-                        //textAlign: 'right',
                         flex: 1,
                         marginTop: 15
                     }}>
@@ -232,9 +216,6 @@ export default function CarIncidenciaMapa({ navigation, props, incidencia }) {
                 </View>
                 <View
                     style={{
-                        // borderBottomColor: 'black',
-                        // borderBottomWidth: 1,
-                        // marginHorizontal: 10,
                         alignSelf: 'center',
                         marginTop: 6,
                         width: (windowWidth * 95.7) / 100,
@@ -317,78 +298,44 @@ export default function CarIncidenciaMapa({ navigation, props, incidencia }) {
                     </View>
                 }
             </View>
-            {/* <Text style={styles.textStyle}>Bottom View</Text> */}
         </View >
     );
 }
 const styles = StyleSheet.create({
+    containerSVGheart: {
+        alignContent: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'center',
+        left: 275,
+        zIndex: 1111111,
+        width: 22,
+        height: 18,
+        borderStyle: "solid",
+        borderColor: COLORS.primary
+    },
     containerMain: {
-        //flex: 1,
-        //alignItems: 'center',
-        //justifyContent: 'center',
-        // borderWidth: 3,
-        // borderColor: 'red',
         backgroundColor: 'white',
         width: '100%',
         height: 480,
-        // marginTop: 265
     },
     bottomView: {
-        // width: '100%',
-        // height: 325,
-        // backgroundColor: 'transparent',
-        // justifyContent: 'center',
-        // alignItems: 'center',
-        // position: 'absolute', //Here is the trick
-        // bottom: 120, //Here is the trick
-        // borderWidth : 3,
-        // borderColor : 'blue'
     },
     textStyle: {
         color: '#fff',
         fontSize: 18,
     },
     container: {
-        // justifyContent: 'center',
-        // alignContent: 'center',
-        // alignItems: 'center',
-        // alignSelf: 'center',
-        // height: 200,
-        // width: 350,
-        // height: 150,
-        // borderRadius: 20,
-        // marginTop: 5,
-        //flex: 1,
         justifyContent: 'center',
         alignContent: 'center',
         alignItems: 'center',
         alignSelf: 'center',
-        // height: (windowHeight * 31.65) / 100,
         height: (windowHeight * 22) / 100,
         width: (windowWidth * 95.7) / 100,
         borderWidth: 1,
         borderRadius: 20,
         marginVertical: 10,
     },
-    // imageContainer: {
-    //     //flex: 1,
-    //     width: '80%',
-    //     height: 150,
-    //     // borderColor: 'green',
-    //     // borderWidth: 3,
-    //     marginTop: 5,
-    //     alignItems: 'center',
-    //     alignSelf: 'center'
-    // },
-    // image: {
-    //     width: '100%',
-    //     height: 150,
-    //     borderRadius: 15,
-    //     marginTop: 0,
-    //     marginLeft: 0
-    //     //marginTop : 145,
-    //     //resizeMode: 'contain',
-    // },
     imageContainer: {
         flex: 1,
         width: '100%',
@@ -398,6 +345,5 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         borderRadius: 15,
-        //resizeMode: 'contain',
     },
 });

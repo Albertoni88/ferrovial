@@ -38,7 +38,8 @@ export default function Map({ navigation, cantidadIncidencias, incidencias, filt
         setMarkersOriginals(aux);
         setMarkers(aux);
         setIncidencia(inc);
-        filtroMapa(incidencias[choice].nombre);
+        // alert("incidencias[choice] " + JSON.stringify(incidencias[choice]))
+        filtroMapa(incidencias[choice].titulo);
     }
 
     const getLocationAsync = async () => {
@@ -120,7 +121,8 @@ export default function Map({ navigation, cantidadIncidencias, incidencias, filt
                     )} */}
                     {incidencias.length > 0 &&
                         incidencias.map((marker, i) => {
-                            if (!marker.latitude || !marker.longitude) return;
+                            // alert("marker " + JSON.stringify(marker));
+                            // if (!marker.latitude || !marker.longitude) return;
                             const { latitude, longitude } = marker;
                             return (
                                 <MapView.Marker
@@ -132,7 +134,8 @@ export default function Map({ navigation, cantidadIncidencias, incidencias, filt
                                         filtroMapa(marker.nombre);
                                     }}
                                     tracksViewChanges={false}
-                                    coordinate={marker}
+                                    // coordinate={marker.geo}
+                                    coordinate={{latitude : 21.84, longitude : -78.76194}}
                                     //title={incidencias[i].nombre}
                                     key={i}
                                 />

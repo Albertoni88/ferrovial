@@ -20,8 +20,9 @@ export default function CardFilterType({ filter, navigation, props, marcado, mar
     const marcados = useReduxSelector((state) => state.user.marcados);
 
     useEffect(() => {
-        alert("marcados " + JSON.stringify(marcados));
-    }, [filter]);
+        // alert("marcado " + JSON.stringify(marcado));
+        //alert("filter.nombre " + JSON.stringify(filter));
+    }, []);
 
     if (filter !== null && filter !== undefined && filter !== []) {
         return (
@@ -48,11 +49,10 @@ export default function CardFilterType({ filter, navigation, props, marcado, mar
                 shadowRadius: 10,
                 shadowOpacity: 1,
                 marginBottom: 2,
-
             }}>
                 {/* <Icon style={{ marginLeft: 10, alignItems: 'center', justifyContent: 'center', }} name="ios-search" size={20} color={marcado ? COLORS.primary : COLORS.browngrey} /> */}
                 {/* <SVG nombre={'Perfil'} width={20} height={20} /> */}
-                <View style={{ width: 45, height: 45, borderWidth: 3 }}>
+                <View style={{ width: 45, height: 45, }}>
                     <SvgCssUri
                         width="100%"
                         height="100%"
@@ -72,43 +72,45 @@ export default function CardFilterType({ filter, navigation, props, marcado, mar
                         fontWeight: "600",
                         fontStyle: "normal",
                         letterSpacing: 0,
-                        marginLeft: 6
+                        marginLeft: 6,
+                        marginRight: 125
                     }}>
                         {filter.nombre}
                     </Text>
                 }
                 {
-                    (marcados !== null && marcados !==undefined) && marcados[indice] === true &&
-                    <Icon
-                        onPress={() => {
-                            changemarcado(indice, marcadoauxiliar);
-                        }}
-                        style={{ textAlign: 'right', flex: 1, marginRight: 10 }}
-                        name="eye-outline"
-                        size={20}
-                        color={marcados[indice] ? COLORS.primary : COLORS.browngrey}
-                    />
-                    // <View style={styles.containerSVG}>
-                    //     <SVG
-                    //         onPress={() => {
-                    //             changemarcado(indice, marcadoauxiliar);
-                    //         }}
-                    //         nombre={'OjoVisible'}
-                    //         width={'20'} height={20}
-                    //     />
-                    // </View>
+                    // ((marcados !== null && marcados !==undefined) && marcados[indice] === true) &&
+                    (marcado === true) &&
+                    <View style={styles.containerSVG}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                //alert("indice " + indice);
+                                changemarcado(indice, marcadoauxiliar);
+                            }}
+                        >
+                            <SVG
+                                nombre={'OjoVisible'}
+                                width={25} height={25}
+                            />
+                        </TouchableOpacity>
+                    </View>
                 }
                 {
-                    (marcados !== null && marcados !==undefined) && marcados[indice] === false &&
-                    <Icon
-                        onPress={() => {
-                            changemarcado(indice, marcadoauxiliar);
-                        }}
-                        style={{ textAlign: 'right', flex: 1, marginRight: 10 }}
-                        name="eye-off-outline"
-                        size={20}
-                        color={COLORS.browngrey}
-                    />
+                    // ((marcados !== null && marcados !==undefined) && marcados[indice] === false) &&
+                    (marcado === false) &&
+                    <View style={styles.containerSVG}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                //alert("indiceno " + indice);
+                                changemarcado(indice, marcadoauxiliar);
+                            }}
+                        >
+                            <SVG
+                                nombre={'OjoNoVisible'}
+                                width={25} height={25}
+                            />
+                        </TouchableOpacity>
+                    </View>
                 }
             </View>
         );
@@ -119,13 +121,17 @@ export default function CardFilterType({ filter, navigation, props, marcado, mar
 }
 const styles = StyleSheet.create({
     containerSVG: {
-        marginLeft: 12,
+        marginRight: 15,
         zIndex: 1111111,
-        width: 15,
-        height: 15,
+        width: 25,
+        height: 25,
         borderStyle: "solid",
         borderColor: COLORS.primary,
-        marginTop: 31,
+        alignContent: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
+        alignSelf: 'center',
+        marginTop: 15,
     },
     container: {
         flex: 1,

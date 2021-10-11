@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import * as Progress from 'react-native-progress';
 import { COLORS } from '../../constants';
+import SVG from '../svg';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
@@ -38,13 +39,13 @@ export default function CarIncidencia({ navigation, props, incidencia }) {
                 }}>
                 <ImageBackground
                     // source={require('../../assets/1.png')}
-                    source={{uri: incidencia.imagen}}
+                    source={{ uri: incidencia.imagen }}
                     style={styles.imageContainer}
                     imageStyle={styles.image}>
                     <View style={{ flexDirection: 'row' }}>
                         <View style={{
                             flexDirection: 'row',
-                            width: 84,
+                            width: 95,
                             height: 24,
                             opacity: 0.9,
                             borderRadius: 12,
@@ -70,7 +71,7 @@ export default function CarIncidencia({ navigation, props, incidencia }) {
                                 // fontSize: 15,
                                 textAlign: 'left',
                                 // marginTop: 5
-                                width: 54,
+                                width: 65,
                                 height: 14,
                                 fontFamily: "nunito-regular",
                                 fontSize: 10,
@@ -86,7 +87,7 @@ export default function CarIncidencia({ navigation, props, incidencia }) {
                                 {incidencia.fecha}
                             </Text>
                         </View>
-                        <Icon
+                        {/* <Icon
                             onPress={() => {
 
                             }}
@@ -99,7 +100,13 @@ export default function CarIncidencia({ navigation, props, incidencia }) {
                             name="heart-outline"
                             color="white"
                             size={30}
-                        />
+                        /> */}
+                        <TouchableOpacity
+                            onPress={() => {
+                            }}
+                            style={styles.containerSVGheart}>
+                            <SVG nombre={'Corazon'} width={22} height={18} />
+                        </TouchableOpacity>
                     </View>
                 </ImageBackground>
             </TouchableOpacity>
@@ -134,7 +141,7 @@ export default function CarIncidencia({ navigation, props, incidencia }) {
                     }}
                     style={{
                         // marginLeft: 100,
-                        marginLeft: 50,
+                        marginLeft: Platform.OS === 'ios' ? 50 : 40,
                     }}
                     name="location-outline"
                     color="grey"
@@ -247,7 +254,7 @@ export default function CarIncidencia({ navigation, props, incidencia }) {
                     borderStyle: "solid",
                     borderWidth: 1,
                     borderColor: COLORS.browngrey,
-                    marginBottom : 8
+                    marginBottom: 8
                 }}
             />
             {/* Segun tipo */}
@@ -324,6 +331,18 @@ export default function CarIncidencia({ navigation, props, incidencia }) {
     );
 }
 const styles = StyleSheet.create({
+    containerSVGheart: {
+        alignContent: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'center',
+        left: 265,
+        zIndex: 1111111,
+        width: 22,
+        height: 18,
+        borderStyle: "solid",
+        borderColor: COLORS.primary
+    },
     container: {
         flex: 1,
         justifyContent: 'center',

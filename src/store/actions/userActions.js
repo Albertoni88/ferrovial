@@ -20,7 +20,7 @@ export const guardarMarcadosArray = (array) => ({
     type: GUARDAR_MARCADOS_ARRAY,
     payload: array
 })
-export const guardarMarcadosOriginals = (value) => ({
+export const guardarMarcadosOriginals = (value) => ({    
     type: GUARDAR_MARCADOS_ORIGINALS,
     payload: value
 })

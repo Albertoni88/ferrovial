@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, createRef } from 'react';
-import { View, Dimensions, TextInput, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
+import { View, Platform, Dimensions, TextInput, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { COLORS } from '../constants';
 import {
@@ -93,10 +93,10 @@ export default function HeaderFilterType({ navigation, filtrar }) {
                         marginLeft: cruz === true ? -30 : 0,
                         marginTop: 30,
                         marginRight: 0,
-                        width: 43,
+                        width: Platform.OS === 'ios' ? 43 : 50,
                         height: 17,
                         fontFamily: "poppins-medium",
-                        fontSize: 12,
+                        fontSize: Platform.OS === 'ios' ? 12 : 11,
                         fontWeight: "500",
                         fontStyle: "normal",
                         letterSpacing: 0,

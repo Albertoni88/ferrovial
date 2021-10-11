@@ -3,6 +3,7 @@ import { Button, Dimensions, Image, TextInput, View, Text, TouchableOpacity, Mod
 import Icon from 'react-native-vector-icons/Ionicons';
 import HeaderCrearIncidencia from '../components/headerCrearIncidencia';
 import { Camera } from 'expo-camera';
+import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import { COLORS } from '../constants';
 import {
     widthPercentageToDP as wp,
@@ -12,20 +13,83 @@ import {
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
+const WINDOW_HEIGHT = Dimensions.get('window').height;
+const CAPTURE_SIZE = Math.floor(WINDOW_HEIGHT * 0.08);
+
 export default function CrearIncidencia({ navigation, props }) {
 
-    const [hasPermission, setHasPermission] = useState(null);
+    //const [hasPermission, setHasPermission] = useState(null);
     const [type, setType] = useState(Camera.Constants.Type.back);
     const [camera, showCamera] = useState(false);
     const [creada, setCreada] = useState(false);
 
+    const cameraRef = useRef();
+    //const cameraRef = createRef();
+    const [hasPermission, setHasPermission] = useState(null);
+    const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
+    const [isPreview, setIsPreview] = useState(false);
+    const [isCameraReady, setIsCameraReady] = useState(false);
+    // useEffect(() => {
+    //     (async () => {
+    //         const { status } = await Camera.requestPermissionsAsync();
+    //         setHasPermission(status === 'granted');
+    //     })();
+    // }, []);
+
     useEffect(() => {
-        (async () => {
-            const { status } = await Camera.requestPermissionsAsync();
-            setHasPermission(status === 'granted');
-        })();
+        onHandlePermission();
     }, []);
 
+    const onSnap = async () => {
+
+        if (cameraRef.current) {
+            const options = { quality: 0.7, base64: true };
+            const data = await cameraRef.current.takePictureAsync(options)
+                .then(async photo => {
+                    //photo.exif.Orientation = 1;
+                    // const source = photo.base64;
+                    // if (source) {
+                    //     await cameraRef.current.pausePreview();
+                    //     setIsPreview(true);
+                    // }
+                    setIsPreview(false);
+                    showCamera(false);
+                    console.log(photo);
+                });
+            // const source = data.base64;
+            // if (source) {
+            //     await cameraRef.current.pausePreview();
+            //     setIsPreview(true);
+            // }
+        }
+    };
+    const cancelPreview = async () => {
+        await cameraRef.current.resumePreview();
+        setIsPreview(false);
+    };
+    const onHandlePermission = async () => {
+        const { status } = await Camera.requestPermissionsAsync();
+        setHasPermission(status === 'granted');
+    };
+    const onCameraReady = () => {
+        setIsCameraReady(true);
+    };
+    if (hasPermission === null) {
+        return <View />;
+    }
+    if (hasPermission === false) {
+        return <Text style={styles.text}>No access to camera</Text>;
+    }
+    const switchCamera = () => {
+        if (isPreview) {
+            return;
+        }
+        setCameraType(prevCameraType =>
+            prevCameraType === Camera.Constants.Type.back
+                ? Camera.Constants.Type.front
+                : Camera.Constants.Type.back
+        );
+    };
     return (
         <View style={styles.container}>
             <HeaderCrearIncidencia navigation={navigation} />
@@ -237,32 +301,68 @@ export default function CrearIncidencia({ navigation, props }) {
                             <Text style={styles.textExit}>X</Text>
                         </TouchableOpacity>
                         <View style={[styles.modalBackground]}>
-                            <Camera style={styles.camera} type={type}>
-                                <View style={styles.buttonContainer}>
+                            {/* <Camera
+                                ref={cameraRef}
+                                style={styles.camera}
+                                type={cameraType}
+                                onCameraReady={onCameraReady}
+                            >                                
+                            </Camera> */}
+
+                            <View style={styles.containerCamera}>
+                                <Camera
+                                    ref={cameraRef}
+                                    style={styles.camera}
+                                    type={cameraType}
+                                    onCameraReady={onCameraReady}
+                                >
+                                </Camera>
+                                {/* {!isPreview && (
+                                    <View style={styles.bottomButtonsContainer}>
+                                        <TouchableOpacity disabled={!isCameraReady} onPress={switchCamera}>
+                                            <Icon
+                                                style={{
+                                                    width: (windowWidth * 4.8) / 18,
+                                                    height: (windowHeight * 2.5) / 20,
+                                                    marginLeft: 12,
+                                                    marginTop: 50,
+                                                }}
+                                                name="chevron-back-outline"
+                                                color="white"
+                                                size={30}
+                                            />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity
+                                            activeOpacity={0.7}
+                                            disabled={!isCameraReady}
+                                            onPress={onSnap}
+                                            style={styles.capture}
+                                        />
+                                    </View>
+                                )} */}
+                                {!isPreview && (
+                                    <View style={styles.bottomButtonsContainer}>
+                                        <TouchableOpacity disabled={!isCameraReady} onPress={switchCamera}>
+                                            <MaterialIcons name='flip-camera-ios' size={28} color='white' />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity
+                                            activeOpacity={0.7}
+                                            disabled={!isCameraReady}
+                                            onPress={onSnap}
+                                            style={styles.capture}
+                                        />
+                                    </View>
+                                )}
+                                {isPreview && (
                                     <TouchableOpacity
-                                        onPress={() => {
-                                            setType(
-                                                type === Camera.Constants.Type.back
-                                                    ? Camera.Constants.Type.front
-                                                    : Camera.Constants.Type.back
-                                            );
-                                        }}
-                                        style={styles.button}>
-                                        <Text style={{
-                                            alignSelf: 'center',
-                                            position: 'absolute',
-                                            alignItems: 'center',
-                                            alignSelf: 'center',
-                                            fontSize: 15,
-                                            textAlign: 'center',
-                                            alignItems: 'center',
-                                            color: 'brown'
-                                        }}>
-                                            Cambiar cámara
-                                        </Text>
+                                        onPress={cancelPreview}
+                                        style={styles.closeButton}
+                                        activeOpacity={0.7}
+                                    >
+                                        <AntDesign name='close' size={32} color='#fff' />
                                     </TouchableOpacity>
-                                </View>
-                            </Camera>
+                                )}
+                            </View>
                         </View>
                     </Modal>
                 )
@@ -333,22 +433,6 @@ export default function CrearIncidencia({ navigation, props }) {
                                         }}
                                         style={styles.salir}>
                                         <Text style={{
-                                            // fontSize: 15,
-                                            // color: 'brown'
-
-                                            // alignItems: 'center',
-                                            // alignSelf: 'center',
-                                            // textAlign: 'center',
-                                            // alignItems: 'center',
-                                            // width: 83,
-                                            // height: 24,
-                                            // fontFamily: "nunito-bold",
-                                            // fontSize: 18,
-                                            // fontWeight: "bold",
-                                            // fontStyle: "normal",
-                                            // letterSpacing: 0.45,
-                                            // textAlign: "center",
-                                            // color: COLORS.primary
                                             width: 40,
                                             height: 24,
                                             fontFamily: "nunito-bold",
@@ -373,9 +457,51 @@ export default function CrearIncidencia({ navigation, props }) {
     );
 }
 const styles = StyleSheet.create({
+    text: {
+        color: '#fff'
+    },
+    closeButton: {
+        position: 'absolute',
+        top: 35,
+        right: 20,
+        height: 50,
+        width: 50,
+        borderRadius: 25,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#5A45FF',
+        opacity: 0.7
+    },
+    bottomButtonsContainer: {
+        position: 'absolute',
+        flexDirection: 'row',
+        bottom: 28,
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    capture: {
+        backgroundColor: '#5A45FF',
+        borderRadius: 5,
+        height: CAPTURE_SIZE,
+        width: CAPTURE_SIZE,
+        borderRadius: Math.floor(CAPTURE_SIZE / 2),
+        marginBottom: 28,
+        marginHorizontal: 30
+    },
     container: {
         flex: 1,
         backgroundColor: COLORS.primary,
+        // flexDirection: 'column',
+        // alignContent: 'center',
+        // alignItems: 'center'
+    },
+    containerCamera: {
+        flex: 1,
+        borderWidth: 'blue',
+        borderWidth: 3,
+        backgroundColor: COLORS.primary,
+        width: '100%'
         // flexDirection: 'column',
         // alignContent: 'center',
         // alignItems: 'center'
@@ -483,15 +609,15 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         shadowColor: "rgba(0, 0, 0, 0.1)",
         shadowOffset: {
-          width: 0,
-          height: 4
+            width: 0,
+            height: 4
         },
         shadowRadius: 10,
         shadowOpacity: 1,
         alignItems: 'center',
         justifyContent: 'center',
         alignSelf: 'center',
-        marginTop : (windowHeight * 27.8) / 100
+        marginTop: (windowHeight * 27.8) / 100
     },
     localizacion: {
         alignItems: 'center',
