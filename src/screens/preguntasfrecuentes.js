@@ -4,7 +4,7 @@ import {
     useSelector as useReduxSelector
 } from 'react-redux';
 import axios from 'axios';
-import { Button, Dimensions, Image, TextInput, View, Text, TouchableOpacity, Alert, Platform, StyleSheet } from 'react-native';
+import { Button, SafeAreaView, Dimensions, Image, TextInput, View, Text, TouchableOpacity, Alert, Platform, StyleSheet } from 'react-native';
 import { Thumbnail, List, ListItem, Separator } from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Accordion from 'react-native-collapsible/Accordion';
@@ -43,13 +43,13 @@ export default function PreguntasFrecuentes({ navigation, props }) {
             .then(response => {
                 //alert("response faqs " + JSON.stringify(response.data))
                 SetSections(response.data);
-                setAcordiones(Array(SECTIONS.length).fill(false));
-                alert("acordiones " + JSON.stringify(acordiones));
+                setAcordiones(Array(response.data.length).fill(false));
+                //alert("acordiones " + JSON.stringify(acordiones));
             })
             .catch(error => {
-                alert("error1 " + error)
+                //alert("error1 " + error)
             });
-    }, [SECTIONS]);
+    }, []);
 
 
     const _renderSectionTitle = (section) => {
@@ -57,7 +57,7 @@ export default function PreguntasFrecuentes({ navigation, props }) {
     };
 
     const _renderHeader = (section, index) => {
-        
+
         if (acordiones[index] === false) {
             return (
                 <View style={{
@@ -220,45 +220,46 @@ export default function PreguntasFrecuentes({ navigation, props }) {
     };
 
     return (
-        <View style={{ backgroundColor: 'rgb(247, 247, 247)', textAlign: 'center', alignItems: 'center', flex: 1, }}>
-            <SideBarHeader texto={'Preguntas frecuentes'} navigation={navigation} />
-            <View style={{ alignItems: 'center', width: '100%', height: '100%' }}>
-                <View style={{
-                    marginTop: 16,
-                }}>
-                    <Text
-                        style={{
-                            width: 351,
-                            height: 44,
-                            fontFamily: 'nunito-semibold',
-                            fontSize: 16,
-                            fontWeight: "600",
-                            fontStyle: "normal",
-                            letterSpacing: 0,
-                            textAlign: "center",
-                            color: COLORS.browngrey
-                        }}>
-                        Si tienes una duda esperamos tener una respuesta para ella...
-                    </Text>
-                </View>
-                <View style={{
-                    marginTop: 22,
-                }}>
+        <SafeAreaView style={{ flex: 1 }}>
+            <View style={{ backgroundColor: 'rgb(247, 247, 247)', textAlign: 'center', alignItems: 'center', flex: 1, }}>
+                <SideBarHeader texto={'Preguntas frecuentes'} navigation={navigation} />
+                <View style={{ alignItems: 'center', width: '100%', height: '100%' }}>
+                    <View style={{
+                        marginTop: 16,
+                    }}>
+                        <Text
+                            style={{
+                                width: 351,
+                                height: 44,
+                                fontFamily: 'nunito-semibold',
+                                fontSize: 16,
+                                fontWeight: "600",
+                                fontStyle: "normal",
+                                letterSpacing: 0,
+                                textAlign: "center",
+                                color: COLORS.browngrey
+                            }}>
+                            Si tienes una duda esperamos tener una respuesta para ella...
+                        </Text>
+                    </View>
+                    <View style={{
+                        marginTop: 22,
+                    }}>
 
-                    <Accordion
-                        expandMultiple={true}
-                        underlayColor={'transparent'}
-                        sections={SECTIONS}
-                        activeSections={activeSections}
-                        renderSectionTitle={_renderSectionTitle}
-                        renderHeader={_renderHeader}
-                        renderContent={_renderContent}
-                        onChange={_updateSections}
-                    />
+                        <Accordion
+                            expandMultiple={true}
+                            underlayColor={'transparent'}
+                            sections={SECTIONS}
+                            activeSections={activeSections}
+                            renderSectionTitle={_renderSectionTitle}
+                            renderHeader={_renderHeader}
+                            renderContent={_renderContent}
+                            onChange={_updateSections}
+                        />
+                    </View>
                 </View>
-            </View>
 
-            {/* <View style={[styles.card, styles.shadowProp]}>
+                {/* <View style={[styles.card, styles.shadowProp]}>
                 <View>
                     <Text style={styles.heading}>
                         React Native Box Shadow (Shadow Props)
@@ -269,7 +270,8 @@ export default function PreguntasFrecuentes({ navigation, props }) {
                 </Text>
             </View> */}
 
-        </View>
+            </View>
+        </SafeAreaView>
     );
 }
 const styles = StyleSheet.create({

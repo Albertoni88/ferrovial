@@ -54,7 +54,7 @@ export default function Login({ props, navigation }) {
                     }
                 })
                 .catch(error => {
-                    alert("error1 " + error)
+                    //alert("error1 " + error)
                 });
         }
     }

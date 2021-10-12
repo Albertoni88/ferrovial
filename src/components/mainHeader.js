@@ -61,7 +61,7 @@ export default function MainHeader({ navigation, props }) {
                 dispatch(guardarIncidenciasOriginals(response.data.rows));
             })
             .catch(error => {
-                alert(error)
+                // alert(error)
             });
     }, []);
 

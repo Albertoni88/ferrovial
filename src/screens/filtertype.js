@@ -58,7 +58,7 @@ export default function FilterType({ navigation, route, props }) {
                     dispatch(guardarMarcadosOriginals(false))
                 })
                 .catch(error => {
-                    alert("error1 " + error)
+                    //alert("error1 " + error)
                 });
         }
         if (route.params.filtro === 'estado') {
@@ -77,7 +77,7 @@ export default function FilterType({ navigation, route, props }) {
                     dispatch(guardarMarcadosOriginals(false))
                 })
                 .catch(error => {
-                    alert("error1 " + error)
+                    //alert("error1 " + error)
                 });
         }
     }, []);

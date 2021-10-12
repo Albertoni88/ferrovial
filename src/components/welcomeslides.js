@@ -38,7 +38,7 @@ export default function WelcomeSlides({ navigation }) {
                 setSlides(response.data)
             })
             .catch(error => {
-                alert("error1 " + error)
+                //alert("error1 " + error)
             });
     }, [])
     const _renderItem = ({ item, index }) => {

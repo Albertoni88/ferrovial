@@ -19,9 +19,9 @@ export default function SideBarHeader({ texto, navigation }) {
                     navigation.goBack();
                 }}
                 style={{
-                    marginTop: 50,
+                    marginTop: 30,
                     marginLeft: 12,
-                    //marginTop : (windowHeight * 6.16) / 90,
+                    // marginTop : (windowHeight * 6.16) / 90,
                     flex: 0.6,
                     justifyContent: 'center',
                     alignItems: 'center',
@@ -32,7 +32,7 @@ export default function SideBarHeader({ texto, navigation }) {
                 size={30}
             />
             <Text style={{
-                marginTop: 47,
+                marginTop: 27,
                 width: 280,
                 height: 27,
                 fontFamily: 'nunito-bold',
@@ -41,6 +41,8 @@ export default function SideBarHeader({ texto, navigation }) {
                 fontStyle: "normal",
                 letterSpacing: 0,
                 textAlign: "center",
+                alignSelf : 'center',
+                marginLeft : -30,
                 color: 'white'
             }}>
                 {texto}
