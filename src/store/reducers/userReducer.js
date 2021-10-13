@@ -6,7 +6,8 @@ const initialState = {
   filtros : null,
   filtrosOriginals : null,
   marcados : null,
-  marcadosOriginals : null
+  marcadosOriginals : null,
+  secciones : null
 };
 
 const userReducer = (state, action) => {
@@ -19,6 +20,11 @@ const userReducer = (state, action) => {
     case actionTypes.GUARDAR_TOKEN: {
       // alert("action " + JSON.stringify(action))
       newState.access_token = action.payload;
+      break;
+    }
+    case actionTypes.GUARDAR_SECCIONES_PERFIL: {
+      // alert("action " + JSON.stringify(action.payload))
+      newState.secciones = action.payload;
       break;
     }
     case actionTypes.GUARDAR_FILTROS: {

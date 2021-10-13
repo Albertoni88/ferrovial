@@ -84,7 +84,7 @@ export default function CarIncidencia({ navigation, props, incidencia }) {
                                 alignItems: 'center',
                                 alignSelf: 'center'
                             }}>
-                                {incidencia.fecha}
+                                {incidencia.created}
                             </Text>
                         </View>
                         {/* <Icon

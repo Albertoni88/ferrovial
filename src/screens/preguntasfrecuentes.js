@@ -95,7 +95,7 @@ export default function PreguntasFrecuentes({ navigation, props }) {
                 }}>
                     <Text style={{
                         width: 305,
-                        height: 19,
+                        height:  Platform.OS === 'ios' ? 19 : 25,
                         fontFamily: 'montserrat-medium',
                         fontSize: 16,
                         fontWeight: "500",
@@ -126,7 +126,7 @@ export default function PreguntasFrecuentes({ navigation, props }) {
                 }}>
                     <Text style={{
                         width: 305,
-                        height: 19,
+                        height:  Platform.OS === 'ios' ? 19 : 25,
                         fontFamily: 'montserrat-medium',
                         fontSize: 16,
                         fontWeight: "500",

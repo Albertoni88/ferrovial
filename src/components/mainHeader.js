@@ -25,8 +25,11 @@ import SvgUri from 'react-native-svg-uri';
 import SVG from './svg';
 import {
     guardarIncidencias,
-    guardarIncidenciasOriginals
+    guardarIncidenciasOriginals,
 } from '../store/actions/incidenciaActions';
+import {
+    guardarSeccionesPerfil    
+} from '../store/actions/userActions';
 import { URL_SERVER } from '../constants/urls';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -48,6 +51,22 @@ export default function MainHeader({ navigation, props }) {
 
 
     useEffect(() => {
+        //dispatch(guardarSeccionesPerfil(token));
+        axios.get(URL_SERVER + 'rest/secciones_textuales?_format=json', 
+            {
+                headers: {
+                    'Authorization' : 'Bearer ' + token
+                }
+            }
+        )
+        .then(async response => {
+            if (response.status === 200) {
+                dispatch(guardarSeccionesPerfil(response.data));                
+            } 
+        })
+        .catch(error => {
+        });
+
         axios
             .get(URL_SERVER + 'rest/incidencias?_format=json',
                 {
@@ -61,7 +80,6 @@ export default function MainHeader({ navigation, props }) {
                 dispatch(guardarIncidenciasOriginals(response.data.rows));
             })
             .catch(error => {
-                // alert(error)
             });
     }, []);
 

@@ -48,7 +48,7 @@ export default function CreateAccount({ navigation, props }) {
             const data =
             {
                 "name": {
-                    "value": field_nombre
+                    "value": mail
                 },
                 "mail": {
                     "value": mail
@@ -63,14 +63,15 @@ export default function CreateAccount({ navigation, props }) {
                 "field_apellidos": {
                     "value": field_apellido
                 }
-            }
+            };
             axios
                 .post(URL_SERVER + 'user/register?_format=hal_json', data,
                     {
                         headers: {
                             Accept: 'application/json',
                             'Content-Type': 'application/json',
-                            'X-CSRF-Token': CSRF
+                            'X-CSRF-Token': CSRF,
+                            'cookie' : ''
                         }
                     }
                 )
@@ -85,10 +86,10 @@ export default function CreateAccount({ navigation, props }) {
                     }
                 })
                 .catch(error => {
-                    console.log("error ", error)
+                    alert("error " + error)
                 });
         } else {
-            alert("No ha aceptado las políticas de privacidad")
+            alert("No aceptó las políticas de privacidad")
         }
 
     }

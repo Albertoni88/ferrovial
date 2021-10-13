@@ -7,16 +7,48 @@ import {
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import SVG from '../components/svg';
-
+import { recuperarPass } from '../store/actions/userActions';
+import axios from 'axios';
+import { URL_SERVER } from '../constants/urls';
+import { correoValidar } from '../constants/validation';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 export default function ResetPassword({ navigation, props }) {
 
+    const [correo, setCorreo] = useState('');
+
     useEffect(() => {
     }, []);
 
+
+    const  Recuperar = () => {
+        const validoCorreo = correoValidar(correo);
+        if(validoCorreo){
+            axios
+            .post(URL_SERVER + 'user/password?_format=json', { "mail": correo },
+                {
+                    headers: {
+                        Accept: 'application/json',
+                    }
+                }
+            )
+            .then(async response => {
+                if(response.status === 200){
+                    alert("Se le envió un correo a su buzón")
+                }
+                else {
+                    alert("Hubo un fallo inténtelo de nuevo")
+                }
+            })
+            .catch(error => {
+                //alert("error1 " + error)
+            });
+        } else {
+            alert("Correo inválido")
+        }
+    }
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ImageBackground
@@ -53,16 +85,17 @@ export default function ResetPassword({ navigation, props }) {
                     </View>
                     <View style={{ flexDirection: 'column' }}>
                         <TextInput
+                            value = {correo}
                             placeholder={'email'}
                             placeholderTextColor={'white'}
                             style={styles.inputuser}
                             onChangeText={(email) => {
-                                //this.setState({ email });
+                               setCorreo(email);
                             }}
                         />
                         <TouchableOpacity
                             onPress={() => {
-
+                                Recuperar();
                             }}
                             style={{
                                 width: 290,

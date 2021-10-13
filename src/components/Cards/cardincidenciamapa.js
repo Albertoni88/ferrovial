@@ -42,7 +42,7 @@ export default function CarIncidenciaMapa({ navigation, props, incidencia }) {
                         <View style={{ flexDirection: 'row' }}>
                             <View style={{
                                 flexDirection: 'row',
-                                width: 84,
+                                width: Platform.OS === 'ios' ? 84 : 92,
                                 height: 24,
                                 opacity: 0.9,
                                 borderRadius: 12,
@@ -65,7 +65,8 @@ export default function CarIncidenciaMapa({ navigation, props, incidencia }) {
                                 />
                                 <Text style={{
                                     textAlign: 'left',
-                                    width: 54,
+                                    // width: Platform.OS === 'ios' ? 54 : 65,
+                                    width: Platform.OS === 'ios' ? 54 : 65,
                                     height: 14,
                                     fontFamily: "nunito-regular",
                                     fontSize: 10,
@@ -78,7 +79,7 @@ export default function CarIncidenciaMapa({ navigation, props, incidencia }) {
                                     alignItems: 'center',
                                     alignSelf: 'center'
                                 }}>
-                                    {incidencia.fecha}
+                                    {incidencia.created}
                                 </Text>
                             </View>
                             <TouchableOpacity

@@ -133,7 +133,7 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                                             alignItems: 'center',
                                             alignSelf: 'center'
                                         }}>
-                                            {route.params.incidencia.fecha}
+                                            {route.params.incidencia.created}
                                         </Text>
                                     </View>
                                     {/* <Icon

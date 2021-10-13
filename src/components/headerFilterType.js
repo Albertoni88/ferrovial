@@ -1,4 +1,8 @@
 import React, { useState, useEffect, useRef, createRef } from 'react';
+import {
+    useDispatch as useReduxDispatch,
+    useSelector as useReduxSelector
+} from 'react-redux';
 import { View, Platform, Dimensions, TextInput, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { COLORS } from '../constants';
@@ -8,6 +12,9 @@ import {
 } from 'react-native-responsive-screen';
 import { marginTop } from 'styled-system';
 import SVG from './svg';
+import {
+    guardarIncidencias,
+} from '../store/actions/incidenciaActions';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -15,28 +22,35 @@ const windowHeight = Dimensions.get('window').height;
 export default function HeaderFilterType({ navigation, filtrar }) {
 
 
+    const dispatch = useReduxDispatch();
+
     const [searchString, setsearchString] = useState('');
     const [cruz, setCruz] = useState(false);
+    const marcados = useReduxSelector((state) => state.user.marcados);
+    const incidenciasOriginals = useReduxSelector((state) => state.incidencia.incidenciasOriginals);
+    const filtros = useReduxSelector((state) => state.user.filtros);
 
+    const FiltrarTipo = () => {
+        
+        var filtradasIncidencias = [];
+        marcados.forEach((element, index) => {
+            if(element === true){                
+                incidenciasOriginals.forEach((inc, index1) => {                
+                   if(inc.tipo_incidencia === filtros[index].nombre){
+                       filtradasIncidencias.push(incidenciasOriginals[index1]);
+                   }
+               });
+            }
+        });
+        navigation.navigate('Main');
+        dispatch(guardarIncidencias(filtradasIncidencias));
+    }
     return (
         <View style={styles.containerWebView}>
             <TouchableOpacity
                 style={styles.iconBackContainer}
                 onPress={() => navigation.goBack()}
             >
-                {/* <Icon
-                    style={{
-                        // flex: 0.5,
-                        marginLeft: 6,
-                        marginTop: 35
-                    }}
-                    onPress={() => {
-                        navigation.goBack()
-                    }}
-                    name="chevron-back-outline"
-                    color={COLORS.primary}
-                    size={30}
-                /> */}
                 <View style={styles.containerSVG}>
                     <SVG nombre={'VolverPrimario'} width={20} height={20} />
                 </View>
@@ -87,7 +101,7 @@ export default function HeaderFilterType({ navigation, filtrar }) {
                 }
                 <Text
                     onPress={() => {
-
+                        FiltrarTipo();
                     }}
                     style={{
                         marginLeft: cruz === true ? -30 : 0,
@@ -146,7 +160,7 @@ const styles = StyleSheet.create({
         },
         shadowRadius: 10,
         shadowOpacity: 1,
-        
+
     },
     input: {
         left: -10,
