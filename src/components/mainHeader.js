@@ -28,7 +28,8 @@ import {
     guardarIncidenciasOriginals,
 } from '../store/actions/incidenciaActions';
 import {
-    guardarSeccionesPerfil    
+    guardarSeccionesPerfil, 
+    guardarUsuario    
 } from '../store/actions/userActions';
 import { URL_SERVER } from '../constants/urls';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -52,10 +53,11 @@ export default function MainHeader({ navigation, props }) {
 
     useEffect(() => {
         //dispatch(guardarSeccionesPerfil(token));
+        dispatch(guardarUsuario(token));
         axios.get(URL_SERVER + 'rest/secciones_textuales?_format=json', 
             {
                 headers: {
-                    'Authorization' : 'Bearer ' + token
+                    'Authorization' : 'Bearer ' + token,
                 }
             }
         )

@@ -19,7 +19,7 @@ import {
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-export default function HeaderFilterType({ navigation, filtrar }) {
+export default function HeaderFilterType({ filtronombre, navigation, filtrar }) {
 
 
     const dispatch = useReduxDispatch();
@@ -30,16 +30,22 @@ export default function HeaderFilterType({ navigation, filtrar }) {
     const incidenciasOriginals = useReduxSelector((state) => state.incidencia.incidenciasOriginals);
     const filtros = useReduxSelector((state) => state.user.filtros);
 
-    const FiltrarTipo = () => {
-        
+    const FiltrarDinamico = () => {
+
         var filtradasIncidencias = [];
         marcados.forEach((element, index) => {
-            if(element === true){                
-                incidenciasOriginals.forEach((inc, index1) => {                
-                   if(inc.tipo_incidencia === filtros[index].nombre){
-                       filtradasIncidencias.push(incidenciasOriginals[index1]);
-                   }
-               });
+            if (element === true) {
+                incidenciasOriginals.forEach((inc, index1) => {
+                    if (filtronombre === 'tipo' && inc.tipo_incidencia === filtros[index].nombre) {
+                        filtradasIncidencias.push(incidenciasOriginals[index1]);
+                    }
+                    if (filtronombre === 'estado' && inc.estado === filtros[index].nombre) {
+                        filtradasIncidencias.push(incidenciasOriginals[index1]);
+                    }
+                    if (filtronombre === 'interaccion' && inc.tipo_participacion === filtros[index].nombre) {
+                        filtradasIncidencias.push(incidenciasOriginals[index1]);
+                    }
+                });
             }
         });
         navigation.navigate('Main');
@@ -101,7 +107,7 @@ export default function HeaderFilterType({ navigation, filtrar }) {
                 }
                 <Text
                     onPress={() => {
-                        FiltrarTipo();
+                        FiltrarDinamico();
                     }}
                     style={{
                         marginLeft: cruz === true ? -30 : 0,

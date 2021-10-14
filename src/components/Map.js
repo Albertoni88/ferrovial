@@ -14,6 +14,7 @@ import { position } from 'styled-system';
 //import { Card, ListItem, Button } from 'react-native-elements';
 import { Card } from 'react-native-paper';
 import CarIncidenciaMapa from './Cards/cardincidenciamapa';
+import { COLORS } from '../constants';
 
 export default function Map({ navigation, cantidadIncidencias, incidencias, filtroMapa }) {
     const [location, setLocation] = useState(null);
@@ -152,7 +153,7 @@ export default function Map({ navigation, cantidadIncidencias, incidencias, filt
                 (location === null || location === undefined) &&
                 <ActivityIndicator
                     size="large"
-                    color={'brown'}
+                    color={COLORS.primary}
                     style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}
                 />
             }

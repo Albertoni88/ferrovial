@@ -1,4 +1,8 @@
 import React, { useState, useEffect, useRef, createRef } from 'react';
+import {
+    useDispatch as useReduxDispatch,
+    useSelector as useReduxSelector
+} from 'react-redux';
 import { Button, SafeAreaView, Dimensions, Image, TextInput, View, Text, TouchableOpacity, Alert, Platform, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { CheckBox } from 'react-native-elements'
@@ -9,22 +13,76 @@ import {
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { height } from 'styled-system';
-
-
+import {
+    guardarUsuario
+} from '../store/actions/userActions';
+import axios from 'axios';
+import { URL_SERVER } from '../constants/urls';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 export default function EditarPerfil({ navigation, props }) {
 
+    const dispatch = useReduxDispatch();
+
     const [toggleCheckBox, setToggleCheckBox] = useState(false);
     const [checked, setChecked] = React.useState(false);
 
+    const user = useReduxSelector((state) => state.user.userInfo);
+    const token = useReduxSelector((state) => state.user.access_token);
+    const [name, setName] = useState(user?.username);
+    const [apellidos, setApellidos] = useState(user?.apellidos);
+    const [email, setEmail] = useState(user?.email);
+    const [CSRF, setCSRF] = useState('');
 
     useEffect(() => {
-        // alert("navigation " + JSON.stringify(navigation))
+        //dispatch(guardarUsuario(token));
+        //alert("user " + JSON.stringify(user))
     }, []);
+    async function getCSRFToken() {
+        axios.get('https://ferrovial.creacionwebprofesional.com/session/token')
+            .then(response => {
+                //alert("response token " + JSON.stringify(response.data));
+                setCSRF(response.data);
+            })
+            .catch(error => {
 
+            });
+    }
+    const editarPerfil = async () => {
+        
+        const data = {
+            "nombre": name,
+            "apellidos": apellidos,
+            "email": email
+        };
+
+        await getCSRFToken();
+
+        axios.put(URL_SERVER + 'rest/perfil_usuario?_format=json', data,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token,
+                    'X-CSRF-Token': CSRF,
+                    'cookie' : ''
+                }
+            }
+        )
+            .then(response => {
+                if (response.status === 200) {
+                    //alert("response editar " + JSON.stringify(response.data))
+                    dispatch(guardarUsuario(response.data));
+                    alert("Guardado con éxito");
+                }
+            })
+            .catch(error => {
+                alert(error)
+            });
+
+    }
+    
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={{ backgroundColor: 'white', textAlign: 'center', alignItems: 'center', flex: 1, }}>
@@ -56,33 +114,49 @@ export default function EditarPerfil({ navigation, props }) {
                     //marginTop: 206,
                     flexDirection: 'column'
                 }}>
+                    {/* {
+                        name !== null && name !== undefined && */}
                     <TextInput
+                        // value={name}
+                        // value={user?.username}
+                        value={name}
                         placeholder={'Nombre'}
                         placeholderTextColor={'white'}
                         style={styles.inputuser}
                         onChangeText={(nombre) => {
+                            setName(nombre)
                         }}
                     />
+                    {/* } */}
+                    {/* {
+                        apellidos !== null && apellidos !== undefined && */}
                     <TextInput
+                        // value={apellidos}
+                        value={apellidos}
                         placeholder={'Apellidos'}
                         placeholderTextColor={'white'}
                         style={styles.apellidos}
                         onChangeText={(apellidos) => {
-                            //this.setState({ email });
-                        }}
+                            setApellidos(apellidos);
+                        }}                        
                     />
+                    {/* }
+                    {
+                        email !== null && email !== undefined && */}
                     <TextInput
+                        // value={email}
+                        value={email}
                         placeholder={'Email'}
                         placeholderTextColor={'white'}
                         style={styles.email}
                         onChangeText={(email) => {
-                            //this.setState({ email });
+                            setEmail(email)
                         }}
                     />
-
+                    {/* } */}
                     <TouchableOpacity
                         onPress={() => {
-
+                            editarPerfil();
                         }}
                         style={{
                             marginTop: (windowHeight * 27) / 100,

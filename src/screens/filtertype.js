@@ -31,7 +31,7 @@ export default function FilterType({ navigation, route, props }) {
 
     const dispatch = useReduxDispatch();
 
-    
+
 
     const filtros = useReduxSelector((state) => state.user.filtros);
     const filtrosOriginals = useReduxSelector((state) => state.user.filtrosOriginals);
@@ -44,7 +44,7 @@ export default function FilterType({ navigation, route, props }) {
     useEffect(() => {
         if (route.params.filtro === 'tipo') {
             axios
-                .get(URL_SERVER + 'rest/tipo-incidencia?_format=json&nombre=ad',
+                .get(URL_SERVER + 'rest/tipo-incidencia?_format=json',
                     {
                         headers: {
                             'Authorization': 'Bearer ' + token,
@@ -63,7 +63,26 @@ export default function FilterType({ navigation, route, props }) {
         }
         if (route.params.filtro === 'estado') {
             axios
-                .get(URL_SERVER + 'rest/tipo-incidencia?_format=json&nombre=ad',
+                .get(URL_SERVER + 'rest/estado-incidencia?_format=json',
+                    {
+                        headers: {
+                            'Authorization': 'Bearer ' + token,
+                        }
+                    }
+                )
+                .then(async response => {
+                    dispatch(guardarFiltros(response.data))
+                    dispatch(guardarFiltrosOriginals(response.data))
+                    dispatch(guardarMarcados(true))
+                    dispatch(guardarMarcadosOriginals(false))
+                })
+                .catch(error => {
+                    //alert("error1 " + error)
+                });
+        }
+        if (route.params.filtro === 'interaccion') {
+            axios
+                .get(URL_SERVER + 'rest/tipo-interaccion?_format=json',
                     {
                         headers: {
                             'Authorization': 'Bearer ' + token,
@@ -132,19 +151,20 @@ export default function FilterType({ navigation, route, props }) {
     }
     return (
         <View style={styles.container}>
-            <HeaderFilterType filtrar={Filtrar} navigation={navigation} />
+            <HeaderFilterType filtronombre={route.params.filtro} filtrar={Filtrar} navigation={navigation} />
             <View style={{ marginBottom: 27 }}></View>
             {
-                (filtros !== null && filtros !== undefined && marcadosAuxiliar !== null && marcadosAuxiliar !==undefined) &&
-                <View style = {{ width : '100%'}}>
+                (filtros !== null && filtros !== undefined && marcadosAuxiliar !== null && marcadosAuxiliar !== undefined) &&
+                <View style={{ width: '100%' }}>
                     {
                         filtros.map((fil, indice) => {
                             return (
-                                <View key = {indice}>
-                                    <CardFilterType filter={fil} changemarcado={ChangeMarcado} indice={indice} marcadoauxiliar={marcados[indice]} marcado={marcados[indice]} />
+                                <View key={indice}>
+                                    <CardFilterType filtronombre={route.params.filtro} filter={fil} changemarcado={ChangeMarcado} indice={indice} marcadoauxiliar={marcados[indice]} marcado={marcados[indice]} />
                                 </View>
                             );
-                        })}
+                        })
+                    }
                 </View>
             }
         </View>
@@ -167,7 +187,7 @@ const styles = StyleSheet.create({
         height: 50,
         fontSize: 15,
         borderRadius: 10,
-        backgroundColor: 'white',        
+        backgroundColor: 'white',
     },
     descripcion: {
         marginTop: 15,

@@ -11,12 +11,12 @@ import {
     useSelector as useReduxSelector
 } from 'react-redux';
 
-export default function CardFilterType({ filter, navigation, props, marcado, marcadoauxiliar, changemarcado, indice }) {
+export default function CardFilterType({ filter, filtronombre, navigation, props, marcado, marcadoauxiliar, changemarcado, indice }) {
 
     const [toggleCheckBox, setToggleCheckBox] = useState(false);
     const [checked, setChecked] = React.useState(false);
     const image = { uri: require("../../assets/1.png") };
-
+    const filtroProps = filtronombre;
     const marcados = useReduxSelector((state) => state.user.marcados);
 
     useEffect(() => {
@@ -52,13 +52,16 @@ export default function CardFilterType({ filter, navigation, props, marcado, mar
             }}>
                 {/* <Icon style={{ marginLeft: 10, alignItems: 'center', justifyContent: 'center', }} name="ios-search" size={20} color={marcado ? COLORS.primary : COLORS.browngrey} /> */}
                 {/* <SVG nombre={'Perfil'} width={20} height={20} /> */}
-                <View style={{ width: 45, height: 45, }}>
-                    <SvgCssUri
-                        width="100%"
-                        height="100%"
-                        uri={filter.imagen}
-                    />
-                </View>
+                {
+                    filtronombre === 'tipo' &&
+                    <View style={{ width: 45, height: 45, }}>
+                        <SvgCssUri
+                            width="100%"
+                            height="100%"
+                            uri={filter.imagen}
+                        />
+                    </View>
+                }
                 {
                     (marcados !== null && marcados !== undefined) &&
                     <Text style={{
@@ -81,7 +84,7 @@ export default function CardFilterType({ filter, navigation, props, marcado, mar
                 {
                     // ((marcados !== null && marcados !==undefined) && marcados[indice] === true) &&
                     (marcado === true) &&
-                    <View style={styles.containerSVG}>
+                    <View style={filtronombre === 'tipo' ? styles.containerSVG : styles.containerSVG1}>
                         <TouchableOpacity
                             onPress={() => {
                                 //alert("indice " + indice);
@@ -98,7 +101,7 @@ export default function CardFilterType({ filter, navigation, props, marcado, mar
                 {
                     // ((marcados !== null && marcados !==undefined) && marcados[indice] === false) &&
                     (marcado === false) &&
-                    <View style={styles.containerSVG}>
+                    <View style={filtronombre === 'tipo' ? styles.containerSVG : styles.containerSVG1}>
                         <TouchableOpacity
                             onPress={() => {
                                 //alert("indiceno " + indice);
@@ -131,7 +134,21 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         alignSelf: 'center',
+        marginTop: 15,        
+    },
+    containerSVG1: {
+        marginRight: 15,
+        zIndex: 1111111,
+        width: 25,
+        height: 25,
+        borderStyle: "solid",
+        borderColor: COLORS.primary,
+        alignContent: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
+        alignSelf: 'center',
         marginTop: 15,
+        left : 50,
     },
     container: {
         flex: 1,

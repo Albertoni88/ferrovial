@@ -1,4 +1,8 @@
 import React, { useState, useEffect, useRef, createRef } from 'react';
+import {
+    useDispatch as useReduxDispatch,
+    useSelector as useReduxSelector
+} from 'react-redux';
 import { Button, Dimensions, ImageBackground, Image, TextInput, View, Text, TouchableOpacity, Alert, Platform, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
@@ -10,7 +14,8 @@ import {
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { height } from 'styled-system';
-
+import axios from 'axios';
+import { URL_SERVER } from '../../constants/urls';
 
 
 const windowWidth = Dimensions.get('window').width;
@@ -18,13 +23,47 @@ const windowHeight = Dimensions.get('window').height;
 
 export default function CarIncidencia({ navigation, props, incidencia }) {
 
-    const [toggleCheckBox, setToggleCheckBox] = useState(false);
-    const [checked, setChecked] = React.useState(false);
+    const [toggleFavorito, setToggleFavorito] = useState(false);
+    const token = useReduxSelector((state) => state.user.access_token);
+    const [CSRF, setCSRF] = useState('');
+
     const image = { uri: require("../../assets/1.png") };
 
     useEffect(() => {
     }, []);
 
+    async function getCSRFToken() {
+        axios.get('https://ferrovial.creacionwebprofesional.com/session/token')
+            .then(response => {
+                setCSRF(response.data);
+            })
+            .catch(error => {
+
+            });
+    }
+    const toggleFavoritoMethod = async () => {
+
+        await getCSRFToken();
+        var incidencia_id = incidencia.id;
+        console.log(URL_SERVER + 'rest/toogle/favorito-incidencia/' + incidencia_id + '?_format=json')
+
+        axios.post(URL_SERVER + 'rest/toogle/favorito-incidencia/' + incidencia_id + '?_format=json',
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token,
+                    'X-CSRF-Token': CSRF,
+                    // 'cookie': ''
+                }
+            }
+        )
+            .then(response => {
+                alert("toggle " + JSON.stringify(response))
+            })
+            .catch(error => {
+                alert("error1 " + error)
+            });
+    }
     return (
         <View style={{
             flex: 1,
@@ -87,22 +126,9 @@ export default function CarIncidencia({ navigation, props, incidencia }) {
                                 {incidencia.created}
                             </Text>
                         </View>
-                        {/* <Icon
-                            onPress={() => {
-
-                            }}
-                            style={{
-                                flex: 1,
-                                textAlign: 'right',
-                                marginRight: 11,
-                                marginTop: 8
-                            }}
-                            name="heart-outline"
-                            color="white"
-                            size={30}
-                        /> */}
                         <TouchableOpacity
                             onPress={() => {
+                                toggleFavoritoMethod();
                             }}
                             style={styles.containerSVGheart}>
                             <SVG nombre={'Corazon'} width={22} height={18} />
@@ -117,7 +143,6 @@ export default function CarIncidencia({ navigation, props, incidencia }) {
                     }}
                     style={{
                         marginLeft: 12,
-                        // marginTop: 3
                     }}
                     name="location-outline"
                     color="grey"

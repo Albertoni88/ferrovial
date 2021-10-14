@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useRef, createRef } from 'react';
+import {
+    useDispatch as useReduxDispatch,
+    useSelector as useReduxSelector
+} from 'react-redux';
 import { Modal, Button, SafeAreaView, Dimensions, ImageBackground, ScrollView, Image, TextInput, View, Text, TouchableOpacity, Alert, Platform, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import Feather from 'react-native-vector-icons/Feather';
 import * as Progress from 'react-native-progress';
 import HeaderIncidenciaDetalles from '../components/headerincidenciadetalles';
@@ -10,13 +15,48 @@ import {
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import SVG from '../components/svg';
+import * as Permissions from 'expo-permissions';
+import { Camera } from 'expo-camera';
+import {
+    guardarIncidencia,
+    guardarImagen,
+    guardarComentario,
+    guardarCreada,
+    guardarIncidenciaRedux,
+    cargarIncidenciaDetalles,
+    borrarComentario
+} from '../store/actions/incidenciaActions';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
+const WINDOW_HEIGHT = Dimensions.get('window').height;
+const CAPTURE_SIZE = Math.floor(WINDOW_HEIGHT * 0.08);
+
 export default function IncidenciaDetalles({ navigation, props, route, incidencia }) {
 
+    useEffect(() => {
+        cargarIncidenciaDetalles(token, route.params.incidencia.id)
+            .then(response => {
+                if (response.status === 200) {
+                    //alert("response editar " + JSON.stringify(response.data))
+                    //dispatch(guardarUsuario(response.data));
+                    //console.log("Incidencia ", response.data.comentarios[0]);
+                    setListadoComentarios(response.data.comentarios);
+                }
+            })
+            .catch(error => {
+                alert(error)
+            });
+        //alert("camera " + camera + " showCamera " + showCamera)
+        onHandlePermission();
+        //alert("incidencia " + JSON.stringify(route.params))
+    }, []);
+
+    const [listadoComentarios, setListadoComentarios] = useState([]);
+    const token = useReduxSelector((state) => state.user.access_token);
     const [votado, setVotado] = useState(false);
+    const [comment, setComment] = useState('');
     const [showModal, setShowModal] = useState(false);
     // Tipo1
     const [votoChoice, setVotoChoice] = useState([1, 1]);
@@ -33,44 +73,150 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
     // Tipo4
     const [apoyado, setApoyado] = useState(false);
     // Tipo4
-    useEffect(() => {
-        //alert("incidencia " + JSON.stringify(route.params))
-    }, []);
 
-    const MarcarVoto1 = (choice) => {
+    const [hasPermission, setHasPermission] = useState(null);
+    const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
+    const [isPreview, setIsPreview] = useState(false);
+    const [isCameraReady, setIsCameraReady] = useState(false);
+    const [camera, showCamera] = useState(false);
+    const [photo, setPhoto] = useState('');
+    const cameraRef = useRef();
+    const user = useReduxSelector((state) => state.user.userInfo);
 
-        if (choice === 0) {
-            setVotoMarcado([1, 0]);
-            setVotoChoice([1, 0]);
+    const onHandlePermission = async () => {
+        const { status } = await Camera.requestPermissionsAsync();
+        setHasPermission(status === 'granted');
+    };
+    const cancelPreview = async () => {
+        await cameraRef.current.resumePreview();
+        setIsPreview(false);
+    };
+    const switchCamera = () => {
+        if (isPreview) {
+            return;
         }
-        if (choice === 1) {
-            setVotoMarcado([0, 1]);
-            setVotoChoice([0, 1]);
+        setCameraType(prevCameraType =>
+            prevCameraType === Camera.Constants.Type.back
+                ? Camera.Constants.Type.front
+                : Camera.Constants.Type.back
+        );
+    };
+    const onCameraReady = () => {
+        setIsCameraReady(true);
+    };
+    const onSnap = async () => {
+
+        if (cameraRef.current) {
+            const options = { quality: 0.7, base64: true };
+            const data = await cameraRef.current.takePictureAsync(options)
+                .then(async photo => {
+                    setIsPreview(false);
+                    console.log("photooooo ", photo.base64);
+                    setPhoto(photo.base64);
+                    Alert.alert(
+                        'Foto',
+                        'Desea esta foto?',
+                        [
+                            { text: 'No', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                            // { text: 'Yes', onPress: () => BackHandler.exitApp() },
+                            {
+                                text: 'Si', onPress: () => {
+                                    showCamera(false);
+                                    guardarComentarioFront();
+                                }
+                            },
+                        ],
+                        { cancelable: false });
+                    // setTomadaFoto(true);
+                });
+        }
+    };
+    const guardarComentarioFront = () => {
+        var d = new Date();
+        var n = d.getMilliseconds();
+        const generatedNombre = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) + n;
+
+        if (comment !== '') {
+            var imagenes = [];
+            imagenes.push({
+                "filename": generatedNombre,
+                "tipemime": "image/png",
+                "base64": photo
+            })
+
+            //alert("data " + JSON.stringify(data.geo))
+            guardarImagen(token, imagenes).then(response => {
+                if (response.status === 200) {
+                    //alert("asdasdasdasd " + JSON.stringify(response.data[0]))
+                    var idArchivo = response.data[0];
+                    //alert("id " + id)
+                    var data = {
+                        "subject": comment,
+                        "comment_body": comment,
+                        "imagenes": [
+                            idArchivo
+                        ]
+                    }
+                    //alert("data comment " + JSON.stringify(data))
+                    guardarComentario(token, data, route.params.incidencia.id).then(response => {
+                        if (response === 200) {
+                            setComment('');
+                            alert("Se guardó correctamente el comentario")
+                        } else {
+                            alert("Hubo error al subir el comentario")
+                        }
+                    });
+                } else {
+                    alert("Hubo error al subir la imagen");
+                }
+            });
+        } else {
+            alert("Comentario vacío");
         }
     }
-    const MarcarVoto2 = (choice) => {
+    const eliminarComentario = (idComentario, uid) => {
 
-        if (choice === 0) {
-            setVotoMarcadoBarras([1, 0, 0, 0, 0]);
-            setVotoChoiceBarras([1, 0, 0, 0, 0]);
-        }
-        if (choice === 1) {
-            setVotoMarcadoBarras([0, 1, 0, 0, 0]);
-            setVotoChoiceBarras([0, 1, 0, 0, 0]);
-        }
-        if (choice === 2) {
-            setVotoMarcadoBarras([0, 0, 1, 0, 0]);
-            setVotoChoiceBarras([0, 0, 1, 0, 0]);
-        }
-        if (choice === 3) {
-            setVotoMarcadoBarras([0, 0, 0, 1, 0]);
-            setVotoChoiceBarras([0, 0, 0, 1, 0]);
-        }
-        if (choice === 4) {
-            setVotoMarcadoBarras([0, 0, 0, 0, 1]);
-            setVotoChoiceBarras([0, 0, 0, 0, 1]);
-        }
+        Alert.alert(
+            'Borrar comentario',
+            'Desea borrar este comentario?',
+            [
+                { text: 'No', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                // { text: 'Yes', onPress: () => BackHandler.exitApp() },
+                {
+                    text: 'Si', onPress: () => {
+                        if(uid === user.id)
+                        {
+                            borrarComentario(token, idComentario)
+                            .then(response => {
+                                if (response.status === 200) {
+                                    var listNueva = [];
+                                    //alert("response editar " + JSON.stringify(response.data))
+                                    //dispatch(guardarUsuario(response.data));
+                                    console.log("Comentario borrado");
+                                    listadoComentarios.forEach(element => {
+                                        if (element.id !== idComentario) {
+                                            listNueva.push(element)
+                                        }
+                                    });
+                                    setListadoComentarios(listNueva);
+                                } else {
+                                    alert("Hubo un error al borrar el comentario");
+                                }
+                            })
+                            .catch(error => {
+                                alert(error)
+                            });
+                        } else {
+                            alert("No fuistes el que hizo el comentario")
+                        }                       
+                    }
+                },
+            ],
+            { cancelable: false });
+
     }
+
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={{
@@ -78,7 +224,7 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                 backgroundColor: 'white',
             }}>
                 {showModal === false && <HeaderIncidenciaDetalles navigation={navigation} />}
-                {showModal === false &&
+                {(showModal === false && camera === false) &&
                     <ScrollView
                         style={{
                             marginTop: 8
@@ -342,8 +488,9 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                                 marginBottom: 8
                             }}
                         />
-                        <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: 'center', justifyContent: 'center' }}>
+                        <View style={{ zIndex: 1111, flexDirection: 'row', alignSelf: 'center', alignItems: 'center', justifyContent: 'center' }}>
                             <TextInput
+                                value={comment}
                                 placeholder='Escribe un comentario...'
                                 placeholderTextColor={COLORS.primary}
                                 style={{
@@ -366,14 +513,23 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                                     backgroundColor: "rgba(77, 94, 225, 0.1)",
                                     //paddingLeft: 17
                                 }}
+                                onChangeText={(comment) => {
+                                    setComment(comment)
+                                }}
                             >
                             </TextInput>
                             <Icon
                                 onPress={() => {
-
+                                    //alert("asdasdasda")
+                                    if (comment === '') {
+                                        alert("Escribe un comentario priemero");
+                                    } else {
+                                        showCamera(true);
+                                    }
                                 }}
                                 style={{
                                     marginLeft: -40,
+                                    zIndex: 11111,
                                     //marginTop: 25,
                                     textAlign: 'right',
                                     justifyContent: 'center',
@@ -385,117 +541,123 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                                 size={30}
                             />
                         </View>
-
-                        <View style={{
-                            // borderWidth: 3,
-                            alignSelf: 'center',
-                            marginTop: 12,
-                            height: (windowHeight * 9.35) / 100,
-                            width: (windowWidth * 93.6) / 100,
-                            borderRadius: 12,
-                            backgroundColor: 'white',
-                            shadowColor: "rgba(0, 0, 0, 0.2)",
-                            shadowOffset: {
-                                width: 0,
-                                height: 0
-                            },
-                            shadowRadius: 15,
-                            shadowOpacity: 1,
-                            flexDirection: 'row',
-                            // borderWidth : 0.2
-                        }}>
-
-                            <Icon
-                                onPress={() => {
-
-                                }}
-                                style={{
-
-                                    marginTop: 10,
-                                    //textAlign: 'left',
-                                    marginLeft: 14
-                                }}
-                                name="person-outline"
-                                color={COLORS.primary}
-                                size={20}
-                            />
-                            <Text
-                                style={{
-                                    // color: COLORS.primary,
-                                    // fontSize: 15,
-                                    // flex : 0.2,
+                        {listadoComentarios.map((com, indice) => {
+                            return (
+                                <View key={indice} style={{
+                                    // borderWidth: 3,
+                                    alignSelf: 'center',
                                     marginTop: 12,
-                                    //flex: 0.9,
-                                    //textAlign: 'left',
-                                    marginLeft: 4,
-                                    width: 82,
-                                    height: 19,
-                                    fontFamily: "nunito-regular",
-                                    fontSize: 14,
-                                    fontWeight: "normal",
-                                    fontStyle: "normal",
-                                    letterSpacing: 0.16,
-                                    color: COLORS.GREYISH_BROWN,
-                                }}
-                            >
-                                {route.params.incidencia.autor_username}
-                            </Text>
-                            <Icon
-                                onPress={() => {
+                                    height: (windowHeight * 9.35) / 100,
+                                    width: (windowWidth * 93.6) / 100,
+                                    borderRadius: 12,
+                                    backgroundColor: 'white',
+                                    shadowColor: "rgba(0, 0, 0, 0.2)",
+                                    shadowOffset: {
+                                        width: 0,
+                                        height: 0
+                                    },
+                                    shadowRadius: 15,
+                                    shadowOpacity: 1,
+                                    flexDirection: 'row',
+                                    // borderWidth : 0.2
+                                }}>
 
-                                }}
-                                style={{
-                                    // flex: 0,
-                                    marginTop: 15,
-                                    textAlign: 'right',
-                                    //left: (route.params.incidencia.tipo === 1 || route.params.incidencia.tipo === 2) ? 150 : 140
-                                    marginRight: 4,
-                                    marginLeft: 210
-                                }}
-                                name="construct-outline"
-                                color={COLORS.primary}
-                                size={20}
-                            />
-                            <Icon
-                                onPress={() => {
+                                    <Icon
+                                        onPress={() => {
 
-                                }}
-                                style={{
-                                    // flex: 1,
-                                    marginTop: 15,
-                                    //left: (route.params.incidencia.tipo === 1 || route.params.incidencia.tipo === 2) ? 150 : 140
-                                    textAlign: 'left',
-                                    marginRight: 7,
-                                    // marginLeft : 100
-                                }}
-                                name="trash-outline"
-                                color={COLORS.primary}
-                                size={20}
-                            />
-                            <View style={{ width: (windowWidth * 95.7) / 100, marginLeft: -377, alignSelf: 'center', flexDirection: 'row' }}>
-                                <Text
-                                    style={{
-                                        textAlign: 'left',
-                                        // color: COLORS.primary,
-                                        // fontSize: 15,
-                                        left: 14,
-                                        // marginLeft : 140,
-                                        marginTop: 45,
-                                        // width: 79.7,
-                                        // height: 19,
-                                        fontFamily: "nunito-regular",
-                                        fontSize: 14,
-                                        fontWeight: "normal",
-                                        fontStyle: "normal",
-                                        letterSpacing: 0.16,
-                                        color: COLORS.GREYISH_BROWN,
-                                        top: -10
-                                    }}
-                                >
-                                    {'Muchas gracias '}{route.params.incidencia.autor}{'!'}
-                                </Text>
-                            </View>
-                        </View>
+                                        }}
+                                        style={{
+
+                                            marginTop: 10,
+                                            //textAlign: 'left',
+                                            marginLeft: 14
+                                        }}
+                                        name="person-outline"
+                                        color={COLORS.primary}
+                                        size={20}
+                                    />
+                                    <Text
+                                        style={{
+                                            // color: COLORS.primary,
+                                            // fontSize: 15,
+                                            // flex : 0.2,
+                                            marginTop: 12,
+                                            //flex: 0.9,
+                                            //textAlign: 'left',
+                                            marginLeft: 4,
+                                            width: 82,
+                                            height: 19,
+                                            fontFamily: "nunito-regular",
+                                            fontSize: 14,
+                                            fontWeight: "normal",
+                                            fontStyle: "normal",
+                                            letterSpacing: 0.16,
+                                            color: COLORS.GREYISH_BROWN,
+                                        }}
+                                    >
+                                        {/* {route.params.incidencia.autor_username} */}
+                                        {com.autor_username}
+                                    </Text>
+                                    <Icon
+                                        onPress={() => {
+
+                                        }}
+                                        style={{
+                                            // flex: 0,
+                                            marginTop: 15,
+                                            textAlign: 'right',
+                                            //left: (route.params.incidencia.tipo === 1 || route.params.incidencia.tipo === 2) ? 150 : 140
+                                            marginRight: 4,
+                                            marginLeft: 210
+                                        }}
+                                        name="construct-outline"
+                                        color={COLORS.primary}
+                                        size={20}
+                                    />
+                                    <Icon
+                                        onPress={() => {
+                                            eliminarComentario(com.id, com.uid);
+                                        }}
+                                        style={{
+                                            // flex: 1,
+                                            zIndex: 111111,
+                                            marginTop: 15,
+                                            //left: (route.params.incidencia.tipo === 1 || route.params.incidencia.tipo === 2) ? 150 : 140
+                                            textAlign: 'left',
+                                            marginRight: 7,
+                                            // marginLeft : 100
+                                        }}
+                                        name="trash-outline"
+                                        color={COLORS.primary}
+                                        size={20}
+                                    />
+                                    <View style={{ width: (windowWidth * 95.7) / 100, marginLeft: -377, alignSelf: 'center', flexDirection: 'row' }}>
+                                        <Text
+                                            style={{
+                                                textAlign: 'left',
+                                                // color: COLORS.primary,
+                                                // fontSize: 15,
+                                                left: 14,
+                                                // marginLeft : 140,
+                                                marginTop: 45,
+                                                // width: 79.7,
+                                                // height: 19,
+                                                fontFamily: "nunito-regular",
+                                                fontSize: 14,
+                                                fontWeight: "normal",
+                                                fontStyle: "normal",
+                                                letterSpacing: 0.16,
+                                                color: COLORS.GREYISH_BROWN,
+                                                top: -10
+                                            }}
+                                        >
+                                            {/* {'Muchas gracias '}{route.params.incidencia.autor}{'!'} */}
+                                            {com.comment_body}
+                                        </Text>
+                                    </View>
+                                </View>
+                            );
+                        })}
                         {/* Tipo 1            */}
                         {
                             (votado === false && route.params.incidencia.tipo === 1) &&
@@ -1153,55 +1315,104 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                         // </View>
                     )
                 }
+                {
+                    camera &&
+                    (
+                        <View style={{ flex: 1 }}>
+                            <Modal
+                                animationType="slide"
+                                transparent={true}
+                                visible={true}>
+
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        showCamera(false);
+                                    }}
+                                    style={styles.buttonExit}>
+                                    <Text style={styles.textExit}>X</Text>
+                                </TouchableOpacity>
+                                <View style={[styles.modalBackground]}>
+                                    {/* <Camera
+                                ref={cameraRef}
+                                style={styles.camera}
+                                type={cameraType}
+                                onCameraReady={onCameraReady}
+                            >                                
+                            </Camera> */}
+
+                                    <View style={styles.containerCamera}>
+                                        <Camera
+                                            ref={cameraRef}
+                                            style={styles.camera}
+                                            type={cameraType}
+                                            onCameraReady={onCameraReady}
+                                        >
+                                        </Camera>
+                                        {!isPreview && (
+                                            <View style={styles.bottomButtonsContainer}>
+                                                <TouchableOpacity disabled={!isCameraReady} onPress={switchCamera}>
+                                                    <MaterialIcons name='flip-camera-ios' size={28} color='white' />
+                                                </TouchableOpacity>
+                                                <TouchableOpacity
+                                                    activeOpacity={0.7}
+                                                    disabled={!isCameraReady}
+                                                    onPress={onSnap}
+                                                    style={styles.capture}
+                                                />
+                                            </View>
+                                        )}
+                                        {isPreview && (
+                                            <TouchableOpacity
+                                                onPress={cancelPreview}
+                                                style={styles.closeButton}
+                                                activeOpacity={0.7}
+                                            >
+                                                <AntDesign name='close' size={32} color='#fff' />
+                                            </TouchableOpacity>
+                                        )}
+                                    </View>
+                                </View>
+                            </Modal>
+                        </View>
+                    )
+                }
             </View>
+
         </SafeAreaView>
 
     );
 }
 const styles = StyleSheet.create({
-    containerSVGheart: {
-        alignContent: 'center',
-        justifyContent: 'center',
+    bottomButtonsContainer: {
+        position: 'absolute',
+        flexDirection: 'row',
+        bottom: 28,
+        width: '100%',
         alignItems: 'center',
-        alignSelf: 'center',
-        left: 275,
-        zIndex: 1111111,
-        width: 22,
-        height: 18,
-        borderStyle: "solid",
-        borderColor: COLORS.primary
+        justifyContent: 'center',
     },
-    container: {
-        // justifyContent: 'center',
-        // alignContent: 'center',
-        // alignItems: 'center',
-        // alignSelf: 'center',
-        // height: 200,
-        // width: 350,
-        // borderWidth: 1,
-        // borderRadius: 20,
-        // marginVertical: 10,
+    capture: {
+        backgroundColor: '#5A45FF',
+        borderRadius: 5,
+        height: CAPTURE_SIZE,
+        width: CAPTURE_SIZE,
+        borderRadius: Math.floor(CAPTURE_SIZE / 2),
+        marginBottom: 28,
+        marginHorizontal: 30
+    },
+    containerCamera: {
         flex: 1,
-        justifyContent: 'center',
-        alignContent: 'center',
+        borderWidth: 'blue',
+        borderWidth: 3,
+        backgroundColor: COLORS.primary,
+        width: '100%'
+    },
+    camera: {
         alignItems: 'center',
-        alignSelf: 'center',
-        height: (windowHeight * 31.65) / 100,
-        width: (windowWidth * 95.7) / 100,
-        borderWidth: 1,
-        borderRadius: 20,
-        marginVertical: 10,
-    },
-    imageContainer: {
-        //flex: 1,
-        width: '100%',
+        justifyContent: 'center',
+        marginTop: 20,
         height: '100%',
-    },
-    image: {
         width: '100%',
-        height: '100%',
-        borderRadius: 15,
-        //resizeMode: 'contain',
     },
     buttonExit: {
         position: 'absolute',
@@ -1224,5 +1435,38 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
+    },
+    containerSVGheart: {
+        alignContent: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'center',
+        left: 275,
+        zIndex: 1111111,
+        width: 22,
+        height: 18,
+        borderStyle: "solid",
+        borderColor: COLORS.primary
+    },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'center',
+        height: (windowHeight * 31.65) / 100,
+        width: (windowWidth * 95.7) / 100,
+        borderWidth: 1,
+        borderRadius: 20,
+        marginVertical: 10,
+    },
+    imageContainer: {
+        width: '100%',
+        height: '100%',
+    },
+    image: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 15,
     },
 });

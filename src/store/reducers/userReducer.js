@@ -7,7 +7,9 @@ const initialState = {
   filtrosOriginals : null,
   marcados : null,
   marcadosOriginals : null,
-  secciones : null
+  secciones : null, 
+  idArchivo : null, 
+  creadaIncidencia : false
 };
 
 const userReducer = (state, action) => {
@@ -22,13 +24,28 @@ const userReducer = (state, action) => {
       newState.access_token = action.payload;
       break;
     }
+    case actionTypes.GUARDAR_CREADA: {
+      //alert("action " + JSON.stringify(action))
+      newState.creadaIncidencia = action.payload;
+      break;
+    }    
+    case actionTypes.GUARDAR_ARCHIVO: {
+      //alert("idarchivo " + JSON.stringify(action.payload))
+      newState.idArchivo = action.payload;
+      break;
+    }
+    case actionTypes.GUARDAR_USUARIO: {
+      //alert("action " + JSON.stringify(action.payload))
+      newState.userInfo = action.payload;
+      break;
+    }
     case actionTypes.GUARDAR_SECCIONES_PERFIL: {
       // alert("action " + JSON.stringify(action.payload))
       newState.secciones = action.payload;
       break;
     }
     case actionTypes.GUARDAR_FILTROS: {
-      //alert("filtros " + JSON.stringify(action.payload))
+      // alert("filtros " + JSON.stringify(action.payload))
       newState.filtros = action.payload;
       //alert("newState.filtros " + JSON.stringify(newState.filtros))
       //newState.filtrosOriginals = action.payload;

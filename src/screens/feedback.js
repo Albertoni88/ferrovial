@@ -1,4 +1,8 @@
 import React, { useState, useEffect, useRef, createRef } from 'react';
+import {
+    useDispatch as useReduxDispatch,
+    useSelector as useReduxSelector
+} from 'react-redux';
 import { Button, SafeAreaView, Dimensions, Image, TextInput, View, Text, TouchableOpacity, Alert, Platform, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { CheckBox } from 'react-native-elements'
@@ -9,7 +13,8 @@ import {
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { height } from 'styled-system';
-
+import axios from 'axios';
+import { URL_SERVER } from '../constants/urls';
 
 
 const windowWidth = Dimensions.get('window').width;
@@ -17,14 +22,61 @@ const windowHeight = Dimensions.get('window').height;
 
 export default function Feedback({ navigation, props }) {
 
-    const [toggleCheckBox, setToggleCheckBox] = useState(false);
-    const [checked, setChecked] = React.useState(false);
-
+    const myRef = createRef();
+    const [asunto, setAsunto] = useState('');
+    const [descripcion, setDescripcion] = React.useState('');
+    const [CSRF, setCSRF] = useState('');
+    const token = useReduxSelector((state) => state.user.access_token);
 
     useEffect(() => {
         // alert("navigation " + JSON.stringify(navigation))
     }, []);
+    async function getCSRFToken() {
+        axios.get('https://ferrovial.creacionwebprofesional.com/session/token')
+            .then(response => {
+                //alert("response token " + JSON.stringify(response.data));
+                setCSRF(response.data);
+            })
+            .catch(error => {
 
+            });
+    }
+    const pressOut = () => {
+        myRef.current.blur();
+    }
+    const guardarFeedBack = async () => {
+        if (asunto !== '' && descripcion !== '') {
+            await getCSRFToken();
+            const data = {
+                "webform_id": "feedback",
+                "subject": asunto,
+                "message": descripcion,
+                "acepta_la_politica_de_privacidad": 1
+            }
+            axios.post(URL_SERVER + 'webform_rest/submit?_format=json', data,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token,
+                        'X-CSRF-Token': CSRF
+                    }
+                }
+            )
+                .then(response => {
+                    if (response.status === 200) {
+                        alert("Guardado con éxito");
+                        setAsunto('');
+                        setDescripcion('');
+                    }
+                })
+                .catch(error => {
+                    alert("error1 " + error)
+                });
+        } else {
+            alert("Tiene campos vacíos");
+        }
+
+    }
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={{ backgroundColor: 'white', textAlign: 'center', alignItems: 'center', flex: 1, }}>
@@ -37,13 +89,8 @@ export default function Feedback({ navigation, props }) {
                     marginBottom: (windowHeight * 19.5) / 100
                 }}>
                     <View style={{ flexDirection: 'column', }}>
-                        {/* <Text style={{ marginTop: 20, marginLeft: 15, color: 'black', fontSize: 16 }}>Si crees que hay algo que pueda ayudarnos a </Text>
-                    <Text style={{ marginLeft: 15, color: 'black', fontSize: 16 }}>mejorar, cuentános... </Text> */}
-                        {/* <Text style={{ marginTop: 20, marginLeft: 15, color: 'black', fontSize: 16 }}>Si crees que hay algo que pueda ayudarnos a </Text> */}
+
                         <Text style={{
-                            // marginLeft: 15,
-                            // color: 'black',
-                            // fontSize: 16
                             width: 351,
                             height: 44,
                             fontFamily: 'nunito-semibold',
@@ -60,34 +107,33 @@ export default function Feedback({ navigation, props }) {
                 </View>
                 <View style={{ marginTop: 5, flexDirection: 'column' }}>
                     <TextInput
+                        value={asunto}
                         placeholder={'Asunto'}
                         placeholderTextColor={'white'}
                         style={styles.inputuser}
                         onChangeText={(asunto) => {
+                            setAsunto(asunto);
                         }}
                     />
                     <TextInput
+                        ref={myRef}
+                        onBlur={pressOut}
+                        value={descripcion}
                         multiline={true}
                         numberOfLines={4}
                         placeholder={'Descripción'}
                         placeholderTextColor={'white'}
                         style={styles.descripcion}
                         onChangeText={(descripcion) => {
-                            //this.setState({ email });
+                            setDescripcion(descripcion);
                         }}
                     />
 
                     <TouchableOpacity
                         onPress={() => {
-
+                            guardarFeedBack();
                         }}
                         style={{
-                            // marginTop: 200,
-                            // borderRadius: 30,
-                            // backgroundColor: 'brown',
-                            // width: 100,
-                            // height: 50
-
                             alignItems: 'center',
                             alignContent: 'center',
                             alignSelf: 'center',
@@ -106,11 +152,6 @@ export default function Feedback({ navigation, props }) {
 
                         }}>
                         <Text style={{
-                            // alignSelf: 'center',
-                            // fontSize: 15,
-                            // textAlign: 'center',
-                            // alignItems: 'center',
-                            // color: 'white'
                             width: 71,
                             height: 24,
                             fontFamily: 'nunito-bold',

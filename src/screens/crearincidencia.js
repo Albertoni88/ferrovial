@@ -1,5 +1,17 @@
 import React, { useState, useEffect, useRef, createRef } from 'react';
-import { Button, Dimensions, Image, TextInput, View, Text, TouchableOpacity, Modal, Alert, Platform, StyleSheet } from 'react-native';
+import {
+    useDispatch as useReduxDispatch,
+    useSelector as useReduxSelector
+} from 'react-redux';
+import MapView, {
+    AnimatedRegion,
+    animateCamera,
+    PROVIDER_GOOGLE,
+} from 'react-native-maps';
+import * as Location from 'expo-location';
+import * as Permissions from 'expo-permissions';
+
+import { Button, ActivityIndicator, Dimensions, Image, TextInput, View, Text, TouchableOpacity, Modal, Alert, Platform, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import HeaderCrearIncidencia from '../components/headerCrearIncidencia';
 import { Camera } from 'expo-camera';
@@ -9,6 +21,12 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import {
+    guardarIncidencia,
+    guardarImagen,
+    guardarCreada,
+    guardarIncidenciaRedux
+} from '../store/actions/incidenciaActions';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -22,45 +40,101 @@ export default function CrearIncidencia({ navigation, props }) {
     const [type, setType] = useState(Camera.Constants.Type.back);
     const [camera, showCamera] = useState(false);
     const [creada, setCreada] = useState(false);
-
+    const myRef = createRef();
     const cameraRef = useRef();
     //const cameraRef = createRef();
     const [hasPermission, setHasPermission] = useState(null);
     const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
     const [isPreview, setIsPreview] = useState(false);
     const [isCameraReady, setIsCameraReady] = useState(false);
-    // useEffect(() => {
-    //     (async () => {
-    //         const { status } = await Camera.requestPermissionsAsync();
-    //         setHasPermission(status === 'granted');
-    //     })();
-    // }, []);
+    const [photo, setPhoto] = useState('');
+    const [titulo, setTitulo] = useState('');
+    const [descripcion, setDescripcion] = useState('');
+    const [direccion, setDireccion] = useState('');
+    const [geo, setGeo] = useState({});
+
+
+    const dispatch = useReduxDispatch();
+    const token = useReduxSelector((state) => state.user.access_token);
+    const idArchivo = useReduxSelector((state) => state.user.idArchivo);
+    const [creadaIncidencia, setCreadaIncidencia] = useState(false);
+    const incidenciasRedux = useReduxSelector((state) => state.incidencia.incidencias);
+    const [location, setLocation] = useState(null);
+    const [mapa, setMapa] = useState(false);
+    const [geoGuardada, setgeoGuardada] = useState(false);
+    const [tomadaFoto, setTomadaFoto] = useState(false);
 
     useEffect(() => {
         onHandlePermission();
+
+        console.log("creadaIncidencia ", creadaIncidencia)
     }, []);
 
+    const setCurrentLocation = async () => {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+            setErrorMsg('Permission to access location was denied');
+            return;
+        }
+        let location = await Location.getCurrentPositionAsync({});
+        // alert("loc " + JSON.stringify(location))
+        setLocation(location);
+    };
+
+    const guardarInc = async () => {
+        var d = new Date();
+        var n = d.getMilliseconds();
+        const generatedNombre = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) + n;
+
+        if (titulo === '' || descripcion === '') {
+            alert("El título y la descrición son obligatorios");
+        } else {
+            var imagenes = [];
+            imagenes.push({
+                "filename": generatedNombre,
+                "tipemime": "image/png",
+                "base64": photo
+            })
+            
+            //alert("data " + JSON.stringify(data.geo))
+            guardarImagen(token, imagenes).then(response => {
+                if (response.status === 200) {
+                    var data = {
+                        "direccion": direccion,
+                        "titulo": titulo,
+                        "descripcion": descripcion,
+                        "imagen": response.data[0],
+                        "geo": {
+                            "lat": location.coords.latitude,
+                            "lng": location.coords.longitude
+                        }
+                    }
+                    guardarIncidencia(token, data).then(response => {
+                        if (response === 200) {
+                            setCreadaIncidencia(true);
+                            dispatch(guardarIncidenciaRedux(data));
+                        }
+                    });
+                } else {
+                    alert("Hubo error al subir la imagen");
+                }
+            });
+        }
+
+
+    }
     const onSnap = async () => {
 
         if (cameraRef.current) {
             const options = { quality: 0.7, base64: true };
             const data = await cameraRef.current.takePictureAsync(options)
                 .then(async photo => {
-                    //photo.exif.Orientation = 1;
-                    // const source = photo.base64;
-                    // if (source) {
-                    //     await cameraRef.current.pausePreview();
-                    //     setIsPreview(true);
-                    // }
                     setIsPreview(false);
                     showCamera(false);
-                    console.log(photo);
+                    console.log("photooooo ", photo.base64);
+                    setPhoto(photo.base64);
+                    setTomadaFoto(true);
                 });
-            // const source = data.base64;
-            // if (source) {
-            //     await cameraRef.current.pausePreview();
-            //     setIsPreview(true);
-            // }
         }
     };
     const cancelPreview = async () => {
@@ -93,116 +167,80 @@ export default function CrearIncidencia({ navigation, props }) {
     return (
         <View style={styles.container}>
             <HeaderCrearIncidencia navigation={navigation} />
-            <View style={{}}>
-                <Text style={{
-                    textAlign: 'left',
-                    marginTop: (windowHeight * 10) / 100,
-                    marginLeft: (windowWidth * 4.3) / 100,
-                    width: 42,
-                    height: 22,
-                    fontFamily: 'nunito-semibold',
-                    fontSize: 16,
-                    fontWeight: "600",
-                    fontStyle: "normal",
-                    letterSpacing: 0,
-                    color: 'white',
-
-
-                }}>
-                    Título
-                </Text>
-                <TextInput
-                    placeholder={'*Pon un título corto y conciso...'}
-                    placeholderTextColor={COLORS.primary}
-                    style={styles.inputtitulo}
-                    placeholderStyle={{
-                        width: 342,
-                        height: 17,
-                        fontSize: 14,
-                        fontWeight: "normal",
+            {
+                mapa === false &&
+                <View style={{}}>
+                    <Text style={{
+                        textAlign: 'left',
+                        marginTop: (windowHeight * 10) / 100,
+                        marginLeft: (windowWidth * 4.3) / 100,
+                        width: 42,
+                        height: 22,
+                        fontFamily: 'nunito-semibold',
+                        fontSize: 16,
+                        fontWeight: "600",
                         fontStyle: "normal",
                         letterSpacing: 0,
-                        color: "#9d9d9d"
-                    }}
-                    onChangeText={(titulo) => {
-                        //this.setState({ email });
-                    }}
-                />
-                <Text style={{
-                    // marginTop: 15,
-                    // fontSize: 15,
-                    // fontWeight: 'bold',
-                    // color: 'white'
-                    textAlign: 'left',
-                    marginTop: (windowHeight * 1.47) / 100,
-                    marginLeft: (windowWidth * 4.3) / 100,
-                    width: 85,
-                    height: 22,
-                    fontFamily: 'nunito-semibold',
-                    fontSize: 16,
-                    fontWeight: "600",
-                    fontStyle: "normal",
-                    letterSpacing: 0,
-                    color: 'white',
-                }}>
-                    Descripción
-                </Text>
-                <TextInput
-                    multiline={true}
-                    numberOfLines={3}
-                    placeholder={'*Describe la incidencia de forma clara...'}
-                    placeholderTextColor={COLORS.primary}
-                    style={styles.descripcion}
-                    onChangeText={(descripcion) => {
-                        //this.setState({ email });
-                    }}
-                />
-                <Text style={{
-                    // marginTop: 15,
-                    // fontSize: 15,
-                    // fontWeight: 'bold',
-                    // color: 'white'
-                    width: 102,
-                    height: 22,
-                    fontFamily: 'nunito-semibold',
-                    fontSize: 16,
-                    fontWeight: "600",
-                    fontStyle: "normal",
-                    letterSpacing: 0,
-                    color: 'white',
-                    marginTop: (windowHeight * 1.47) / 100,
-                    marginLeft: (windowWidth * 4.3) / 100,
-                }}>
-                    Sube una foto
-                </Text>
-                <View
-                    style={styles.descripcion}
-                >
-                    <Icon
-                        style={{
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            alignContent: 'center',
-                            // color: 'brown',
-                            alignSelf: 'center',
-                            zIndex: 111,
-                            width: 73,
-                            height: 70,
-                            marginTop: 25
-                            //backgroundColor: "rgba(0, 0, 0, 0.26)"
+                        color: 'white',
+
+
+                    }}>
+                        Título
+                    </Text>
+                    <TextInput
+                        value={titulo}
+                        placeholder={'*Pon un título corto y conciso...'}
+                        placeholderTextColor={COLORS.primary}
+                        style={styles.inputtitulo}
+                        placeholderStyle={{
+                            width: 342,
+                            height: 17,
+                            fontSize: 14,
+                            fontWeight: "normal",
+                            fontStyle: "normal",
+                            letterSpacing: 0,
+                            color: "#9d9d9d"
                         }}
-                        onPress={() => {
-                            showCamera(true);
+                        onChangeText={(titulo) => {
+                            setTitulo(titulo)
                         }}
-                        name="camera-outline" size={75}
-                        color={'rgba(0, 0, 0, 0.26)'}
                     />
-                </View>
-                <View
-                //style={styles.localizacion}
-                >
                     <Text style={{
-                        width: 212,
+                        // marginTop: 15,
+                        // fontSize: 15,
+                        // fontWeight: 'bold',
+                        // color: 'white'
+                        textAlign: 'left',
+                        marginTop: (windowHeight * 1.47) / 100,
+                        marginLeft: (windowWidth * 4.3) / 100,
+                        width: 85,
+                        height: 22,
+                        fontFamily: 'nunito-semibold',
+                        fontSize: 16,
+                        fontWeight: "600",
+                        fontStyle: "normal",
+                        letterSpacing: 0,
+                        color: 'white',
+                    }}>
+                        Descripción
+                    </Text>
+                    <TextInput
+                        value={descripcion}
+                        multiline={true}
+                        numberOfLines={3}
+                        placeholder={'*Describe la incidencia de forma clara...'}
+                        placeholderTextColor={COLORS.primary}
+                        style={styles.descripcion}
+                        onChangeText={(descripcion) => {
+                            setDescripcion(descripcion)
+                        }}
+                    />
+                    <Text style={{
+                        // marginTop: 15,
+                        // fontSize: 15,
+                        // fontWeight: 'bold',
+                        // color: 'white'
+                        width: 102,
                         height: 22,
                         fontFamily: 'nunito-semibold',
                         fontSize: 16,
@@ -213,78 +251,127 @@ export default function CrearIncidencia({ navigation, props }) {
                         marginTop: (windowHeight * 1.47) / 100,
                         marginLeft: (windowWidth * 4.3) / 100,
                     }}>
-                        Donde ha sido la incidencia?
+                        Sube una foto
                     </Text>
                     <View
-                        style={styles.localizacion}
+                        style={styles.descripcion}
                     >
-                        <Text style={{
-                            marginLeft: 10,
-                            textAlign: 'left',
-                            // fontSize: 15,
-                            // color: 'brown'
-                            // width: 342,
-                            // height: 17,
-                            //fontFamily: "VarelaRound",
-                            fontSize: 14,
-                            fontWeight: "normal",
-                            fontStyle: "normal",
-                            letterSpacing: 0,
-                            color: "#9d9d9d"
-                        }}>
-                            Geolocalización de la ubicación
-                        </Text>
                         <Icon
                             style={{
-                                // justifyContent: 'center',
-                                // alignItems: 'center',
-                                // alignContent: 'center',
-                                color: 'rgb(79, 95, 225)',
-                                textAlign: 'right',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                alignContent: 'center',
+                                // color: 'brown',
+                                alignSelf: 'center',
                                 zIndex: 111,
-                                flex: 0.95
-                                //marginLeft: 20
+                                width: 73,
+                                height: 70,
+                                marginTop: 25
+                                //backgroundColor: "rgba(0, 0, 0, 0.26)"
                             }}
                             onPress={() => {
+                                showCamera(true);
                             }}
-                            name="location-outline" size={30}
+                            name="camera-outline" size={75}
+                            color={'rgba(0, 0, 0, 0.26)'}
                         />
+                        {
+                            tomadaFoto === true &&
+                            <AntDesign name='checkcircleo' size={32} color={'rgba(0, 0, 0, 0.26)'} />
+                        }
                     </View>
-                    <TextInput
-                        placeholder={'Nombre amigable para la dirección'}
-                        placeholderTextColor={"#9d9d9d"}
-                        style={styles.direccion}
-                        onChangeText={(descripcion) => {
-                            //this.setState({ email });
-                        }}
-                    />
-                    <TouchableOpacity
-                        onPress={() => {
-                            setCreada(true);
-                        }}
-                        style={styles.siguienteTouch}>
+                    <View
+                    //style={styles.localizacion}
+                    >
                         <Text style={{
-                            // fontSize: 15,
-                            // color: 'brown'
-                            alignItems: 'center',
-                            alignSelf: 'center',
-                            textAlign: 'center',
-                            alignItems: 'center',
-                            width: 83,
-                            height: 24,
-                            fontFamily: "nunito-bold",
-                            fontSize: 18,
-                            fontWeight: "bold",
+                            width: 212,
+                            height: 22,
+                            fontFamily: 'nunito-semibold',
+                            fontSize: 16,
+                            fontWeight: "600",
                             fontStyle: "normal",
-                            letterSpacing: 0.45,
-                            textAlign: "center",
-                            color: COLORS.primary
+                            letterSpacing: 0,
+                            color: 'white',
+                            marginTop: (windowHeight * 1.47) / 100,
+                            marginLeft: (windowWidth * 4.3) / 100,
                         }}>
-                            Siguiente
+                            Donde ha sido la incidencia?
                         </Text>
-                    </TouchableOpacity>
+                        <View
+                            style={styles.localizacion}
+                        >
+                            <Text style={{
+                                marginLeft: 10,
+                                textAlign: 'left',
+                                // fontSize: 15,
+                                // color: 'brown'
+                                // width: 342,
+                                // height: 17,
+                                //fontFamily: "VarelaRound",
+                                fontSize: 14,
+                                fontWeight: "normal",
+                                fontStyle: "normal",
+                                letterSpacing: 0,
+                                color: "#9d9d9d"
+                            }}>
+                                {geoGuardada === false ? 'Geolocalización de la ubicación' : 'Ubicación guardada'}
+                            </Text>
+                            <Icon
+                                style={{
+                                    // justifyContent: 'center',
+                                    // alignItems: 'center',
+                                    // alignContent: 'center',
+                                    color: 'rgb(79, 95, 225)',
+                                    textAlign: 'right',
+                                    zIndex: 111,
+                                    flex: 0.95
+                                    //marginLeft: 20
+                                }}
+                                onPress={() => {
+                                    setCurrentLocation();
+                                    setMapa(true);
+                                }}
+                                name="location-outline" size={30}
+                            />
+                        </View>
+                        <TextInput
+                            value={direccion}
+                            placeholder={'Nombre amigable para la dirección'}
+                            placeholderTextColor={"#9d9d9d"}
+                            style={styles.direccion}
+                            onChangeText={(direccion) => {
+                                setDireccion(direccion);
+                            }}
+                        />
+                        <TouchableOpacity
+                            onPress={() => {
+                                //setCreada(true);
+                                guardarInc();
+                            }}
+                            style={styles.siguienteTouch}>
+                            <Text style={{
+                                // fontSize: 15,
+                                // color: 'brown'
+                                alignItems: 'center',
+                                alignSelf: 'center',
+                                textAlign: 'center',
+                                alignItems: 'center',
+                                width: 83,
+                                height: 24,
+                                fontFamily: "nunito-bold",
+                                fontSize: 18,
+                                fontWeight: "bold",
+                                fontStyle: "normal",
+                                letterSpacing: 0.45,
+                                textAlign: "center",
+                                color: COLORS.primary
+                            }}>
+                                Siguiente
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-            </View>
+            }
             {
                 camera &&
                 (
@@ -317,29 +404,6 @@ export default function CrearIncidencia({ navigation, props }) {
                                     onCameraReady={onCameraReady}
                                 >
                                 </Camera>
-                                {/* {!isPreview && (
-                                    <View style={styles.bottomButtonsContainer}>
-                                        <TouchableOpacity disabled={!isCameraReady} onPress={switchCamera}>
-                                            <Icon
-                                                style={{
-                                                    width: (windowWidth * 4.8) / 18,
-                                                    height: (windowHeight * 2.5) / 20,
-                                                    marginLeft: 12,
-                                                    marginTop: 50,
-                                                }}
-                                                name="chevron-back-outline"
-                                                color="white"
-                                                size={30}
-                                            />
-                                        </TouchableOpacity>
-                                        <TouchableOpacity
-                                            activeOpacity={0.7}
-                                            disabled={!isCameraReady}
-                                            onPress={onSnap}
-                                            style={styles.capture}
-                                        />
-                                    </View>
-                                )} */}
                                 {!isPreview && (
                                     <View style={styles.bottomButtonsContainer}>
                                         <TouchableOpacity disabled={!isCameraReady} onPress={switchCamera}>
@@ -368,90 +432,155 @@ export default function CrearIncidencia({ navigation, props }) {
                 )
             }
             {
-                creada &&
-                (
-                    <Modal
-                        animationType="slide"
-                        transparent={true}
-                        visible={true}>
-                        <View style={[styles.modalCreada]}>
+                creadaIncidencia &&
+                (<Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={true}>
+                    <View style={[styles.modalCreada]}>
 
+                        <View style={{
+                            alignItems: 'center',
+                            alignSelf: 'center',
+                            justifyContent: 'center',
+                            height: '20%',
+                            width: '50%',
+                            // marginTop: 267,
+                        }}>
+                            <Image style={{
+                                height: '100%',
+                                width: '100%',
+                                borderRadius: 20
+                            }} source={require('../assets/1.png')} />
                             <View style={{
-                                alignItems: 'center',
-                                alignSelf: 'center',
-                                justifyContent: 'center',
-                                height: '20%',
-                                width: '50%',
-                                // marginTop: 267,
+                                flexDirection: 'column',
+                                width: 325,
+                                height: 165,
+                                marginTop: 8,
                             }}>
-                                <Image style={{
-                                    height: '100%',
-                                    width: '100%',
-                                    borderRadius: 20
-                                }} source={require('../assets/1.png')} />
-                                <View style={{
-                                    flexDirection: 'column',
-                                    width: 325,
-                                    height: 165,
-                                    marginTop: 8,
+                                <Text style={{
+                                    width: 295,
+                                    //height: 108,
+                                    fontFamily: "nunito-bold",
+                                    fontSize: 16,
+                                    fontWeight: "normal",
+                                    fontStyle: "normal",
+                                    letterSpacing: 0,
+                                    color: 'white',
+                                    textAlign: "center",
+                                    alignSelf: 'center',
+                                    justifyContent: 'center'
+
                                 }}>
+                                    ¡Mil gracias por tu aportación!
+                                </Text>
+                                <Text style={{
+                                    width: 295,
+                                    fontFamily: "nunito-regular",
+                                    fontSize: 16,
+                                    fontWeight: "normal",
+                                    fontStyle: "normal",
+                                    letterSpacing: 0,
+                                    color: 'white',
+                                    marginTop: 40,
+                                    textAlign: "center",
+                                    alignSelf: 'center',
+                                    justifyContent: 'center'
+                                }}>
+                                    Sigue el estado de las propuestas en cualquier momento.
+                                </Text>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        //setCreada(false);
+                                        navigation.navigate('Main');
+                                        setCreadaIncidencia(false);
+                                    }}
+                                    style={styles.salir}>
                                     <Text style={{
-                                        width: 295,
-                                        //height: 108,
+                                        width: 40,
+                                        height: 24,
                                         fontFamily: "nunito-bold",
-                                        fontSize: 16,
-                                        fontWeight: "normal",
+                                        fontSize: 18,
+                                        fontWeight: "bold",
                                         fontStyle: "normal",
-                                        letterSpacing: 0,
-                                        color: 'white',
+                                        letterSpacing: 0.45,
                                         textAlign: "center",
-                                        alignSelf: 'center',
-                                        justifyContent: 'center'
-
+                                        color: COLORS.primary,
                                     }}>
-                                        ¡Mil gracias por tu aportación!
+                                        Salir
                                     </Text>
-                                    <Text style={{
-                                        width: 295,
-                                        fontFamily: "nunito-regular",
-                                        fontSize: 16,
-                                        fontWeight: "normal",
-                                        fontStyle: "normal",
-                                        letterSpacing: 0,
-                                        color: 'white',
-                                        marginTop: 40,
-                                        textAlign: "center",
-                                        alignSelf: 'center',
-                                        justifyContent: 'center'
-                                    }}>
-                                        Sigue el estado de las propuestas en cualquier momento.
-                                    </Text>
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            setCreada(false);
-                                            navigation.navigate('MainHeader');
-                                        }}
-                                        style={styles.salir}>
-                                        <Text style={{
-                                            width: 40,
-                                            height: 24,
-                                            fontFamily: "nunito-bold",
-                                            fontSize: 18,
-                                            fontWeight: "bold",
-                                            fontStyle: "normal",
-                                            letterSpacing: 0.45,
-                                            textAlign: "center",
-                                            color: COLORS.primary,
-                                        }}>
-                                            Salir
-                                        </Text>
-                                    </TouchableOpacity>
-                                </View>
+                                </TouchableOpacity>
                             </View>
-
                         </View>
-                    </Modal>
-                )
+
+                    </View>
+                </Modal>)
+            }
+            {
+                mapa === true && (location === null || location == undefined) &&
+                <ActivityIndicator
+                    size="large"
+                    color={'white'}
+                    style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}
+                />
+            }
+            {
+                mapa === true && location &&
+                <View style={{ flex: 1, marginTop: 80, zIndex: 11111 }}>
+                    <MapView
+                        ref={myRef}
+                        style={{
+                            flex: 1,
+                            width: '100%',
+                            // borderWidth : 3
+                        }}
+                        provider={PROVIDER_GOOGLE}
+                        //onMapReady={() => this._onMapReady()}
+                        // onLayout={ ()=> this._onMapReady()}
+                        loadingEnabled={true}
+                        loadingIndicatorColor={'brown'}
+                        initialRegion={{
+                            "latitude": location.coords.latitude,
+                            "longitude": location.coords.longitude,
+                            "latitudeDelta": 0.0922,
+                            "longitudeDelta": 0.0421,
+                        }}
+                    // onRegionChange={this.onRegionChange}                    
+                    >
+
+
+                        <MapView.Marker
+                            onDragEnd={(e) => {
+                                setLocation({
+                                    "coords": {
+                                        "latitude": e.nativeEvent.coordinate.latitude,
+                                        "longitude": e.nativeEvent.coordinate.longitude
+                                    }
+                                });
+                                //alert("locationasasdasd " + JSON.stringify(e.nativeEvent.coordinate))
+                                Alert.alert(
+                                    'Ubicación',
+                                    'Desea esta ubicación?',
+                                    [
+                                        { text: 'No', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                                        // { text: 'Yes', onPress: () => BackHandler.exitApp() },
+                                        {
+                                            text: 'Si', onPress: () => {
+                                                setgeoGuardada(true);
+                                                setMapa(false);
+                                            }
+                                        },
+                                    ],
+                                    { cancelable: false });
+                            }}
+                            draggable
+                            onPress={() => {
+                            }}
+                            tracksViewChanges={false}
+                            coordinate={{ latitude: location.coords.latitude, longitude: location.coords.longitude }}
+                        />
+                    </MapView>
+                </View>
             }
         </View>
     );
@@ -498,8 +627,6 @@ const styles = StyleSheet.create({
     },
     containerCamera: {
         flex: 1,
-        borderWidth: 'blue',
-        borderWidth: 3,
         backgroundColor: COLORS.primary,
         width: '100%'
         // flexDirection: 'column',
