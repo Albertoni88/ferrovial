@@ -126,7 +126,7 @@ export default function CrearIncidencia({ navigation, props }) {
     const onSnap = async () => {
 
         if (cameraRef.current) {
-            const options = { quality: 0.7, base64: true };
+            const options = { quality: 0.2, base64: true };
             const data = await cameraRef.current.takePictureAsync(options)
                 .then(async photo => {
                     setIsPreview(false);

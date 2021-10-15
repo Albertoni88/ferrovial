@@ -155,12 +155,12 @@ export default function FilterType({ navigation, route, props }) {
             <View style={{ marginBottom: 27 }}></View>
             {
                 (filtros !== null && filtros !== undefined && marcadosAuxiliar !== null && marcadosAuxiliar !== undefined) &&
-                <ScrollView style={{ flex: 1, height: '100%' }}>
+                <ScrollView style={{ flex: 1, height: '100%', width : '100%' }}>
                     <View style={{ width: '100%' }}>
                         {
                             filtros.map((fil, indice) => {
                                 return (
-                                    <View key={indice}>
+                                    <View style = {{ width : '100%' }} key={indice}>
                                         <CardFilterType filtronombre={route.params.filtro} filter={fil} changemarcado={ChangeMarcado} indice={indice} marcadoauxiliar={marcados[indice]} marcado={marcados[indice]} />
                                     </View>
                                 );

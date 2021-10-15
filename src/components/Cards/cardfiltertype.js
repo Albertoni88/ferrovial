@@ -20,13 +20,14 @@ export default function CardFilterType({ filter, filtronombre, navigation, props
     const marcados = useReduxSelector((state) => state.user.marcados);
 
     useEffect(() => {
-        alert("marcado " + JSON.stringify(marcado));
+        //alert("marcado " + JSON.stringify(marcado));
         //alert("filter.nombre " + JSON.stringify(filter));
     }, []);
 
     if (filter !== null && filter !== undefined && filter !== []) {
         return (
             <View style={{
+                // flex : 1,
                 alignItems: 'center',
                 flexDirection: 'row',
                 width: '100%',
@@ -59,8 +60,7 @@ export default function CardFilterType({ filter, filtronombre, navigation, props
                         // fontSize: 15,
                         // alignItems: 'center',
                         color: marcados[indice] ? COLORS.primary : COLORS.browngrey,
-                        // width: 200,
-                        width: 200,
+                        width: 200,                        
                         height: 22,
                         fontFamily: "nunito-semibold",
                         fontSize: 16,
@@ -76,7 +76,7 @@ export default function CardFilterType({ filter, filtronombre, navigation, props
                 {
                     // ((marcados !== null && marcados !==undefined) && marcados[indice] === true) &&
                     (marcado === true) &&
-                    <View style={filtronombre === 'tipo' ? styles.containerSVG : styles.containerSVG1}>
+                    <View style={(filtronombre === 'tipo') ? styles.containerSVG : styles.containerSVG1}>
                         <TouchableOpacity
                             onPress={() => {
                                 //alert("indice " + indice);
@@ -93,7 +93,7 @@ export default function CardFilterType({ filter, filtronombre, navigation, props
                 {
                     // ((marcados !== null && marcados !==undefined) && marcados[indice] === false) &&
                     (marcado === false) &&
-                    <View style={filtronombre === 'tipo' ? styles.containerSVG : styles.containerSVG1}>
+                    <View style={(filtronombre === 'tipo') ? styles.containerSVG : styles.containerSVG1}>
                         <TouchableOpacity
                             onPress={() => {
                                 //alert("indiceno " + indice);
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignSelf: 'center',
         marginTop: 15,
-        left : 50,
+        left : 50,        
     },
     container: {
         flex: 1,

@@ -170,11 +170,11 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
     const onSnap = async () => {
 
         if (cameraRef.current) {
-            const options = { quality: 0.7, base64: true };
+            const options = { quality: 0.2, base64: true };
             const data = await cameraRef.current.takePictureAsync(options)
                 .then(async photo => {
                     setIsPreview(false);
-                    console.log("photooooo ", photo.base64);
+                    //console.log("photooooo ", photo.base64);
                     setPhoto(photo.base64);
                     Alert.alert(
                         'Foto',
