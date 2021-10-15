@@ -21,6 +21,7 @@ import {
     guardarIncidencia,
     guardarImagen,
     guardarComentario,
+    editarComentario,
     guardarCreada,
     guardarIncidenciaRedux,
     cargarIncidenciaDetalles,
@@ -41,8 +42,15 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                 if (response.status === 200) {
                     //alert("response editar " + JSON.stringify(response.data))
                     //dispatch(guardarUsuario(response.data));
-                    //console.log("Incidencia ", response.data.comentarios[0]);
+                    console.log("comentarios ", response.data.comentarios);
+                    var auxiliar = [];
+                    response.data.comentarios.forEach(element => {
+                        auxiliar.push(element.imagenes[0].id);
+                    });
+                    setImagenesFront(auxiliar);
+                    // alert("auxiliar " + JSON.stringify(auxiliar));
                     setListadoComentarios(response.data.comentarios);
+                    setCommentEditar(Array(response.data.comentarios.length).fill(false))
                 }
             })
             .catch(error => {
@@ -52,7 +60,7 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
         onHandlePermission();
         //alert("incidencia " + JSON.stringify(route.params))
     }, []);
-
+    const [imagenesfront, setImagenesFront] = useState(new Array());
     const [listadoComentarios, setListadoComentarios] = useState([]);
     const token = useReduxSelector((state) => state.user.access_token);
     const [votado, setVotado] = useState(false);
@@ -82,7 +90,62 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
     const [photo, setPhoto] = useState('');
     const cameraRef = useRef();
     const user = useReduxSelector((state) => state.user.userInfo);
+    const [activo, setActivo] = useState(-1);
+    const [commentEditar, setCommentEditar] = useState([]);
+    const [editado, setEditado] = useState('');
 
+    const editarComentarioFront = (index, id, body) => {
+
+        setEditado(body);
+        var marcados = [];
+        if (commentEditar[index] === false) {
+            commentEditar.forEach((element, i) => {
+                if (i !== index) {
+                    marcados.push(false);
+                } else {
+                    marcados.push(true);
+                    setActivo(index)
+                }
+            });
+            // alert("marcados " + JSON.stringify(marcados))
+            setCommentEditar(marcados);
+        } else {
+            var nuevos = [];
+            var idEditado = -1;
+            if (activo === index) {
+                listadoComentarios.forEach((element1, j) => {
+                    if (index === j) {
+                        var copia = { ...element1, "comment_body": editado };
+                        idEditado = copia.id
+                        //alert("antes " + JSON.stringify(element1) + " copia " + JSON.stringify(copia))
+                        nuevos.push(copia);
+                    } else {
+                        nuevos.push(element1);
+                    }
+                });
+                var im = [];
+                im.push(imagenesfront[index])
+                var data = {
+                    "subject": editado,
+                    "comment_body": editado,
+                    "imagenes": im
+                }
+                editarComentario(token, data, idEditado).then(response => {
+                    //alert("response " + JSON.stringify(response.data))
+                    if (response.status === 200) {
+                        // alert("correcto")
+                        setListadoComentarios(nuevos);
+                    }
+                })
+                    .catch(error => {
+                        alert(error)
+                    });
+
+            }
+
+            setCommentEditar(Array(commentEditar.length).fill(false));
+        }
+    }
     const onHandlePermission = async () => {
         const { status } = await Camera.requestPermissionsAsync();
         setHasPermission(status === 'granted');
@@ -143,11 +206,8 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                 "tipemime": "image/png",
                 "base64": photo
             })
-
-            //alert("data " + JSON.stringify(data.geo))
             guardarImagen(token, imagenes).then(response => {
                 if (response.status === 200) {
-                    //alert("asdasdasdasd " + JSON.stringify(response.data[0]))
                     var idArchivo = response.data[0];
                     //alert("id " + id)
                     var data = {
@@ -157,9 +217,48 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                             idArchivo
                         ]
                     }
-                    //alert("data comment " + JSON.stringify(data))
                     guardarComentario(token, data, route.params.incidencia.id).then(response => {
-                        if (response === 200) {
+                        if (response.status === 200) {
+                            // alert("user " + JSON.stringify(user));
+                            var temp = {
+                                ...data,
+                                "uid": user.id,
+                                "autor_fullname": user.username + " " + user.apellidos,
+                                "autor_username": user.username,
+                                "subject": comment,
+                                "comment_body": comment,
+                                "imagenes": [
+                                    idArchivo
+                                ]
+                            }
+                            data = temp;
+
+
+
+                            // Adicionando los comentarios en app
+                            var coms = [];
+                            listadoComentarios.forEach(it => {
+                                coms.push(it);
+                            });
+                            coms.push(data);
+                            setListadoComentarios(coms);
+                            // Adicionando los ids de las imagenes de los comentarios en app
+                            var images = [];
+                            imagenesfront.forEach(ele => {
+                                images.push(ele);
+                            });
+                            images.push(response.data.id)
+                            console.log("imagenesfront ", imagenesfront);
+                            // Adicionando los false | true de los comentarios activados en app
+                            var commentEditarNews = [];
+                            commentEditar.forEach(cedi => {
+                                commentEditarNews.push(cedi);
+                            });
+                            commentEditarNews.push(false);
+                            setCommentEditar(commentEditarNews);
+
+                            setImagenesFront(images);
+                            console.log("respo ", response.data.id);
                             setComment('');
                             alert("Se guardó correctamente el comentario")
                         } else {
@@ -184,31 +283,30 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                 // { text: 'Yes', onPress: () => BackHandler.exitApp() },
                 {
                     text: 'Si', onPress: () => {
-                        if(uid === user.id)
-                        {
+                        if (uid === user.id) {
                             borrarComentario(token, idComentario)
-                            .then(response => {
-                                if (response.status === 200) {
-                                    var listNueva = [];
-                                    //alert("response editar " + JSON.stringify(response.data))
-                                    //dispatch(guardarUsuario(response.data));
-                                    console.log("Comentario borrado");
-                                    listadoComentarios.forEach(element => {
-                                        if (element.id !== idComentario) {
-                                            listNueva.push(element)
-                                        }
-                                    });
-                                    setListadoComentarios(listNueva);
-                                } else {
-                                    alert("Hubo un error al borrar el comentario");
-                                }
-                            })
-                            .catch(error => {
-                                alert(error)
-                            });
+                                .then(response => {
+                                    if (response.status === 200) {
+                                        var listNueva = [];
+                                        //alert("response editar " + JSON.stringify(response.data))
+                                        //dispatch(guardarUsuario(response.data));
+                                        console.log("Comentario borrado");
+                                        listadoComentarios.forEach(element => {
+                                            if (element.id !== idComentario) {
+                                                listNueva.push(element)
+                                            }
+                                        });
+                                        setListadoComentarios(listNueva);
+                                    } else {
+                                        alert("Hubo un error al borrar el comentario");
+                                    }
+                                })
+                                .catch(error => {
+                                    alert(error)
+                                });
                         } else {
                             alert("No fuistes el que hizo el comentario")
-                        }                       
+                        }
                     }
                 },
             ],
@@ -282,26 +380,12 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                                             {route.params.incidencia.created}
                                         </Text>
                                     </View>
-                                    {/* <Icon
-                                    onPress={() => {
-
-                                    }}
-                                    style={{
-                                        flex: 1,
-                                        textAlign: 'right',
-                                        marginRight: 11,
-                                        marginTop: 8
-                                    }}
-                                    name="heart-outline"
-                                    color="white"
-                                    size={30}
-                                /> */}
                                     <TouchableOpacity
                                         onPress={() => {
 
                                         }}
                                         style={styles.containerSVGheart}>
-                                        <SVG nombre={'Corazon'} width={22} height={18} />
+                                        <SVG nombre={'Corazon'} width={25} height={25} />
                                     </TouchableOpacity>
                                 </View>
                             </ImageBackground>
@@ -522,7 +606,7 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                                 onPress={() => {
                                     //alert("asdasdasda")
                                     if (comment === '') {
-                                        alert("Escribe un comentario priemero");
+                                        alert("Escribe un comentario primero");
                                     } else {
                                         showCamera(true);
                                     }
@@ -542,6 +626,9 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                             />
                         </View>
                         {listadoComentarios.map((com, indice) => {
+                            console.log("com11 ", com);
+                            console.log("commentEditar[indice] ", commentEditar[indice], " indice ", indice);
+
                             return (
                                 <View key={indice} style={{
                                     // borderWidth: 3,
@@ -600,12 +687,13 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                                     </Text>
                                     <Icon
                                         onPress={() => {
-
+                                            editarComentarioFront(indice, com.id, com.comment_body)
                                         }}
                                         style={{
                                             // flex: 0,
                                             marginTop: 15,
                                             textAlign: 'right',
+                                            zIndex: 111111,
                                             //left: (route.params.incidencia.tipo === 1 || route.params.incidencia.tipo === 2) ? 150 : 140
                                             marginRight: 4,
                                             marginLeft: 210
@@ -632,28 +720,45 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                                         size={20}
                                     />
                                     <View style={{ width: (windowWidth * 95.7) / 100, marginLeft: -377, alignSelf: 'center', flexDirection: 'row' }}>
-                                        <Text
-                                            style={{
-                                                textAlign: 'left',
-                                                // color: COLORS.primary,
-                                                // fontSize: 15,
-                                                left: 14,
-                                                // marginLeft : 140,
-                                                marginTop: 45,
-                                                // width: 79.7,
-                                                // height: 19,
-                                                fontFamily: "nunito-regular",
-                                                fontSize: 14,
-                                                fontWeight: "normal",
-                                                fontStyle: "normal",
-                                                letterSpacing: 0.16,
-                                                color: COLORS.GREYISH_BROWN,
-                                                top: -10
-                                            }}
-                                        >
-                                            {/* {'Muchas gracias '}{route.params.incidencia.autor}{'!'} */}
-                                            {com.comment_body}
-                                        </Text>
+                                        {
+                                            commentEditar[indice] === false &&
+                                            <Text
+                                                style={{
+                                                    textAlign: 'left',
+                                                    // color: COLORS.primary,
+                                                    // fontSize: 15,
+                                                    left: 14,
+                                                    // marginLeft : 140,
+                                                    marginTop: 45,
+                                                    // width: 79.7,
+                                                    // height: 19,
+                                                    fontFamily: "nunito-regular",
+                                                    fontSize: 14,
+                                                    fontWeight: "normal",
+                                                    fontStyle: "normal",
+                                                    letterSpacing: 0.16,
+                                                    color: COLORS.GREYISH_BROWN,
+                                                    top: -10
+                                                }}
+                                            >
+                                                {/* {'Muchas gracias '}{route.params.incidencia.autor}{'!'} */}
+                                                {com.comment_body}
+                                            </Text>
+                                        }
+                                        {
+                                            commentEditar[indice] === true &&
+                                            <TextInput
+                                                // value={name}
+                                                // value={user?.username}
+                                                value={editado}
+                                                placeholder={'Comentario'}
+                                                placeholderTextColor={COLORS.primary}
+                                                style={styles.inputuser}
+                                                onChangeText={(comentario) => {
+                                                    setEditado(comentario)
+                                                }}
+                                            />
+                                        }
                                     </View>
                                 </View>
                             );
@@ -1383,6 +1488,27 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
     );
 }
 const styles = StyleSheet.create({
+    inputuser: {
+        textAlign: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 150,
+        height: 30,
+        borderRadius: 8,
+        backgroundColor: "rgba(0, 0, 0, 0.2)",
+        shadowColor: "rgba(0, 0, 0, 0.05)",
+        shadowOffset: {
+            width: 0,
+            height: 5
+        },
+        shadowRadius: 15,
+        shadowOpacity: 1,
+        borderStyle: "solid",
+        borderWidth: 1,
+        borderColor: "#dfdfdf",
+        marginBottom: 8,
+        marginTop: 35
+    },
     bottomButtonsContainer: {
         position: 'absolute',
         flexDirection: 'row',
@@ -1441,7 +1567,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'center',
-        left: 275,
+        left: 265,
+        marginTop : 5,
         zIndex: 1111111,
         width: 22,
         height: 18,

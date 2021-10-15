@@ -14,7 +14,7 @@ import {
 } from 'react-native-responsive-screen';
 import { height } from 'styled-system';
 import {
-    guardarUsuario
+    guardarUsuario, guardarUsuarioRedux
 } from '../store/actions/userActions';
 import axios from 'axios';
 import { URL_SERVER } from '../constants/urls';
@@ -37,6 +37,7 @@ export default function EditarPerfil({ navigation, props }) {
     const [CSRF, setCSRF] = useState('');
 
     useEffect(() => {
+        getCSRFToken()
         //dispatch(guardarUsuario(token));
         //alert("user " + JSON.stringify(user))
     }, []);
@@ -73,12 +74,12 @@ export default function EditarPerfil({ navigation, props }) {
             .then(response => {
                 if (response.status === 200) {
                     //alert("response editar " + JSON.stringify(response.data))
-                    dispatch(guardarUsuario(response.data));
+                    dispatch(guardarUsuarioRedux(response.data));
                     alert("Guardado con éxito");
                 }
             })
             .catch(error => {
-                alert(error)
+                alert("Error al guardar el perfil")
             });
 
     }

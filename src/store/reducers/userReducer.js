@@ -3,6 +3,7 @@ import * as actionTypes from '../types/userTypes';
 const initialState = {
   userInfo: null,
   access_token: '',
+  csrf: '',
   filtros : null,
   filtrosOriginals : null,
   marcados : null,
@@ -21,7 +22,9 @@ const userReducer = (state, action) => {
   switch (action.type) {
     case actionTypes.GUARDAR_TOKEN: {
       // alert("action " + JSON.stringify(action))
-      newState.access_token = action.payload;
+      newState.access_token = action.payload.token;
+      newState.csrf = action.payload.csrf;
+      //console.log("access_token ", token, " csrf ", csrf);
       break;
     }
     case actionTypes.GUARDAR_CREADA: {

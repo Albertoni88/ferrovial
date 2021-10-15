@@ -46,7 +46,8 @@ export default function Login({ props, navigation }) {
                 )
                 .then(async response => {
                     if (response.status === 200) {
-                        dispatch(guardarToken(response.data.access_token))
+                        console.log("response ", response.data.csrf_token)
+                        dispatch(guardarToken({"token" : response.data.access_token, "csrf" : response.data.csrf_token}))
                         navigation.navigate('Main');
 
                     } else {
@@ -54,7 +55,7 @@ export default function Login({ props, navigation }) {
                     }
                 })
                 .catch(error => {
-                    //alert("error1 " + error)
+                    alert("error1 " + error)
                 });
         }
     }

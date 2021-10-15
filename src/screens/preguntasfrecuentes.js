@@ -62,26 +62,15 @@ export default function PreguntasFrecuentes({ navigation, props }) {
             return (
                 <View style={{
                     marginTop: 12,
-                    //marginBottom: 12,
-                    // width: 343,
                     width: (windowWidth * 93.6) / 100,
                     height: 44,
                     borderRadius: 8,
                     backgroundColor: "rgba(255, 255, 255, 0.25)",
-                    // shadowColor: "rgba(0, 0, 0, 0.1)",
-                    // shadowOffset: {
-                    //     width: 0,
-                    //     height: 5
-                    // },
-                    // shadowRadius: 10,
-                    // shadowOpacity: 1,
                     textAlign: 'center',
                     justifyContent: 'center',
                     alignItems: 'center',
                     alignSelf: 'center',
                     alignSelf: 'center',
-                    // height: (windowHeight * 9.35) / 100,
-                    // width: (windowWidth * 93.6) / 100,
                     borderRadius: 12,
                     backgroundColor: 'white',
                     shadowColor: "rgba(0, 0, 0, 0.2)",
@@ -112,7 +101,6 @@ export default function PreguntasFrecuentes({ navigation, props }) {
         } else {
             return (
                 <View style={{
-                    // width: 343,
                     width: (windowWidth * 93.6) / 100,
                     height: 43,
                     marginTop: 12,
@@ -122,7 +110,6 @@ export default function PreguntasFrecuentes({ navigation, props }) {
                     justifyContent: 'center',
                     alignItems: 'center',
                     alignSelf: 'center',
-                    // borderWidth: 3
                 }}>
                     <Text style={{
                         width: 305,
@@ -137,7 +124,6 @@ export default function PreguntasFrecuentes({ navigation, props }) {
                         justifyContent: 'center',
                         alignItems: 'center',
                         alignSelf: 'center',
-                        //marginBottom: 12
                     }}>{section.nombre}</Text>
                 </View>
             );
@@ -147,19 +133,9 @@ export default function PreguntasFrecuentes({ navigation, props }) {
     const _renderContent = (section) => {
         return (
             <View style={{
-                // zindex : 1111,
                 width: (windowWidth * 93.6) / 100,
                 height: 107,
                 marginTop: 12,
-                // borderRadius: 8,
-                // backgroundColor: "rgba(255, 255, 255, 0.25)",
-                // shadowColor: "rgba(0, 0, 0, 0.2)",
-                // shadowOffset: {
-                //     width: 0,
-                //     height: 0
-                // },
-                // shadowRadius: 10,
-                // shadowOpacity: 1,
                 borderRadius: 8,
                 backgroundColor: 'white',
                 shadowColor: "rgba(0, 0, 0, 0.2)",
@@ -174,20 +150,6 @@ export default function PreguntasFrecuentes({ navigation, props }) {
                 marginTop: 12,
                 height: (windowHeight * 9.35) / 100,
                 width: (windowWidth * 93.6) / 100,
-
-                // alignSelf: 'center',
-                //marginTop: 12,
-                // // height: (windowHeight * 9.35) / 100,
-                // // width: (windowWidth * 93.6) / 100,
-                // borderRadius: 12,
-                // backgroundColor: 'white',
-                // shadowColor: "rgba(0, 0, 0, 0.2)",
-                // shadowOffset: {
-                //     width: 0,
-                //     height: 0
-                // },
-                // shadowRadius: 15,
-                // shadowOpacity: 1,
             }}>
                 <Text style={{
                     width: 305,
@@ -210,7 +172,6 @@ export default function PreguntasFrecuentes({ navigation, props }) {
     };
 
     const _updateSections = (activeSections) => {
-        // alert("activeSections " + JSON.stringify(activeSections));
         var aux = Array(SECTIONS.length).fill(false);
         for (let i = 0; i < activeSections.length; i++) {
             aux[activeSections[i]] = true;

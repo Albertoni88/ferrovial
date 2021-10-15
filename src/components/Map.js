@@ -26,6 +26,12 @@ export default function Map({ navigation, cantidadIncidencias, incidencias, filt
 
     const myRef = createRef();
 
+    useEffect(() => {
+        // alert("ess")
+        //setIncidencia(incidencias[0])
+        console.log("incidencias ", incidencias);
+        setCurrentLocation();
+    }, []);
     const MarkerChoice = async (choice) => {
         var inc = {};
         for(let i = 0; i < incidencias.length; i++){
@@ -75,11 +81,7 @@ export default function Map({ navigation, cantidadIncidencias, incidencias, filt
             );
         }
     };
-    useEffect(() => {
-        // alert("ess")
-        //setIncidencia(incidencias[0])
-        setCurrentLocation();
-    }, []);
+    
 
     let text = 'Waiting..';
     if (errorMsg) {
@@ -120,11 +122,11 @@ export default function Map({ navigation, cantidadIncidencias, incidencias, filt
                             title={'Posición Actual'}
                         />
                     )} */}
-                    {incidencias.length > 0 &&
+                    { incidencias !==null && incidencias !==undefined && incidencias.length > 0 &&
                         incidencias.map((marker, i) => {
-                            // alert("marker " + JSON.stringify(marker));
                             // if (!marker.latitude || !marker.longitude) return;
-                            const { latitude, longitude } = marker;
+                            const { lat, lng } = marker.geo[0];
+                            console.log("lat ", lat," lng", lng);
                             return (
                                 <MapView.Marker
                                     opacity={markers[i] === true ? 1 : 0.5}
@@ -136,7 +138,8 @@ export default function Map({ navigation, cantidadIncidencias, incidencias, filt
                                     }}
                                     tracksViewChanges={false}
                                     // coordinate={marker.geo}
-                                    coordinate={{latitude : 21.84, longitude : -78.76194}}
+                                    // coordinate={{latitude : 21.84, longitude : -78.76194}}
+                                    coordinate={{latitude : lat, longitude : lng}}
                                     //title={incidencias[i].nombre}
                                     key={i}
                                 />

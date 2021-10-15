@@ -20,9 +20,9 @@ export const recuperarPass = (email) => {
             //alert("error1 " + error)
         });
 }
-export const guardarToken = (token) => ({
+export const guardarToken = (data) => ({
     type: GUARDAR_TOKEN,
-    payload: token
+    payload: data
 })
 export const guardarUsuario = (access_token) => async dispatch => {
     return axios.get(URL_SERVER + 'rest/perfil_usuario?_format=json',

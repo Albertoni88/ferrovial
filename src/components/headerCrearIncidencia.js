@@ -34,7 +34,7 @@ export default function HeaderCrearIncidencia({ navigation }) {
                     }}
                     name="chevron-back-outline"
                     color="white"
-                    size={30}
+                    size={25}
                 />
                 <Text style={{
                     width: 280,
@@ -44,7 +44,8 @@ export default function HeaderCrearIncidencia({ navigation }) {
                     fontWeight: "bold",
                     fontStyle: "normal",
                     letterSpacing: 0,
-                    textAlign: "center",
+                    marginLeft : 100,
+                    textAlign: "left",
                     alignItems : 'center',
                     justifyContent : 'center',
                     alignSelf: 'center',
@@ -53,7 +54,7 @@ export default function HeaderCrearIncidencia({ navigation }) {
                 }}>
                     Crear incidencia
                 </Text>
-                <Text style={{
+                {/* <Text style={{
                     flex : 0.35,
                     //width: 76,
                     height: 27,
@@ -84,7 +85,7 @@ export default function HeaderCrearIncidencia({ navigation }) {
                     marginTop : 17
                 }}>
                     /1
-                </Text>
+                </Text> */}
             </TouchableOpacity>
 
         </View>

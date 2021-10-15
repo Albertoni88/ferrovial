@@ -16,6 +16,7 @@ import {
 import { height } from 'styled-system';
 import axios from 'axios';
 import { URL_SERVER } from '../../constants/urls';
+import { favoritoComentario } from '../../store/actions/incidenciaActions';
 
 
 const windowWidth = Dimensions.get('window').width;
@@ -25,11 +26,13 @@ export default function CarIncidencia({ navigation, props, incidencia }) {
 
     const [toggleFavorito, setToggleFavorito] = useState(false);
     const token = useReduxSelector((state) => state.user.access_token);
+    const csrf = useReduxSelector((state) => state.user.csrf);
     const [CSRF, setCSRF] = useState('');
 
     const image = { uri: require("../../assets/1.png") };
 
     useEffect(() => {
+        getCSRFToken()
     }, []);
 
     async function getCSRFToken() {
@@ -43,20 +46,11 @@ export default function CarIncidencia({ navigation, props, incidencia }) {
     }
     const toggleFavoritoMethod = async () => {
 
-        await getCSRFToken();
+        //await getCSRFToken();
         var incidencia_id = incidencia.id;
-        console.log(URL_SERVER + 'rest/toogle/favorito-incidencia/' + incidencia_id + '?_format=json')
+        console.log(URL_SERVER + 'rest/toogle/favorito-incidencia/' + incidencia.id + '?_format=json')
 
-        axios.post(URL_SERVER + 'rest/toogle/favorito-incidencia/' + incidencia_id + '?_format=json',
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token,
-                    'X-CSRF-Token': CSRF,
-                    // 'cookie': ''
-                }
-            }
-        )
+        favoritoComentario(token, csrf, incidencia_id)
             .then(response => {
                 alert("toggle " + JSON.stringify(response))
             })
@@ -131,7 +125,7 @@ export default function CarIncidencia({ navigation, props, incidencia }) {
                                 toggleFavoritoMethod();
                             }}
                             style={styles.containerSVGheart}>
-                            <SVG nombre={'Corazon'} width={22} height={18} />
+                            <SVG nombre={'Corazon'} width={25} height={25} />
                         </TouchableOpacity>
                     </View>
                 </ImageBackground>
@@ -362,6 +356,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         alignSelf: 'center',
         left: 265,
+        marginTop : 5,
         zIndex: 1111111,
         width: 22,
         height: 18,

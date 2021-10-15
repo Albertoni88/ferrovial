@@ -152,7 +152,7 @@ export default function Feedback({ navigation, props }) {
 
                         }}>
                         <Text style={{
-                            width: 71,
+                            width: Platform.OS ==='ios' ? 71 : 80,
                             height: 24,
                             fontFamily: 'nunito-bold',
                             fontSize: 18,

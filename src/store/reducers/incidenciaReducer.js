@@ -30,8 +30,20 @@ const incidenciaReducer = (state, action) => {
       break;
     }
     case actionTypes.GUARDAR_INCIDENCIA_REDUX: {
-      newState.incidencias.push(action.payload);
-      //alert("newState.incidencias " + JSON.stringify(newState.incidencias[newState.incidencias.length - 1]))
+      var auxiliar = [];
+      var auxiliar1 = [];
+      
+      auxiliar.push(action.payload);
+      auxiliar1.push(action.payload);
+
+      newState.incidencias.forEach(element => {
+        auxiliar.push(element);
+        auxiliar1.push(element);
+      });
+      newState.incidencias = auxiliar;
+      newState.incidenciasOriginals = auxiliar1;
+      
+      console.log("newState.incidencias ", newState.incidencias)
       break;
     }
     case actionTypes.GUARDAR_INCIDENCIAS_ORIGINALS: {

@@ -10,7 +10,7 @@ import {
     guardarMarcadosArray,
     guardarMarcadosOriginals
 } from '../store/actions/userActions';
-import { Button, Dimensions, Image, TextInput, View, Text, TouchableOpacity, Modal, Alert, Platform, StyleSheet } from 'react-native';
+import { Button, ScrollView, Dimensions, Image, TextInput, View, Text, TouchableOpacity, Modal, Alert, Platform, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import HeaderFilterType from '../components/headerFilterType';
 import CardFilterType from '../components/Cards/cardfiltertype';
@@ -155,17 +155,19 @@ export default function FilterType({ navigation, route, props }) {
             <View style={{ marginBottom: 27 }}></View>
             {
                 (filtros !== null && filtros !== undefined && marcadosAuxiliar !== null && marcadosAuxiliar !== undefined) &&
-                <View style={{ width: '100%' }}>
-                    {
-                        filtros.map((fil, indice) => {
-                            return (
-                                <View key={indice}>
-                                    <CardFilterType filtronombre={route.params.filtro} filter={fil} changemarcado={ChangeMarcado} indice={indice} marcadoauxiliar={marcados[indice]} marcado={marcados[indice]} />
-                                </View>
-                            );
-                        })
-                    }
-                </View>
+                <ScrollView style={{ flex: 1, height: '100%' }}>
+                    <View style={{ width: '100%' }}>
+                        {
+                            filtros.map((fil, indice) => {
+                                return (
+                                    <View key={indice}>
+                                        <CardFilterType filtronombre={route.params.filtro} filter={fil} changemarcado={ChangeMarcado} indice={indice} marcadoauxiliar={marcados[indice]} marcado={marcados[indice]} />
+                                    </View>
+                                );
+                            })
+                        }
+                    </View>
+                </ScrollView>
             }
         </View>
     );

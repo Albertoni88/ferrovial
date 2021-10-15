@@ -26,10 +26,11 @@ import SVG from './svg';
 import {
     guardarIncidencias,
     guardarIncidenciasOriginals,
+    loadIncidencias, loadSecciones
 } from '../store/actions/incidenciaActions';
 import {
-    guardarSeccionesPerfil, 
-    guardarUsuario    
+    guardarSeccionesPerfil,
+    guardarUsuario
 } from '../store/actions/userActions';
 import { URL_SERVER } from '../constants/urls';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -52,36 +53,24 @@ export default function MainHeader({ navigation, props }) {
 
 
     useEffect(() => {
-        //dispatch(guardarSeccionesPerfil(token));
+        
         dispatch(guardarUsuario(token));
-        axios.get(URL_SERVER + 'rest/secciones_textuales?_format=json', 
-            {
-                headers: {
-                    'Authorization' : 'Bearer ' + token,
-                }
-            }
-        )
-        .then(async response => {
-            if (response.status === 200) {
-                dispatch(guardarSeccionesPerfil(response.data));                
-            } 
-        })
-        .catch(error => {
-        });
 
-        axios
-            .get(URL_SERVER + 'rest/incidencias?_format=json',
-                {
-                    headers: {
-                        'Authorization': 'Bearer ' + token,
-                    }
-                }
-            )
+        loadSecciones(token)
+            .then(response => {
+                dispatch(guardarSeccionesPerfil(response.data));
+            })
+            .catch(error => {
+                // alert("error1 " + error)
+            });
+
+        loadIncidencias(token)
             .then(response => {
                 dispatch(guardarIncidencias(response.data.rows));
                 dispatch(guardarIncidenciasOriginals(response.data.rows));
             })
             .catch(error => {
+                // alert("Error " + error)
             });
     }, []);
 
@@ -701,7 +690,7 @@ const styles = StyleSheet.create({
     },
     containerSide: {
         flex: 1,
-        opacity : 0.8,
+        opacity: 0.8,
         height: '100%',
         zIndex: 99999999,
         backgroundColor: COLORS.primary,

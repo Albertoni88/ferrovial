@@ -350,15 +350,13 @@ export default function CrearIncidencia({ navigation, props }) {
                             }}
                             style={styles.siguienteTouch}>
                             <Text style={{
-                                // fontSize: 15,
-                                // color: 'brown'
                                 alignItems: 'center',
                                 alignSelf: 'center',
                                 textAlign: 'center',
                                 alignItems: 'center',
                                 width: 83,
                                 height: 24,
-                                fontFamily: "nunito-bold",
+                                fontFamily: "nunito-bold", 
                                 fontSize: 18,
                                 fontWeight: "bold",
                                 fontStyle: "normal",

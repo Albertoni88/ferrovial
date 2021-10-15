@@ -20,22 +20,13 @@ export default function CardFilterType({ filter, filtronombre, navigation, props
     const marcados = useReduxSelector((state) => state.user.marcados);
 
     useEffect(() => {
-        // alert("marcado " + JSON.stringify(marcado));
+        alert("marcado " + JSON.stringify(marcado));
         //alert("filter.nombre " + JSON.stringify(filter));
     }, []);
 
     if (filter !== null && filter !== undefined && filter !== []) {
         return (
-            // <View style = {{flex : 1 }}>
-            //     <Text style = {{ fontSize :12}}>asasd</Text>
-            // </View>
-
             <View style={{
-                // marginTop: 5,
-                // backgroundColor: 'white',
-                // borderWidth : 3,
-                // width: '100%',
-                // height: 60,
                 alignItems: 'center',
                 flexDirection: 'row',
                 width: '100%',
@@ -68,6 +59,7 @@ export default function CardFilterType({ filter, filtronombre, navigation, props
                         // fontSize: 15,
                         // alignItems: 'center',
                         color: marcados[indice] ? COLORS.primary : COLORS.browngrey,
+                        // width: 200,
                         width: 200,
                         height: 22,
                         fontFamily: "nunito-semibold",

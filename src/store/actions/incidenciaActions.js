@@ -10,7 +10,7 @@ import axios from 'axios';
 import { URL_SERVER } from '../../constants/urls';
 
 async function getCSRFToken() {
-    return axios.get('https://ferrovial.creacionwebprofesional.com/session/token')
+    return axios.get(URL_SERVER + 'session/token')
         .then(response => {
             //alert("asd " + JSON.stringify(response.data))
             return response.data
@@ -47,7 +47,7 @@ export const guardarIncidencia = (access_token, data) => {
 export const cargarIncidenciaDetalles = (access_token, idIncidencia) => {
 
     //rest/incidencia/18?_format=json
-    return axios.get(URL_SERVER + 'rest/incidencia/' + idIncidencia +'?_format=json',
+    return axios.get(URL_SERVER + 'rest/incidencia/' + idIncidencia + '?_format=json',
         {
             headers: {
                 'Authorization': 'Bearer ' + access_token,
@@ -84,19 +84,19 @@ export const borrarComentario = (access_token, idComentario) => {
             }
         }
     )
-        .then(async response => { 
-                return response
-            
+        .then(async response => {
+            return response;
         })
         .catch(error => {
             //dispatch(guardarCreada(-1));
-            //alert("error1 " + error)
+            alert("error1 " + error)
             return 400;
         });
 }
+
 export const guardarComentario = (access_token, data, id) => {
     var csrf = getCSRFToken();
-    return axios.post(URL_SERVER + 'rest/comentario_incidencia/' + id +'?_format=json', data,
+    return axios.post(URL_SERVER + 'rest/comentario_incidencia/' + id + '?_format=json', data,
         {
             headers: {
                 'Authorization': 'Bearer ' + access_token,
@@ -111,13 +111,113 @@ export const guardarComentario = (access_token, data, id) => {
             if (response.status === 200) {
                 // dispatch(guardarCreada(1));
                 // dispatch(guardarIncidenciaRedux(data))
-                return response.status
+                return response
             }
         })
         .catch(error => {
+            return 400;
             //dispatch(guardarCreada(-1));
             //alert("error1 " + error)
         });
+}
+export const editarComentario = async (access_token, data, id) => {
+
+    var csrf = await getCSRFToken();
+    //alert("csrf " + csrf)
+    return axios.put(URL_SERVER + 'rest/comentario_incidencia/' + id + '?_format=json', data,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + access_token,
+                'X-CSRF-Token': csrf,
+            }
+        }
+    )
+        .then(async response => {
+            if (response.status === 200) {
+                // dispatch(guardarCreada(1));
+                // dispatch(guardarIncidenciaRedux(data))
+                return response
+            }
+        })
+        .catch(error => {
+            return 400;
+            //dispatch(guardarCreada(-1));
+            //alert("error1 " + error)
+        });
+}
+export const favoritoComentario = async (access_token, csrf, id) => {
+
+    // var csrf = await getCSRFToken();
+    console.log("csrf ", csrf);
+    return axios.post(URL_SERVER + 'rest/toogle/favorito-incidencia/' + id + '?_format=json',
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + access_token,
+                'X-CSRF-Token': csrf,
+            }
+        }
+    )
+        .then(response => {
+            return response
+        })
+        .catch(error => {
+            console.log("error ", error)
+            return 400;
+        });
+
+}
+export const loadIncidencias = async (access_token) => {
+    
+    return axios.get(URL_SERVER + 'rest/incidencias?_format=json',
+        {
+            headers: {
+                'Authorization': 'Bearer ' + access_token,
+            }
+        }
+    )
+        .then(response => {
+            return response
+        })
+        .catch(error => {
+            console.log("error ", error)
+            return 400;
+        });
+
+}
+export const loadSecciones = async (access_token) => {
+    
+    // axios.get(URL_SERVER + 'rest/secciones_textuales?_format=json',
+    //         {
+    //             headers: {
+    //                 'Authorization': 'Bearer ' + token,
+    //             }
+    //         }
+    //     )
+    //         .then(async response => {
+    //             if (response.status === 200) {
+    //                 dispatch(guardarSeccionesPerfil(response.data));
+    //             }
+    //         })
+    //         .catch(error => {
+    //         });
+
+    return axios.get(URL_SERVER + 'rest/secciones_textuales?_format=json',
+        {
+            headers: {
+                'Authorization': 'Bearer ' + access_token,
+            }
+        }
+    )
+        .then(response => {
+            return response
+        })
+        .catch(error => {
+            console.log("error ", error)
+            return 400;
+        });
+
 }
 export const guardarIncidenciaRedux = (incidencia) => ({
     type: GUARDAR_INCIDENCIA_REDUX,

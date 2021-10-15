@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Dimensions, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
+import { View, Dimensions, Text, StyleSheet, TouchableOpacity, Image, Platform } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { COLORS } from '../constants';
 import {
@@ -34,7 +34,7 @@ export default function SideBarHeader({ texto, navigation }) {
             <Text style={{
                 marginTop: 27,
                 width: 280,
-                height: 27,
+                height: Platform.OS === 'ios' ? 27 : 30,
                 fontFamily: 'nunito-bold',
                 fontSize: 20,
                 fontWeight: "bold",
