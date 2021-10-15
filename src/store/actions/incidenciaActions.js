@@ -148,8 +148,6 @@ export const editarComentario = async (access_token, data, id) => {
 }
 export const favoritoComentario = async (access_token, csrf, id) => {
 
-    // var csrf = await getCSRFToken();
-    console.log("csrf ", csrf);
     return axios.post(URL_SERVER + 'rest/toogle/favorito-incidencia/' + id + '?_format=json',
         {
             headers: {
@@ -163,7 +161,6 @@ export const favoritoComentario = async (access_token, csrf, id) => {
             return response
         })
         .catch(error => {
-            console.log("error ", error)
             return 400;
         });
 
@@ -181,7 +178,6 @@ export const loadIncidencias = async (access_token) => {
             return response
         })
         .catch(error => {
-            console.log("error ", error)
             return 400;
         });
 
@@ -214,7 +210,6 @@ export const loadSecciones = async (access_token) => {
             return response
         })
         .catch(error => {
-            console.log("error ", error)
             return 400;
         });
 

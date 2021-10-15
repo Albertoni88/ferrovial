@@ -18,7 +18,7 @@ export default function App() {
 
 
   const getFonts = () => {
-    console.log('LOADING FONTS...')
+    
     return Font.loadAsync({
       'roboto-medium': require('./src/assets/fonts/Roboto/Roboto-Medium.ttf'),
       'roboto-bold': require('./src/assets/fonts/Roboto/Roboto-Bold.ttf'),

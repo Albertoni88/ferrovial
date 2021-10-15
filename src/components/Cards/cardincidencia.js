@@ -48,7 +48,6 @@ export default function CarIncidencia({ navigation, props, incidencia }) {
 
         //await getCSRFToken();
         var incidencia_id = incidencia.id;
-        console.log(URL_SERVER + 'rest/toogle/favorito-incidencia/' + incidencia.id + '?_format=json')
 
         favoritoComentario(token, csrf, incidencia_id)
             .then(response => {

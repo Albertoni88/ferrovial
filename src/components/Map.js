@@ -27,9 +27,6 @@ export default function Map({ navigation, cantidadIncidencias, incidencias, filt
     const myRef = createRef();
 
     useEffect(() => {
-        // alert("ess")
-        //setIncidencia(incidencias[0])
-        console.log("incidencias ", incidencias);
         setCurrentLocation();
     }, []);
     const MarkerChoice = async (choice) => {
@@ -126,7 +123,6 @@ export default function Map({ navigation, cantidadIncidencias, incidencias, filt
                         incidencias.map((marker, i) => {
                             // if (!marker.latitude || !marker.longitude) return;
                             const { lat, lng } = marker.geo[0];
-                            console.log("lat ", lat," lng", lng);
                             return (
                                 <MapView.Marker
                                     opacity={markers[i] === true ? 1 : 0.5}

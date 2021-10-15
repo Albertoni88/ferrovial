@@ -66,8 +66,6 @@ export default function CrearIncidencia({ navigation, props }) {
 
     useEffect(() => {
         onHandlePermission();
-
-        console.log("creadaIncidencia ", creadaIncidencia)
     }, []);
 
     const setCurrentLocation = async () => {
@@ -130,8 +128,7 @@ export default function CrearIncidencia({ navigation, props }) {
             const data = await cameraRef.current.takePictureAsync(options)
                 .then(async photo => {
                     setIsPreview(false);
-                    showCamera(false);
-                    console.log("photooooo ", photo.base64);
+                    showCamera(false);                    
                     setPhoto(photo.base64);
                     setTomadaFoto(true);
                 });

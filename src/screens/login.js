@@ -46,7 +46,6 @@ export default function Login({ props, navigation }) {
                 )
                 .then(async response => {
                     if (response.status === 200) {
-                        console.log("response ", response.data.csrf_token)
                         dispatch(guardarToken({"token" : response.data.access_token, "csrf" : response.data.csrf_token}))
                         navigation.navigate('Main');
 

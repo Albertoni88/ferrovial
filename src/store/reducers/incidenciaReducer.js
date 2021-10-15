@@ -42,8 +42,6 @@ const incidenciaReducer = (state, action) => {
       });
       newState.incidencias = auxiliar;
       newState.incidenciasOriginals = auxiliar1;
-      
-      console.log("newState.incidencias ", newState.incidencias)
       break;
     }
     case actionTypes.GUARDAR_INCIDENCIAS_ORIGINALS: {

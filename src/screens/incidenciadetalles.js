@@ -40,15 +40,11 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
         cargarIncidenciaDetalles(token, route.params.incidencia.id)
             .then(response => {
                 if (response.status === 200) {
-                    //alert("response editar " + JSON.stringify(response.data))
-                    //dispatch(guardarUsuario(response.data));
-                    console.log("comentarios ", response.data.comentarios);
                     var auxiliar = [];
                     response.data.comentarios.forEach(element => {
                         auxiliar.push(element.imagenes[0].id);
                     });
                     setImagenesFront(auxiliar);
-                    // alert("auxiliar " + JSON.stringify(auxiliar));
                     setListadoComentarios(response.data.comentarios);
                     setCommentEditar(Array(response.data.comentarios.length).fill(false))
                 }
@@ -56,9 +52,7 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
             .catch(error => {
                 alert(error)
             });
-        //alert("camera " + camera + " showCamera " + showCamera)
         onHandlePermission();
-        //alert("incidencia " + JSON.stringify(route.params))
     }, []);
     const [imagenesfront, setImagenesFront] = useState(new Array());
     const [listadoComentarios, setListadoComentarios] = useState([]);
@@ -174,14 +168,12 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
             const data = await cameraRef.current.takePictureAsync(options)
                 .then(async photo => {
                     setIsPreview(false);
-                    //console.log("photooooo ", photo.base64);
                     setPhoto(photo.base64);
                     Alert.alert(
                         'Foto',
                         'Desea esta foto?',
                         [
                             { text: 'No', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-                            // { text: 'Yes', onPress: () => BackHandler.exitApp() },
                             {
                                 text: 'Si', onPress: () => {
                                     showCamera(false);
@@ -248,7 +240,6 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                                 images.push(ele);
                             });
                             images.push(response.data.id)
-                            console.log("imagenesfront ", imagenesfront);
                             // Adicionando los false | true de los comentarios activados en app
                             var commentEditarNews = [];
                             commentEditar.forEach(cedi => {
@@ -258,7 +249,6 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                             setCommentEditar(commentEditarNews);
 
                             setImagenesFront(images);
-                            console.log("respo ", response.data.id);
                             setComment('');
                             alert("Se guardó correctamente el comentario")
                         } else {
@@ -290,7 +280,6 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                                         var listNueva = [];
                                         //alert("response editar " + JSON.stringify(response.data))
                                         //dispatch(guardarUsuario(response.data));
-                                        console.log("Comentario borrado");
                                         listadoComentarios.forEach(element => {
                                             if (element.id !== idComentario) {
                                                 listNueva.push(element)
@@ -626,8 +615,6 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                             />
                         </View>
                         {listadoComentarios.map((com, indice) => {
-                            console.log("com11 ", com);
-                            console.log("commentEditar[indice] ", commentEditar[indice], " indice ", indice);
 
                             return (
                                 <View key={indice} style={{
