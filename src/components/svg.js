@@ -1,13 +1,7 @@
 
 
 import React from 'react'
-import { View, Text, StyleSheet, Image, TouchableOpacity, } from 'react-native'
-// import { SvgXml } from 'react-native-svg';
-// import Svg, { Circle } from 'react-native-svg';
-
-// import SvgUri from 'react-native-svg-uri';
-// import Buscar from '../assets/Buscar.svg';
-// import { SvgXml } from 'react-native-svg'
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
 import SvgUri from 'react-native-svg-uri'; // SVG Package
 
