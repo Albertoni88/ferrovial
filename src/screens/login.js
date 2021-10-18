@@ -1,16 +1,15 @@
 import React, { useState, useEffect, useRef, createRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { guardarToken } from '../store/actions/userActions';
-//import * as Google from 'expo-auth-session/providers/google';
 import { Button, Dimensions, SafeAreaView, ImageBackground, Image, TextInput, View, Text, TouchableOpacity, Alert, Platform, StyleSheet } from 'react-native';
 import { COLORS } from '../constants';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import axios from 'axios';
 import { URL_SERVER } from '../constants/urls';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { loginUser } from '../store/actions/userActions';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -34,19 +33,10 @@ export default function Login({ props, navigation }) {
         if (name === '' || pass === '') {
             alert("Tiene campos vacíos")
         } else {
-            axios
-                .post(URL_SERVER + 'user/login?_format=json', data,
-                    {
-                        headers: {
-                            Accept: 'application/json',
-                            'Content-Type': 'application/json',
-                            'cookie': ''
-                        }
-                    }
-                )
+            loginUser(data)
                 .then(async response => {
                     if (response.status === 200) {
-                        dispatch(guardarToken({"token" : response.data.access_token, "csrf" : response.data.csrf_token}))
+                        dispatch(guardarToken({ "token": response.data.access_token, "csrf": response.data.csrf_token }))
                         navigation.navigate('Main');
 
                     } else {
@@ -66,11 +56,11 @@ export default function Login({ props, navigation }) {
                 source={require('../assets/fondo.jpg')}
                 //source={{ uri: incidencia.imagen }}
                 style={{
-                    flex : 1
+                    flex: 1
                 }}
-                // imageStyle={styles.image}
-                >
-                <View style={{ opacity : 0.8, backgroundColor: COLORS.primary, textAlign: 'center', alignItems: 'center', flex: 1, }}>
+            // imageStyle={styles.image}
+            >
+                <View style={{ opacity: 0.8, backgroundColor: COLORS.primary, textAlign: 'center', alignItems: 'center', flex: 1, }}>
                     <View style={{
                         alignContent: 'center',
                         // marginTop: 100,

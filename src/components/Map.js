@@ -23,6 +23,7 @@ export default function Map({ navigation, cantidadIncidencias, incidencias, filt
     const [markersOriginals, setMarkersOriginals] = useState(Array(incidencias.length).fill(false));
     const [renderCard, setRenderCard] = useState(false);
     const [incidencia, setIncidencia] = useState({});
+    const [indice, setIndice] = useState(0);
 
     const myRef = createRef();
 
@@ -30,20 +31,22 @@ export default function Map({ navigation, cantidadIncidencias, incidencias, filt
         setCurrentLocation();
     }, []);
     const MarkerChoice = async (choice) => {
+        
+        setIndice(choice);
+
         var inc = {};
         for(let i = 0; i < incidencias.length; i++){
             if (i === choice) {
                 inc = incidencias[i];
-                //alert("choice " + choice + " i " + i + " inc " + JSON.stringify(inc))
+                
             }
         }
         var aux = Array(incidencias.length).fill(false);
         aux[choice] = true;
+        
         setMarkersOriginals(aux);
         setMarkers(aux);
         setIncidencia(inc);
-        // alert("incidencias[choice] " + JSON.stringify(incidencias[choice]))
-        filtroMapa(incidencias[choice].titulo);
     }
 
     const getLocationAsync = async () => {
@@ -121,6 +124,7 @@ export default function Map({ navigation, cantidadIncidencias, incidencias, filt
                     )} */}
                     { incidencias !==null && incidencias !==undefined && incidencias.length > 0 &&
                         incidencias.map((marker, i) => {
+                            console.log("marker ", marker, " i ", i)
                             // if (!marker.latitude || !marker.longitude) return;
                             const { lat, lng } = marker.geo[0];
                             return (
@@ -130,7 +134,7 @@ export default function Map({ navigation, cantidadIncidencias, incidencias, filt
                                         //gotToTouch(marker.latitude, marker.longitude);
                                         setRenderCard(true);
                                         MarkerChoice(i);
-                                        filtroMapa(marker.nombre);
+                                        //filtroMapa(marker.nombre);
                                     }}
                                     tracksViewChanges={false}
                                     // coordinate={marker.geo}
@@ -146,7 +150,7 @@ export default function Map({ navigation, cantidadIncidencias, incidencias, filt
             }
             {
                 renderCard === true && incidencia !== {} &&
-                <CarIncidenciaMapa key={incidencia.id} navigation={navigation} incidencia={incidencia} />
+                <CarIncidenciaMapa key={incidencia.id} navigation={navigation} incidencia={incidencia} indice = {indice} />
             }
             {
                 (location === null || location === undefined) &&

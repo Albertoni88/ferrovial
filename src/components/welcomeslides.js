@@ -10,9 +10,9 @@ import {
 import { COLORS } from "../constants";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { URL_SERVER } from '../constants/urls';
-import axios from 'axios';
 import { SvgUri } from 'react-native-svg';
 import SwiperFlatList from 'react-native-swiper-flatlist';
+import { tomarIntros } from '../store/actions/userActions';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -24,22 +24,12 @@ export default function WelcomeSlides({ navigation }) {
     const [hidePagination, setHidePagination] = useState(false)
 
     useEffect(() => {
-        // navigation.navigate('Login');
-        axios.get(URL_SERVER + 'rest/intros?_format=json',
-            {
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    'cookie': '',
-                }
-            }
-        )
+
+        tomarIntros()
             .then(response => {
-                // alert("response.data " + JSON.stringify)
-                setSlides(response.data)
+                setSlides(response);
             })
             .catch(error => {
-                //alert("error1 " + error)
             });
     }, [])
     const _renderItem = ({ item, index }) => {
@@ -108,15 +98,15 @@ export default function WelcomeSlides({ navigation }) {
                 return (
                     <View
                         style={{
-                            position : 'absolute',
+                            position: 'absolute',
                             //borderWidth : 3,
                             //zIndex: 1111111,
                             width: 112,
                             height: 44,
                             // marginLeft: Platform.OS === 'android' ? 0 : -250,
                             // marginLeft: 145,
-                            alignSelf : 'center',
-                            marginTop : Platform.OS === 'android' ? 760 : 650,
+                            alignSelf: 'center',
+                            marginTop: Platform.OS === 'android' ? 760 : 650,
                         }}
                     >
                         <TouchableOpacity
@@ -174,28 +164,31 @@ export default function WelcomeSlides({ navigation }) {
     };
     return (
         <SafeAreaView style={{ zIndex: -11111, flex: 1 }}>
-            <View style={{ flex: 1, zIndex: -11111 }}> 
+            <View style={{ flex: 1, zIndex: -11111 }}>
 
-                <AppIntroSlider
-                    showNextButton={false}
-                    activeDotStyle={hidePagination ? styles.hideDot : styles.activeDot}
-                    // dotStyle={{
-                    //     backgroundColor: '#d8d8d8',
-                    //     width: 10,
-                    //     height: 10,
-                    //     borderRadius: 7
-                    // }}
+                {
+                    slides !== null && slides !== undefined &&
+                    <AppIntroSlider
+                        showNextButton={false}
+                        activeDotStyle={hidePagination ? styles.hideDot : styles.activeDot}
+                        // dotStyle={{
+                        //     backgroundColor: '#d8d8d8',
+                        //     width: 10,
+                        //     height: 10,
+                        //     borderRadius: 7
+                        // }}
 
-                    dotStyle={hidePagination ? styles.hideDot : styles.inactiveDot}
-                    onSlideChange={_onSlideChange}
-                    renderDoneButton={_renderDoneButton}
-                    renderPagination={hidePagination === false ? numero : _renderDoneButton}
-                    // renderNextButton={_renderNextButton}
-                    renderItem={_renderItem}
-                    // keyExtractor={(item, index) => index.toString()}
-                    data={slides}
-                    onDone={_onDone}
-                />
+                        dotStyle={hidePagination ? styles.hideDot : styles.inactiveDot}
+                        onSlideChange={_onSlideChange}
+                        renderDoneButton={_renderDoneButton}
+                        renderPagination={hidePagination === false ? numero : _renderDoneButton}
+                        // renderNextButton={_renderNextButton}
+                        renderItem={_renderItem}
+                        // keyExtractor={(item, index) => index.toString()}
+                        data={slides}
+                        onDone={_onDone}
+                    />
+                }
             </View>
         </SafeAreaView>
     )

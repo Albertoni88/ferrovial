@@ -75,7 +75,7 @@ export default function CrearIncidencia({ navigation, props }) {
             return;
         }
         let location = await Location.getCurrentPositionAsync({});
-        // alert("loc " + JSON.stringify(location))
+        
         setLocation(location);
     };
 
@@ -94,7 +94,7 @@ export default function CrearIncidencia({ navigation, props }) {
                 "base64": photo
             })
             
-            //alert("data " + JSON.stringify(data.geo))
+            
             guardarImagen(token, imagenes).then(response => {
                 if (response.status === 200) {
                     var data = {
@@ -552,7 +552,7 @@ export default function CrearIncidencia({ navigation, props }) {
                                         "longitude": e.nativeEvent.coordinate.longitude
                                     }
                                 });
-                                //alert("locationasasdasd " + JSON.stringify(e.nativeEvent.coordinate))
+                                
                                 Alert.alert(
                                     'Ubicación',
                                     'Desea esta ubicación?',

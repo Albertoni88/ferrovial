@@ -13,9 +13,11 @@ import {
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { height } from 'styled-system';
-import axios from 'axios';
 import { URL_SERVER } from '../constants/urls';
-
+import {
+    getCSRFToken,
+    saveFeedBack
+} from '../store/actions/userActions';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -29,39 +31,28 @@ export default function Feedback({ navigation, props }) {
     const token = useReduxSelector((state) => state.user.access_token);
 
     useEffect(() => {
-        // alert("navigation " + JSON.stringify(navigation))
-    }, []);
-    async function getCSRFToken() {
-        axios.get('https://ferrovial.creacionwebprofesional.com/session/token')
+        getCSRFToken()
             .then(response => {
-                //alert("response token " + JSON.stringify(response.data));
                 setCSRF(response.data);
             })
             .catch(error => {
 
             });
-    }
+    }, []);
+
     const pressOut = () => {
         myRef.current.blur();
     }
     const guardarFeedBack = async () => {
         if (asunto !== '' && descripcion !== '') {
-            await getCSRFToken();
+
             const data = {
                 "webform_id": "feedback",
                 "subject": asunto,
                 "message": descripcion,
                 "acepta_la_politica_de_privacidad": 1
             }
-            axios.post(URL_SERVER + 'webform_rest/submit?_format=json', data,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + token,
-                        'X-CSRF-Token': CSRF
-                    }
-                }
-            )
+            saveFeedBack(data, token, CSRF)
                 .then(response => {
                     if (response.status === 200) {
                         alert("Guardado con éxito");
@@ -70,7 +61,7 @@ export default function Feedback({ navigation, props }) {
                     }
                 })
                 .catch(error => {
-                    alert("error1 " + error)
+                    
                 });
         } else {
             alert("Tiene campos vacíos");
@@ -152,7 +143,7 @@ export default function Feedback({ navigation, props }) {
 
                         }}>
                         <Text style={{
-                            width: Platform.OS ==='ios' ? 71 : 80,
+                            width: Platform.OS === 'ios' ? 71 : 80,
                             height: 24,
                             fontFamily: 'nunito-bold',
                             fontSize: 18,

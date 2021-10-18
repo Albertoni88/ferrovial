@@ -15,18 +15,15 @@ const incidenciaReducer = (state, action) => {
 
   switch (action.type) {
     case actionTypes.GUARDAR_CREADA: {
-      //alert("action " + JSON.stringify(action))
       newState.creadaIncidencia = action.payload;
       break;
     }    
     case actionTypes.GUARDAR_ARCHIVO: {
-      //alert("idarchivo " + JSON.stringify(action.payload))
       newState.idArchivo = action.payload;
       break;
     }
     case actionTypes.GUARDAR_INCIDENCIAS: {
       newState.incidencias = action.payload;
-      //alert("newState.incidencias " + JSON.stringify(newState.incidencias))
       break;
     }
     case actionTypes.GUARDAR_INCIDENCIA_REDUX: {

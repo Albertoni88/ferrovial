@@ -22,10 +22,14 @@ import {
 import Buscar from '../assets/Buscar.svg'
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
-import axios from 'axios';
 import { URL_SERVER } from '../constants/urls';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import userReducer from '../store/reducers/userReducer';
+import {
+    filtroTipo,
+    filtroEstado,
+    filtroInteraccion
+} from '../store/actions/incidenciaActions';
 
 export default function FilterType({ navigation, route, props }) {
 
@@ -43,14 +47,7 @@ export default function FilterType({ navigation, route, props }) {
 
     useEffect(() => {
         if (route.params.filtro === 'tipo') {
-            axios
-                .get(URL_SERVER + 'rest/tipo-incidencia?_format=json',
-                    {
-                        headers: {
-                            'Authorization': 'Bearer ' + token,
-                        }
-                    }
-                )
+            filtroTipo(token)
                 .then(async response => {
                     dispatch(guardarFiltros(response.data))
                     dispatch(guardarFiltrosOriginals(response.data))
@@ -58,18 +55,11 @@ export default function FilterType({ navigation, route, props }) {
                     dispatch(guardarMarcadosOriginals(false))
                 })
                 .catch(error => {
-                    //alert("error1 " + error)
+                    
                 });
         }
         if (route.params.filtro === 'estado') {
-            axios
-                .get(URL_SERVER + 'rest/estado-incidencia?_format=json',
-                    {
-                        headers: {
-                            'Authorization': 'Bearer ' + token,
-                        }
-                    }
-                )
+            filtroEstado(token)
                 .then(async response => {
                     dispatch(guardarFiltros(response.data))
                     dispatch(guardarFiltrosOriginals(response.data))
@@ -77,18 +67,11 @@ export default function FilterType({ navigation, route, props }) {
                     dispatch(guardarMarcadosOriginals(false))
                 })
                 .catch(error => {
-                    //alert("error1 " + error)
+                    
                 });
         }
         if (route.params.filtro === 'interaccion') {
-            axios
-                .get(URL_SERVER + 'rest/tipo-interaccion?_format=json',
-                    {
-                        headers: {
-                            'Authorization': 'Bearer ' + token,
-                        }
-                    }
-                )
+            filtroInteraccion(token)
                 .then(async response => {
                     dispatch(guardarFiltros(response.data))
                     dispatch(guardarFiltrosOriginals(response.data))
@@ -96,7 +79,7 @@ export default function FilterType({ navigation, route, props }) {
                     dispatch(guardarMarcadosOriginals(false))
                 })
                 .catch(error => {
-                    //alert("error1 " + error)
+                    
                 });
         }
     }, []);
@@ -155,12 +138,12 @@ export default function FilterType({ navigation, route, props }) {
             <View style={{ marginBottom: 27 }}></View>
             {
                 (filtros !== null && filtros !== undefined && marcadosAuxiliar !== null && marcadosAuxiliar !== undefined) &&
-                <ScrollView style={{ flex: 1, height: '100%', width : '100%' }}>
+                <ScrollView style={{ flex: 1, height: '100%', width: '100%' }}>
                     <View style={{ width: '100%' }}>
                         {
                             filtros.map((fil, indice) => {
                                 return (
-                                    <View style = {{ width : '100%' }} key={indice}>
+                                    <View style={{ width: '100%' }} key={indice}>
                                         <CardFilterType filtronombre={route.params.filtro} filter={fil} changemarcado={ChangeMarcado} indice={indice} marcadoauxiliar={marcados[indice]} marcado={marcados[indice]} />
                                     </View>
                                 );

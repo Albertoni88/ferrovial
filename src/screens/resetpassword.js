@@ -1,16 +1,13 @@
 import React, { useState, useEffect, useRef, createRef } from 'react';
 import { Button, ImageBackground, Dimensions, SafeAreaView, Image, TextInput, View, Text, TouchableOpacity, Alert, Platform, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
 import { COLORS } from '../constants';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import SVG from '../components/svg';
-import { recuperarPass } from '../store/actions/userActions';
-import axios from 'axios';
-import { URL_SERVER } from '../constants/urls';
 import { correoValidar } from '../constants/validation';
+import { reset } from '../store/actions/userActions';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -23,17 +20,13 @@ export default function ResetPassword({ navigation, props }) {
     }, []);
 
 
-    const  Recuperar = () => {
+    const Recuperar = () => {
+        
         const validoCorreo = correoValidar(correo);
+        var data = { "mail": correo };
+
         if(validoCorreo){
-            axios
-            .post(URL_SERVER + 'user/password?_format=json', { "mail": correo },
-                {
-                    headers: {
-                        Accept: 'application/json',
-                    }
-                }
-            )
+            reset(data)
             .then(async response => {
                 if(response.status === 200){
                     alert("Se le envió un correo a su buzón")
@@ -43,7 +36,6 @@ export default function ResetPassword({ navigation, props }) {
                 }
             })
             .catch(error => {
-                //alert("error1 " + error)
             });
         } else {
             alert("Correo inválido")

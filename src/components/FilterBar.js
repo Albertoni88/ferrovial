@@ -230,7 +230,6 @@ export default function FilterBar({ texto, navigation, showMap }) {
 const styles = StyleSheet.create({
     containerWebView: {
         width: '100%',
-        // height: (windowHeight * 5.5) / 100,
         height: 44,
         zIndex: 9999,
         backgroundColor: COLORS.primary,

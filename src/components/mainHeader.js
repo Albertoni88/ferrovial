@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, useMemo, createRef } from 'react';
-import axios from 'axios';
 import {
     useDispatch as useReduxDispatch,
     useSelector as useReduxSelector
@@ -30,7 +29,8 @@ import {
 } from '../store/actions/incidenciaActions';
 import {
     guardarSeccionesPerfil,
-    guardarUsuario
+    guardarUsuario,
+    initialFavoritos
 } from '../store/actions/userActions';
 import { URL_SERVER } from '../constants/urls';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -65,22 +65,25 @@ export default function MainHeader({ navigation, props }) {
     useEffect(() => {
 
         dispatch(guardarUsuario(token));
-
+        
         loadSecciones(token)
-            .then(response => {
-                dispatch(guardarSeccionesPerfil(response.data));
-            })
-            .catch(error => {
-                // alert("error1 " + error)
-            });
-
+        .then(response => {
+            dispatch(guardarSeccionesPerfil(response.data));
+        })
+        .catch(error => {
+        });
+        
         loadIncidencias(token)
-            .then(response => {
-                dispatch(guardarIncidencias(response.data.rows));
+        .then(response => {
+            dispatch(guardarIncidencias(response.data.rows));
+            var favoritosRe = [];
+            response.data.rows.forEach(element => {
+                favoritosRe.push(element.favorito);
+            });
+            dispatch(initialFavoritos(favoritosRe));                
                 dispatch(guardarIncidenciasOriginals(response.data.rows));
             })
             .catch(error => {
-                // alert("Error " + error)
             });
     }, []);
 
@@ -254,7 +257,6 @@ export default function MainHeader({ navigation, props }) {
                             color: 'rgb(255, 255,255)'
                         }}
                             onPress={() => {
-                                // alert("Cerrar sesion")
                             }}
                         >
                             Cerrar sesión
@@ -324,32 +326,44 @@ export default function MainHeader({ navigation, props }) {
                             name="ios-menu"
                             size={30}
                         /> */}
-                        <View style={{ flexDirection: 'column', marginLeft :12, marginTop : 30, marginRight : 120 }}>
-                            <View style={{
-                                width: 18,
-                                height: 1,
-                                borderStyle: "solid",
-                                borderWidth: 2,
-                                borderColor: COLORS.primary,
-                                // marginBottom : (windowHeight * 0.98) /100
-                                marginBottom : 5
-                            }} />
-                            <View style={{
-                                width: 18,
-                                height: 1,
-                                borderStyle: "solid",
-                                borderWidth: 2,
-                                borderColor: COLORS.primary,
-                                marginBottom : 5
-                            }} />
-                            <View style={{
-                                width: 18,
-                                height: 1,
-                                borderStyle: "solid",
-                                borderWidth: 2,
-                                borderColor: COLORS.primary
-                            }} />
-                        </View>
+                        <TouchableOpacity
+                            style={{
+                                width: 25,
+                                height: 30,
+                                marginTop: 30,
+                                marginLeft: 12,
+                                marginRight: 120
+                            }}
+                            onPress={toggleOpen}
+                        >
+                            <View
+                                style={{ flexDirection: 'column' }}>
+                                <View style={{
+                                    width: 18,
+                                    height: 1,
+                                    borderStyle: "solid",
+                                    borderWidth: 2,
+                                    borderColor: COLORS.primary,
+                                    // marginBottom : (windowHeight * 0.98) /100
+                                    marginBottom: 5
+                                }} />
+                                <View style={{
+                                    width: 18,
+                                    height: 1,
+                                    borderStyle: "solid",
+                                    borderWidth: 2,
+                                    borderColor: COLORS.primary,
+                                    marginBottom: 5
+                                }} />
+                                <View style={{
+                                    width: 18,
+                                    height: 1,
+                                    borderStyle: "solid",
+                                    borderWidth: 2,
+                                    borderColor: COLORS.primary
+                                }} />
+                            </View>
+                        </TouchableOpacity>
 
                         <Text style={{
                             flex: 1,
@@ -455,9 +469,8 @@ export default function MainHeader({ navigation, props }) {
                             >
 
                                 {incidencias.map((incidencia, indice) => {
-                                    console.log("inc ", incidencia)
                                     return (
-                                        <CarIncidencia key={incidencia.id} navigation={navigation} incidencia={incidencia} />
+                                        <CarIncidencia indice = {indice} key={incidencia.id} navigation={navigation} incidencia={incidencia} />
                                     );
                                 })}
                             </View>

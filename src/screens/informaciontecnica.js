@@ -26,7 +26,6 @@ export default function InformacionTecnica({ navigation, props }) {
     const secciones = useReduxSelector((state) => state.user.secciones);
 
     useEffect(() => {
-        // alert("navigation " + JSON.stringify(navigation))
     }, []);
 
     return (

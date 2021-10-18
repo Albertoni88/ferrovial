@@ -1,22 +1,15 @@
-import React, { useState, useEffect, useRef, createRef } from 'react';
+import React, { useState, useEffect, } from 'react';
 import {
     useDispatch as useReduxDispatch,
     useSelector as useReduxSelector
 } from 'react-redux';
-import axios from 'axios';
 import { Button, SafeAreaView, Dimensions, Image, TextInput, View, Text, TouchableOpacity, Alert, Platform, StyleSheet } from 'react-native';
-import { Thumbnail, List, ListItem, Separator } from 'native-base';
-import Icon from 'react-native-vector-icons/Ionicons';
+
+
 import Accordion from 'react-native-collapsible/Accordion';
 import SideBarHeader from '../components/sideBarHeader';
 import { COLORS } from '../constants';
-import {
-    widthPercentageToDP as wp,
-    heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
-import { height } from 'styled-system';
-import { URL_SERVER } from '../constants/urls';
-
+import { getFaqs } from '../store/actions/userActions';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -33,21 +26,12 @@ export default function PreguntasFrecuentes({ navigation, props }) {
     const [activeSections, setActiveSections] = useState([]);
 
     useEffect(() => {
-        axios.get(URL_SERVER + 'rest/faqs?_format=json',
-            {
-                headers: {
-                    'Authorization': 'Bearer ' + token,
-                }
-            }
-        )
+        getFaqs(token)
             .then(response => {
-                //alert("response faqs " + JSON.stringify(response.data))
                 SetSections(response.data);
                 setAcordiones(Array(response.data.length).fill(false));
-                //alert("acordiones " + JSON.stringify(acordiones));
             })
             .catch(error => {
-                //alert("error1 " + error)
             });
     }, []);
 
@@ -84,7 +68,7 @@ export default function PreguntasFrecuentes({ navigation, props }) {
                 }}>
                     <Text style={{
                         width: 305,
-                        height:  Platform.OS === 'ios' ? 19 : 25,
+                        height: Platform.OS === 'ios' ? 19 : 25,
                         fontFamily: 'montserrat-medium',
                         fontSize: 16,
                         fontWeight: "500",
@@ -113,7 +97,7 @@ export default function PreguntasFrecuentes({ navigation, props }) {
                 }}>
                     <Text style={{
                         width: 305,
-                        height:  Platform.OS === 'ios' ? 19 : 25,
+                        height: Platform.OS === 'ios' ? 19 : 25,
                         fontFamily: 'montserrat-medium',
                         fontSize: 16,
                         fontWeight: "500",
@@ -207,16 +191,19 @@ export default function PreguntasFrecuentes({ navigation, props }) {
                         marginTop: 22,
                     }}>
 
-                        <Accordion
-                            expandMultiple={true}
-                            underlayColor={'transparent'}
-                            sections={SECTIONS}
-                            activeSections={activeSections}
-                            renderSectionTitle={_renderSectionTitle}
-                            renderHeader={_renderHeader}
-                            renderContent={_renderContent}
-                            onChange={_updateSections}
-                        />
+                        {
+                            SECTIONS !== null && SECTIONS !== undefined &&
+                            <Accordion
+                                expandMultiple={true}
+                                underlayColor={'transparent'}
+                                sections={SECTIONS}
+                                activeSections={activeSections}
+                                renderSectionTitle={_renderSectionTitle}
+                                renderHeader={_renderHeader}
+                                renderContent={_renderContent}
+                                onChange={_updateSections}
+                            />
+                        }
                     </View>
                 </View>
 

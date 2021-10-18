@@ -9,52 +9,49 @@ import Feather from 'react-native-vector-icons/Feather';
 import * as Progress from 'react-native-progress';
 import { COLORS } from '../../constants';
 import SVG from '../svg';
-import {
-    widthPercentageToDP as wp,
-    heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
-import { height } from 'styled-system';
-import axios from 'axios';
-import { URL_SERVER } from '../../constants/urls';
 import { favoritoComentario } from '../../store/actions/incidenciaActions';
-
+import {
+    getCSRFToken,
+    setFavoritoRdux
+} from '../../store/actions/userActions';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-export default function CarIncidencia({ navigation, props, incidencia }) {
+export default function CarIncidencia({ navigation, props, incidencia, indice }) {
 
+    const dispatch = useReduxDispatch();
     const [toggleFavorito, setToggleFavorito] = useState(false);
     const token = useReduxSelector((state) => state.user.access_token);
     const csrf = useReduxSelector((state) => state.user.csrf);
     const [CSRF, setCSRF] = useState('');
-
+    const [favorito, setFavorito] = useState(0)
     const image = { uri: require("../../assets/1.png") };
+    const favoritosRedux = useReduxSelector((state) => state.user.favoritosRedux);
 
     useEffect(() => {
         getCSRFToken()
-    }, []);
-
-    async function getCSRFToken() {
-        axios.get('https://ferrovial.creacionwebprofesional.com/session/token')
             .then(response => {
                 setCSRF(response.data);
             })
             .catch(error => {
 
             });
-    }
+
+    }, [favorito]);
+
+
     const toggleFavoritoMethod = async () => {
 
-        //await getCSRFToken();
         var incidencia_id = incidencia.id;
 
-        favoritoComentario(token, csrf, incidencia_id)
+        favoritoComentario(token, CSRF, incidencia_id)
             .then(response => {
-                alert("toggle " + JSON.stringify(response))
+                //setFavorito(response.data.favorito);
+                dispatch(setFavoritoRdux({ "value" : response.data.favorito, "indice" : indice})) 
             })
             .catch(error => {
-                alert("error1 " + error)
+                
             });
     }
     return (
@@ -62,13 +59,13 @@ export default function CarIncidencia({ navigation, props, incidencia }) {
             flex: 1,
             backgroundColor: 'white',
             marginTop: 8,
-            zIndex : 11111,
+            zIndex: 11111,
             // position : 'relative'
         }}>
             <TouchableOpacity
                 style={styles.container}
                 onPress={() => {
-                    navigation.navigate('IncidenciaDetalles', { incidencia: incidencia });
+                    navigation.navigate('IncidenciaDetalles', { incidencia: incidencia, indice : indice });
                 }}>
                 <ImageBackground
                     // source={require('../../assets/1.png')}
@@ -120,13 +117,26 @@ export default function CarIncidencia({ navigation, props, incidencia }) {
                                 {incidencia?.created}
                             </Text>
                         </View>
-                        <TouchableOpacity
-                            onPress={() => {
-                                toggleFavoritoMethod();
-                            }}
-                            style={styles.containerSVGheart}>
-                            <SVG nombre={'Corazon'} width={25} height={25} />
-                        </TouchableOpacity>
+                        {
+                            favoritosRedux[indice] === 0 &&
+                            <TouchableOpacity
+                                onPress={() => {
+                                    toggleFavoritoMethod();
+                                }}
+                                style={styles.containerSVGheart}>
+                                <SVG nombre={'Corazon'} width={25} height={25} />
+                            </TouchableOpacity>
+                        }
+                        {
+                            favoritosRedux[indice] === 1 &&
+                            <TouchableOpacity
+                                onPress={() => {
+                                    toggleFavoritoMethod();
+                                }}
+                                style={styles.containerSVGheart}>
+                                <SVG nombre={'CorazonRelleno'} width={25} height={25} />
+                            </TouchableOpacity>
+                        }
                     </View>
                 </ImageBackground>
             </TouchableOpacity>
@@ -356,7 +366,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         alignSelf: 'center',
         left: 265,
-        marginTop : 5,
+        marginTop: 5,
         zIndex: 1111111,
         width: 22,
         height: 18,
@@ -371,7 +381,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         height: (windowHeight * 31.65) / 100,
         width: (windowWidth * 95.7) / 100,
-        borderWidth: 1,
+        //borderWidth: 1,
         borderRadius: 20,
         marginVertical: 10,
     },

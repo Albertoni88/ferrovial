@@ -1,4 +1,8 @@
 import React, { useState, useEffect, useRef, createRef } from 'react';
+import {
+    useDispatch as useReduxDispatch,
+    useSelector as useReduxSelector
+} from 'react-redux';
 import { Dimensions, Button, ImageBackground, Image, TextInput, View, Text, TouchableOpacity, Alert, Platform, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
@@ -11,21 +15,51 @@ import {
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { height } from 'styled-system';
-
+import { favoritoComentario } from '../../store/actions/incidenciaActions';
+import {
+    getCSRFToken,
+    setFavoritoRdux
+} from '../../store/actions/userActions';
 
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-export default function CarIncidenciaMapa({ navigation, props, incidencia }) {
+export default function CarIncidenciaMapa({ navigation, props, incidencia, indice }) {
+
+    const dispatch = useReduxDispatch();
+    const token = useReduxSelector((state) => state.user.access_token);
+    const csrf = useReduxSelector((state) => state.user.csrf);
+    const [CSRF, setCSRF] = useState('');
 
     const [toggleCheckBox, setToggleCheckBox] = useState(false);
     const [checked, setChecked] = React.useState(false);
     const image = { uri: require("../../assets/1.png") };
+    const favoritosRedux = useReduxSelector((state) => state.user.favoritosRedux);
 
     useEffect(() => {
+        getCSRFToken()
+            .then(response => {
+                setCSRF(response.data);
+            })
+            .catch(error => {
+
+            });
     }, []);
 
+    const toggleFavoritoMethod = async () => {
+
+        var incidencia_id = incidencia.id;
+
+        favoritoComentario(token, CSRF, incidencia_id)
+            .then(response => {
+                //setFavorito(response.data.favorito);
+                dispatch(setFavoritoRdux({ "value": response.data.favorito, "indice": indice }))
+            })
+            .catch(error => {
+                
+            });
+    }
     return (
 
         <View style={styles.containerMain}>
@@ -82,13 +116,26 @@ export default function CarIncidenciaMapa({ navigation, props, incidencia }) {
                                     {incidencia.created}
                                 </Text>
                             </View>
-                            <TouchableOpacity
-                                onPress={() => {
-
-                                }}
-                                style={styles.containerSVGheart}>
-                                <SVG nombre={'Corazon'} width={22} height={18} />
-                            </TouchableOpacity>
+                            {
+                                favoritosRedux[indice] === 0 &&
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        toggleFavoritoMethod();
+                                    }}
+                                    style={styles.containerSVGheart}>
+                                    <SVG nombre={'Corazon'} width={25} height={25} />
+                                </TouchableOpacity>
+                            }
+                            {
+                                favoritosRedux[indice] === 1 &&
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        toggleFavoritoMethod();
+                                    }}
+                                    style={styles.containerSVGheart}>
+                                    <SVG nombre={'CorazonRelleno'} width={25} height={25} />
+                                </TouchableOpacity>
+                            }
                         </View>
                     </ImageBackground>
                 </TouchableOpacity>

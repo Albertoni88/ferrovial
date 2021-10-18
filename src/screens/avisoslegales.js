@@ -26,7 +26,7 @@ export default function AvisosLegales({ navigation, props }) {
     const secciones = useReduxSelector((state) => state.user.secciones);
 
     useEffect(() => {
-        // alert("navigation " + JSON.stringify(navigation))
+        
     }, []);
 
     return (

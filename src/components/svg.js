@@ -129,6 +129,14 @@ export default function SVG({ navigation, width, height, nombre }) {
                 />
             }
             {
+                nombre === 'CorazonRelleno' &&
+                <SvgUri
+                    width={width}
+                    height={height}
+                    source={require('../assets/Corazonrelleno.svg')}
+                />
+            }
+            {
                 nombre === 'Subir' &&
                 <SvgUri
                     width={width}

@@ -20,8 +20,6 @@ export default function CardFilterType({ filter, filtronombre, navigation, props
     const marcados = useReduxSelector((state) => state.user.marcados);
 
     useEffect(() => {
-        //alert("marcado " + JSON.stringify(marcado));
-        //alert("filter.nombre " + JSON.stringify(filter));
     }, []);
 
     if (filter !== null && filter !== undefined && filter !== []) {
@@ -73,13 +71,11 @@ export default function CardFilterType({ filter, filtronombre, navigation, props
                         {filter.nombre}
                     </Text>
                 }
-                {
-                    // ((marcados !== null && marcados !==undefined) && marcados[indice] === true) &&
+                {                    
                     (marcado === true) &&
                     <View style={(filtronombre === 'tipo') ? styles.containerSVG : styles.containerSVG1}>
                         <TouchableOpacity
-                            onPress={() => {
-                                //alert("indice " + indice);
+                            onPress={() => {                                
                                 changemarcado(indice, marcadoauxiliar);
                             }}
                         >
@@ -90,13 +86,11 @@ export default function CardFilterType({ filter, filtronombre, navigation, props
                         </TouchableOpacity>
                     </View>
                 }
-                {
-                    // ((marcados !== null && marcados !==undefined) && marcados[indice] === false) &&
+                {                    
                     (marcado === false) &&
                     <View style={(filtronombre === 'tipo') ? styles.containerSVG : styles.containerSVG1}>
                         <TouchableOpacity
                             onPress={() => {
-                                //alert("indiceno " + indice);
                                 changemarcado(indice, marcadoauxiliar);
                             }}
                         >

@@ -11,9 +11,7 @@ import {
 } from 'react-native-responsive-screen';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-import { URL_SERVER } from '../constants/urls';
-import axios from 'axios';
+import { registerAccount, getCSRFToken } from '../store/actions/userActions';
 import { correoValidar } from '../constants/validation';
 
 import SVG from '../components/svg';
@@ -32,23 +30,21 @@ export default function CreateAccount({ navigation, props }) {
     const [CSRF, setCSRF] = useState('');
 
     useEffect(() => {
-    }, []);
-    async function getCSRFToken() {
-        axios.get('https://ferrovial.creacionwebprofesional.com/session/token')
+        getCSRFToken()
             .then(response => {
-                //alert("response token " + JSON.stringify(response));
                 setCSRF(response.data);
             })
             .catch(error => {
 
             });
-    }
+    }, []);
+
     async function register() {
         const validoCorreo = correoValidar(mail);
-        if(pass !== ''){
+        if (pass !== '' && mail !== '' && field_apellido !== '' && field_nombre !== '') {
 
             if (validoCorreo) {
-                await getCSRFToken();
+
                 if (checked === true) {
                     const data =
                     {
@@ -64,22 +60,12 @@ export default function CreateAccount({ navigation, props }) {
                         "field_nombre": {
                             "value": field_nombre
                         },
-    
+
                         "field_apellidos": {
                             "value": field_apellido
                         }
                     };
-                    axios
-                        .post(URL_SERVER + 'user/register?_format=hal_json', data,
-                            {
-                                headers: {
-                                    Accept: 'application/json',
-                                    'Content-Type': 'application/json',
-                                    'X-CSRF-Token': CSRF,
-                                    // 'cookie': ''
-                                }
-                            }
-                        )
+                    registerAccount(data, CSRF)
                         .then(response => {
                             if (checked === true) {
                                 if (response.status === 200) {
@@ -91,7 +77,7 @@ export default function CreateAccount({ navigation, props }) {
                             }
                         })
                         .catch(error => {
-                            alert("error " + error)
+                            
                         });
                 } else {
                     alert("No aceptó las políticas de privacidad")
@@ -101,7 +87,7 @@ export default function CreateAccount({ navigation, props }) {
                 alert("Correo inválido");
             }
         } else {
-            alert("Contraseña vacía");
+            alert("Tiene campos vacíos");
         }
     }
     return (

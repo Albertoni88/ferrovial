@@ -14,9 +14,11 @@ import {
 } from 'react-native-responsive-screen';
 import { height } from 'styled-system';
 import {
-    guardarUsuario, guardarUsuarioRedux
+    guardarUsuario,
+    guardarUsuarioRedux,
+    getCSRFToken,
+    editPerfil
 } from '../store/actions/userActions';
-import axios from 'axios';
 import { URL_SERVER } from '../constants/urls';
 
 const windowWidth = Dimensions.get('window').width;
@@ -38,42 +40,26 @@ export default function EditarPerfil({ navigation, props }) {
 
     useEffect(() => {
         getCSRFToken()
-        //dispatch(guardarUsuario(token));
-        //alert("user " + JSON.stringify(user))
-    }, []);
-    async function getCSRFToken() {
-        axios.get('https://ferrovial.creacionwebprofesional.com/session/token')
             .then(response => {
-                //alert("response token " + JSON.stringify(response.data));
                 setCSRF(response.data);
             })
             .catch(error => {
 
             });
-    }
+    }, []);
+
     const editarPerfil = async () => {
-        
+
         const data = {
             "nombre": name,
             "apellidos": apellidos,
             "email": email
-        };
+        };        
 
-        await getCSRFToken();
-
-        axios.put(URL_SERVER + 'rest/perfil_usuario?_format=json', data,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token,
-                    'X-CSRF-Token': CSRF,
-                    'cookie' : ''
-                }
-            }
-        )
+        editPerfil(data, token, CSRF)
             .then(response => {
                 if (response.status === 200) {
-                    //alert("response editar " + JSON.stringify(response.data))
+                    
                     dispatch(guardarUsuarioRedux(response.data));
                     alert("Guardado con éxito");
                 }
@@ -83,7 +69,7 @@ export default function EditarPerfil({ navigation, props }) {
             });
 
     }
-    
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={{ backgroundColor: 'white', textAlign: 'center', alignItems: 'center', flex: 1, }}>
@@ -139,7 +125,7 @@ export default function EditarPerfil({ navigation, props }) {
                         style={styles.apellidos}
                         onChangeText={(apellidos) => {
                             setApellidos(apellidos);
-                        }}                        
+                        }}
                     />
                     {/* }
                     {

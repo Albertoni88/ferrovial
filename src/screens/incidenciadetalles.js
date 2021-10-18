@@ -25,8 +25,13 @@ import {
     guardarCreada,
     guardarIncidenciaRedux,
     cargarIncidenciaDetalles,
-    borrarComentario
+    borrarComentario,
+    favoritoComentario
 } from '../store/actions/incidenciaActions';
+import {
+    setFavoritoRdux,
+    getCSRFToken
+} from '../store/actions/userActions';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -50,10 +55,20 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                 }
             })
             .catch(error => {
-                alert(error)
             });
+
         onHandlePermission();
+
+        getCSRFToken()
+            .then(response => {
+                setCSRF(response.data);
+            })
+            .catch(error => {
+
+            });
     }, []);
+
+    const dispatch = useReduxDispatch();
     const [imagenesfront, setImagenesFront] = useState(new Array());
     const [listadoComentarios, setListadoComentarios] = useState([]);
     const token = useReduxSelector((state) => state.user.access_token);
@@ -87,6 +102,21 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
     const [activo, setActivo] = useState(-1);
     const [commentEditar, setCommentEditar] = useState([]);
     const [editado, setEditado] = useState('');
+    const [CSRF, setCSRF] = useState('');
+    const favoritosRedux = useReduxSelector((state) => state.user.favoritosRedux);
+
+    const toggleFavoritoMethod = async () => {
+
+        var incidencia_id = route.params.incidencia.id;
+
+        favoritoComentario(token, CSRF, incidencia_id)
+            .then(response => {
+                //setFavorito(response.data.favorito);
+                dispatch(setFavoritoRdux({ "value": response.data.favorito, "indice": route.params.indice }))
+            })
+            .catch(error => {
+            });
+    }
 
     const editarComentarioFront = (index, id, body) => {
 
@@ -101,7 +131,6 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                     setActivo(index)
                 }
             });
-            // alert("marcados " + JSON.stringify(marcados))
             setCommentEditar(marcados);
         } else {
             var nuevos = [];
@@ -110,8 +139,7 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                 listadoComentarios.forEach((element1, j) => {
                     if (index === j) {
                         var copia = { ...element1, "comment_body": editado };
-                        idEditado = copia.id
-                        //alert("antes " + JSON.stringify(element1) + " copia " + JSON.stringify(copia))
+                        idEditado = copia.id;
                         nuevos.push(copia);
                     } else {
                         nuevos.push(element1);
@@ -125,14 +153,11 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                     "imagenes": im
                 }
                 editarComentario(token, data, idEditado).then(response => {
-                    //alert("response " + JSON.stringify(response.data))
                     if (response.status === 200) {
-                        // alert("correcto")
                         setListadoComentarios(nuevos);
                     }
                 })
                     .catch(error => {
-                        alert(error)
                     });
 
             }
@@ -201,7 +226,6 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
             guardarImagen(token, imagenes).then(response => {
                 if (response.status === 200) {
                     var idArchivo = response.data[0];
-                    //alert("id " + id)
                     var data = {
                         "subject": comment,
                         "comment_body": comment,
@@ -211,7 +235,6 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                     }
                     guardarComentario(token, data, route.params.incidencia.id).then(response => {
                         if (response.status === 200) {
-                            // alert("user " + JSON.stringify(user));
                             var temp = {
                                 ...data,
                                 "uid": user.id,
@@ -278,8 +301,7 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                                 .then(response => {
                                     if (response.status === 200) {
                                         var listNueva = [];
-                                        //alert("response editar " + JSON.stringify(response.data))
-                                        //dispatch(guardarUsuario(response.data));
+                                        
                                         listadoComentarios.forEach(element => {
                                             if (element.id !== idComentario) {
                                                 listNueva.push(element)
@@ -291,7 +313,6 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                                     }
                                 })
                                 .catch(error => {
-                                    alert(error)
                                 });
                         } else {
                             alert("No fuistes el que hizo el comentario")
@@ -369,13 +390,26 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                                             {route.params.incidencia.created}
                                         </Text>
                                     </View>
-                                    <TouchableOpacity
-                                        onPress={() => {
-
-                                        }}
-                                        style={styles.containerSVGheart}>
-                                        <SVG nombre={'Corazon'} width={25} height={25} />
-                                    </TouchableOpacity>
+                                    {
+                                        favoritosRedux[route.params.indice] === 0 &&
+                                        <TouchableOpacity
+                                            onPress={() => {
+                                                toggleFavoritoMethod();
+                                            }}
+                                            style={styles.containerSVGheart}>
+                                            <SVG nombre={'Corazon'} width={25} height={25} />
+                                        </TouchableOpacity>
+                                    }
+                                    {
+                                        favoritosRedux[route.params.indice] === 1 &&
+                                        <TouchableOpacity
+                                            onPress={() => {
+                                                toggleFavoritoMethod();
+                                            }}
+                                            style={styles.containerSVGheart}>
+                                            <SVG nombre={'CorazonRelleno'} width={25} height={25} />
+                                        </TouchableOpacity>
+                                    }
                                 </View>
                             </ImageBackground>
                         </TouchableOpacity>
@@ -588,7 +622,6 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                             </TextInput>
                             <Icon
                                 onPress={() => {
-                                    //alert("asdasdasda")
                                     if (comment === '') {
                                         alert("Escribe un comentario primero");
                                     } else {

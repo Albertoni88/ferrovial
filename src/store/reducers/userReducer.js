@@ -4,13 +4,14 @@ const initialState = {
   userInfo: null,
   access_token: '',
   csrf: '',
-  filtros : null,
-  filtrosOriginals : null,
-  marcados : null,
-  marcadosOriginals : null,
-  secciones : null, 
-  idArchivo : null, 
-  creadaIncidencia : false
+  filtros: null,
+  filtrosOriginals: null,
+  marcados: null,
+  marcadosOriginals: null,
+  secciones: null,
+  idArchivo: null,
+  creadaIncidencia: false,
+  favoritosRedux: []
 };
 
 const userReducer = (state, action) => {
@@ -28,7 +29,7 @@ const userReducer = (state, action) => {
     case actionTypes.GUARDAR_CREADA: {
       newState.creadaIncidencia = action.payload;
       break;
-    }    
+    }
     case actionTypes.GUARDAR_ARCHIVO: {
       newState.idArchivo = action.payload;
       break;
@@ -49,17 +50,37 @@ const userReducer = (state, action) => {
       newState.filtrosOriginals = action.payload;
       break;
     }
+    case actionTypes.INITIAL_FAVORITOS: {
+      newState.favoritosRedux = action.payload;
+      console.log("auxFavoritos ", JSON.stringify(newState.favoritosRedux))
+      break;
+    }
+    case actionTypes.SET_FAVORITO: {
+
+      var temp = [];
+      newState.favoritosRedux.forEach((element, i) => {
+        if (i === action.payload.indice) {
+          temp.push(action.payload.value)
+        } else {
+          temp.push(element)
+        }
+      });
+      console.log("action.payload.value ", action.payload.value)
+      newState.favoritosRedux = temp;
+      console.log("auxFavoritos nuevos ", newState.favoritosRedux)
+      break;
+    }
     case actionTypes.GUARDAR_MARCADOS: {
       var aux = Array(newState.filtros.length).fill(action.payload);
       newState.marcados = aux;
       break;
     }
     case actionTypes.GUARDAR_MARCADOS_ARRAY: {
-      
+
       newState.marcados = action.payload;
       break;
     }
-    case actionTypes.GUARDAR_MARCADOS_ORIGINALS: {  
+    case actionTypes.GUARDAR_MARCADOS_ORIGINALS: {
       var aux1 = Array(newState.filtros.length).fill(true);
       newState.marcadosOriginals = aux1;
       break;
