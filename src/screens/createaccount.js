@@ -14,6 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { URL_SERVER } from '../constants/urls';
 import axios from 'axios';
+import { correoValidar } from '../constants/validation';
 
 import SVG from '../components/svg';
 const windowWidth = Dimensions.get('window').width;
@@ -43,55 +44,65 @@ export default function CreateAccount({ navigation, props }) {
             });
     }
     async function register() {
-        await getCSRFToken();
-        if (checked === true) {
-            const data =
-            {
-                "name": {
-                    "value": mail
-                },
-                "mail": {
-                    "value": mail
-                },
-                "pass": {
-                    "value": pass
-                },
-                "field_nombre": {
-                    "value": field_nombre
-                },
+        const validoCorreo = correoValidar(mail);
+        if(pass !== ''){
 
-                "field_apellidos": {
-                    "value": field_apellido
-                }
-            };
-            axios
-                .post(URL_SERVER + 'user/register?_format=hal_json', data,
+            if (validoCorreo) {
+                await getCSRFToken();
+                if (checked === true) {
+                    const data =
                     {
-                        headers: {
-                            Accept: 'application/json',
-                            'Content-Type': 'application/json',
-                            'X-CSRF-Token': CSRF,
-                            'cookie' : ''
+                        "name": {
+                            "value": mail
+                        },
+                        "mail": {
+                            "value": mail
+                        },
+                        "pass": {
+                            "value": pass
+                        },
+                        "field_nombre": {
+                            "value": field_nombre
+                        },
+    
+                        "field_apellidos": {
+                            "value": field_apellido
                         }
-                    }
-                )
-                .then(response => {
-                    if (checked === true) {
-                        if (response.status === 200) {
-                            alert("Registrado correctamente");
-                            navigation.navigate('Login');
-                        }
-                    } else {
-                        alert("No aceptó las políticas de privacidad");
-                    }
-                })
-                .catch(error => {
-                    alert("error " + error)
-                });
+                    };
+                    axios
+                        .post(URL_SERVER + 'user/register?_format=hal_json', data,
+                            {
+                                headers: {
+                                    Accept: 'application/json',
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-Token': CSRF,
+                                    // 'cookie': ''
+                                }
+                            }
+                        )
+                        .then(response => {
+                            if (checked === true) {
+                                if (response.status === 200) {
+                                    alert("Registrado correctamente");
+                                    navigation.navigate('Login');
+                                }
+                            } else {
+                                alert("No aceptó las políticas de privacidad");
+                            }
+                        })
+                        .catch(error => {
+                            alert("error " + error)
+                        });
+                } else {
+                    alert("No aceptó las políticas de privacidad")
+                }
+            }
+            else {
+                alert("Correo inválido");
+            }
         } else {
-            alert("No aceptó las políticas de privacidad")
+            alert("Contraseña vacía");
         }
-
     }
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -103,7 +114,7 @@ export default function CreateAccount({ navigation, props }) {
                 }}
             // imageStyle={styles.image}
             >
-                <View style={{ opacity : 0.8, backgroundColor: COLORS.primary, flex: 1, }}>
+                <View style={{ opacity: 0.8, backgroundColor: COLORS.primary, flex: 1, }}>
                     <View style={styles.goBack}>
                         <View style={styles.containerSVG}>
                             <TouchableOpacity

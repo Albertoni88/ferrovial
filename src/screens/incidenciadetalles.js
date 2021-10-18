@@ -566,25 +566,20 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                                 value={comment}
                                 placeholder='Escribe un comentario...'
                                 placeholderTextColor={COLORS.primary}
+                                multiline={true}
+                                numberOfLines={3}
                                 style={{
-                                    // marginTop: 25,
-                                    // backgroundColor: 'grey',
-                                    // height: 45,
-                                    // width: '80%',
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                     alignContent: 'center',
                                     alignSelf: 'center',
                                     textAlign: 'left',
                                     paddingLeft: 17,
-                                    // borderRadius: 30
-
                                     width: 351,
                                     height: 34,
                                     width: (windowWidth * 93.6) / 100,
                                     borderRadius: 20,
                                     backgroundColor: "rgba(77, 94, 225, 0.1)",
-                                    //paddingLeft: 17
                                 }}
                                 onChangeText={(comment) => {
                                     setComment(comment)
@@ -1555,7 +1550,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         alignSelf: 'center',
         left: 265,
-        marginTop : 5,
+        marginTop: 5,
         zIndex: 1111111,
         width: 22,
         height: 18,

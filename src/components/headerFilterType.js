@@ -29,27 +29,36 @@ export default function HeaderFilterType({ filtronombre, navigation, filtrar }) 
     const marcados = useReduxSelector((state) => state.user.marcados);
     const incidenciasOriginals = useReduxSelector((state) => state.incidencia.incidenciasOriginals);
     const filtros = useReduxSelector((state) => state.user.filtros);
+    const filtrosOriginals = useReduxSelector((state) => state.user.filtrosOriginals);
 
     const FiltrarDinamico = () => {
 
         var filtradasIncidencias = [];
+        var cantidadMarcados = 0;
+        
         marcados.forEach((element, index) => {
             if (element === true) {
+                cantidadMarcados++;
                 incidenciasOriginals.forEach((inc, index1) => {
-                    if (filtronombre === 'tipo' && inc.tipo_incidencia === filtros[index].nombre) {
+                    if (filtronombre === 'tipo' && inc.tipo_incidencia === filtrosOriginals[index].nombre) {
                         filtradasIncidencias.push(incidenciasOriginals[index1]);
                     }
-                    if (filtronombre === 'estado' && inc.estado === filtros[index].nombre) {
+                    if (filtronombre === 'estado' && inc.estado === filtrosOriginals[index].nombre) {
                         filtradasIncidencias.push(incidenciasOriginals[index1]);
                     }
-                    if (filtronombre === 'interaccion' && inc.tipo_participacion === filtros[index].nombre) {
+                    if (filtronombre === 'interaccion' && inc.tipo_participacion === filtrosOriginals[index].nombre) {
                         filtradasIncidencias.push(incidenciasOriginals[index1]);
                     }
                 });
             }
         });
         navigation.navigate('Main');
-        dispatch(guardarIncidencias(filtradasIncidencias));
+        if (cantidadMarcados === 0) {
+            filtrar('');
+            dispatch(guardarIncidencias(incidenciasOriginals));
+        } else {
+            dispatch(guardarIncidencias(filtradasIncidencias));
+        }
     }
     return (
         <View style={styles.containerWebView}>

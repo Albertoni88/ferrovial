@@ -16,7 +16,7 @@ export default function FilterBar({ texto, navigation, showMap }) {
         <View style={styles.containerWebView}>
             <TouchableOpacity
                 onPress={() => {
-                    navigation.navigate('FilterType', {filtro: 'tipo'});
+                    navigation.navigate('FilterType', { filtro: 'tipo' });
                 }}
                 style={{
                     alignItems: 'center',
@@ -36,7 +36,7 @@ export default function FilterBar({ texto, navigation, showMap }) {
                     borderStyle: "solid",
                     borderWidth: 1,
                     borderColor: 'white',
-                    marginLeft : 6
+                    marginLeft: 6
                 }}>
                 <Text style={{
                     alignSelf: 'center',
@@ -53,14 +53,14 @@ export default function FilterBar({ texto, navigation, showMap }) {
                     lineHeight: (windowHeight * 2.2) / 100,
                     letterSpacing: 0.3,
                     color: 'white',
-                    
+
                 }}>
                     Tipo
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={() => {
-                    navigation.navigate('FilterType', {filtro: 'estado'});
+                    navigation.navigate('FilterType', { filtro: 'estado' });
                 }}
                 style={{
                     alignItems: 'center',
@@ -103,7 +103,7 @@ export default function FilterBar({ texto, navigation, showMap }) {
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={() => {
-                    navigation.navigate('FilterType', {filtro: 'interaccion'});
+                    navigation.navigate('FilterType', { filtro: 'interaccion' });
                 }}
                 style={{
                     alignItems: 'center',
@@ -145,7 +145,57 @@ export default function FilterBar({ texto, navigation, showMap }) {
                     Interacción
                 </Text>
             </TouchableOpacity>
-            <Icon
+            <View style={{ flexDirection: 'column', marginLeft : 90, marginRight : 10}}>
+                <View style={{
+                    width: 22,
+                    height: 7,
+                    borderRadius: 2,
+                    borderStyle: "solid",
+                    borderWidth: 1,
+                    borderColor: 'white',
+                }}>
+                    <View style={{
+                        width: 22,
+                        height: 4,
+                        borderRadius: 2,
+                        backgroundColor: 'white'
+
+                    }} />
+                </View>
+                <View style={{
+                    width: 22,
+                    height: 7,
+                    borderRadius: 2,
+                    borderStyle: "solid",
+                    borderWidth: 1,
+                    borderColor: 'white',
+                }}>
+                    <View style={{
+                        width: 22,
+                        height: 4,
+                        borderRadius: 2,
+                        backgroundColor: 'white'
+
+                    }} />
+                </View>
+                <View style={{
+                    width: 22,
+                    height: 7,
+                    borderRadius: 2,
+                    borderStyle: "solid",
+                    borderWidth: 1,
+                    borderColor: 'white',   
+                }}>
+                    <View style={{
+                        width: 22,
+                        height: 4,
+                        borderRadius: 2,
+                        backgroundColor: 'white'
+
+                    }} />
+                </View>
+            </View>
+            {/* <Icon
                 style={{
                     flex: 1,
                     justifyContent: 'center',
@@ -157,7 +207,7 @@ export default function FilterBar({ texto, navigation, showMap }) {
                 onPress={() => { }}
                 name="ios-menu"
                 size={30}
-            />
+            /> */}
             <Icon
                 style={{
                     //flex: 1,
@@ -166,7 +216,7 @@ export default function FilterBar({ texto, navigation, showMap }) {
                     alignContent: 'center',
                     color: 'white',
                     textAlign: 'right',
-                    opacity : 0.3,
+                    opacity: 0.3,
                 }}
                 onPress={() => {
                     showMap()

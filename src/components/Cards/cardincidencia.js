@@ -61,8 +61,9 @@ export default function CarIncidencia({ navigation, props, incidencia }) {
         <View style={{
             flex: 1,
             backgroundColor: 'white',
-            //marginTop: 16
-            marginTop: (windowHeight * 2) / 100
+            marginTop: 8,
+            zIndex : 11111,
+            // position : 'relative'
         }}>
             <TouchableOpacity
                 style={styles.container}
@@ -116,7 +117,7 @@ export default function CarIncidencia({ navigation, props, incidencia }) {
                                 alignItems: 'center',
                                 alignSelf: 'center'
                             }}>
-                                {incidencia.created}
+                                {incidencia?.created}
                             </Text>
                         </View>
                         <TouchableOpacity
@@ -151,7 +152,7 @@ export default function CarIncidencia({ navigation, props, incidencia }) {
                     letterSpacing: 0,
                     color: COLORS.browngrey
                 }}>
-                    {incidencia.autor_username}
+                    {incidencia?.autor_username}
                 </Text>
                 <Icon
                     onPress={() => {
@@ -176,7 +177,7 @@ export default function CarIncidencia({ navigation, props, incidencia }) {
                     color: COLORS.browngrey
                 }}>
                     {/* {incidencia.categoria} */}
-                    {incidencia.tipo_incidencia}
+                    {incidencia?.tipo_incidencia}
                 </Text>
                 <Icon
                     onPress={() => {
@@ -202,7 +203,7 @@ export default function CarIncidencia({ navigation, props, incidencia }) {
                     letterSpacing: 0,
                     color: COLORS.browngrey
                 }}>
-                    {incidencia.estado}
+                    {incidencia?.estado}
                 </Text>
             </View>
             <View
@@ -230,7 +231,7 @@ export default function CarIncidencia({ navigation, props, incidencia }) {
                 letterSpacing: 0,
                 color: COLORS.primary, marginLeft: 12
             }}>
-                {incidencia.titulo}
+                {incidencia?.titulo}
                 {/* Nombre de la incidencia que ocupa 2 líneas para tener el ejemplo en el diseño de la app */}
             </Text>
 
@@ -256,7 +257,7 @@ export default function CarIncidencia({ navigation, props, incidencia }) {
                     flex: 1,
                     marginTop: 15
                 }}>
-                    {incidencia.direccion}
+                    {incidencia?.direccion}
                 </Text>
             </View>
             <View

@@ -192,6 +192,7 @@ export default function WelcomeSlides({ navigation }) {
                     renderPagination={hidePagination === false ? numero : _renderDoneButton}
                     // renderNextButton={_renderNextButton}
                     renderItem={_renderItem}
+                    // keyExtractor={(item, index) => index.toString()}
                     data={slides}
                     onDone={_onDone}
                 />

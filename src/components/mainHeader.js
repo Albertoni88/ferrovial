@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef, createRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo, createRef } from 'react';
 import axios from 'axios';
 import {
     useDispatch as useReduxDispatch,
     useSelector as useReduxSelector
 } from 'react-redux';
-import { Button, ImageBackground, SafeAreaView, Dimensions, ScrollView, Image, TextInput, View, Text, TouchableOpacity, Alert, Platform, StyleSheet } from 'react-native';
+import { Button, ImageBackground, SafeAreaView, Dimensions, ScrollView, Image, TextInput, View, Text, TouchableOpacity, Alert, Platform, StyleSheet, BackHandler } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -34,11 +34,20 @@ import {
 } from '../store/actions/userActions';
 import { URL_SERVER } from '../constants/urls';
 import { LinearGradient } from 'expo-linear-gradient';
+import { backgroundColor } from 'styled-system';
 
 export default function MainHeader({ navigation, props }) {
 
 
-
+    const memoIncidencias = React.useMemo(() =>
+        // listOfItems.map(item => ({
+        //     ...item,
+        //     itemProp1: expensiveFunction(props.first),
+        //     itemProp2: anotherPriceyFunction(props.second)
+        // }))
+        mapeoIncidencias
+        , [incidencias]
+    )
     const dispatch = useReduxDispatch();
     const [open, setOpen] = useState(false);
     const [find, setFind] = useState(false);
@@ -52,8 +61,9 @@ export default function MainHeader({ navigation, props }) {
 
 
 
+
     useEffect(() => {
-        
+
         dispatch(guardarUsuario(token));
 
         loadSecciones(token)
@@ -74,6 +84,18 @@ export default function MainHeader({ navigation, props }) {
             });
     }, []);
 
+
+    const mapeoIncidencias = () => {
+
+        return incidencias.map((incidencia, indice) => {
+            return (
+                <View style={{ marginTop: 8 }} key={incidencia.id}>
+                    <CarIncidencia key={incidencia.id} navigation={navigation} incidencia={incidencia} />
+                </View>
+            );
+        })
+
+    }
     const toggleOpen = () => {
         setShowBody(!showBody);
         setOpen(!open);
@@ -272,215 +294,254 @@ export default function MainHeader({ navigation, props }) {
 
 
     return (
+
         <SafeAreaView
             style={{ flex: 1, height: '100%' }}
         >
-
-            <View style={styles.container}>
-                {
-                    (open === false && find === false) &&
-                    <View style={{
-                        zIndex: 11111
-                    }}>
-                        <View style={styles.containerWebView}>
-                            <Icon
-                                style={{
-                                    flex: 0.55,
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    alignContent: 'center',
-                                    color: COLORS.primary,
-                                    marginLeft: 12,
-                                    marginTop: 31,
-                                    alignSelf: 'center'
-                                }}
-                                onPress={toggleOpen}
-                                name="ios-menu"
-                                size={30}
-                            />
-                            <Text style={{
-                                flex: 1,
-                                width: 280,
-                                height: 27,
-                                fontFamily: "nunito-bold",
-                                fontSize: 20,
-                                fontWeight: "bold",
-                                fontStyle: "normal",
-                                letterSpacing: 0,
-                                textAlign: "center",
+            {/* <LinearGradient
+                colors={[COLORS.PALE_GREY, COLORS.PALE_GREY, 'grey']}
+                style={styles.linearGradient}
+            > */}
+            {/* <View style={styles.container}> */}
+            {
+                (open === false && find === false) &&
+                <View style={{
+                    zIndex: 111111
+                }}>
+                    <View style={styles.containerWebView}>
+                        {/* <Icon
+                            style={{
+                                flex: 0.55,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                alignContent: 'center',
                                 color: COLORS.primary,
-                                textAlign: 'left',
-                                alignSelf: 'center',
-                                marginTop: 27
-                            }}>
-                                Valdepeñas
-                            </Text>
-                            <View style={styles.containerSVG}>
-                                <TouchableOpacity
-                                    onPress={toggleFind}
-                                >
-                                    <SVG nombre={'Buscar'} width={20} height={20} />
-                                </TouchableOpacity>
-                            </View>
+                                marginLeft: 12,
+                                marginTop: 31,
+                                alignSelf: 'center'
+                            }}
+                            onPress={toggleOpen}
+                            name="ios-menu"
+                            size={30}
+                        /> */}
+                        <View style={{ flexDirection: 'column', marginLeft :12, marginTop : 30, marginRight : 120 }}>
+                            <View style={{
+                                width: 18,
+                                height: 1,
+                                borderStyle: "solid",
+                                borderWidth: 2,
+                                borderColor: COLORS.primary,
+                                // marginBottom : (windowHeight * 0.98) /100
+                                marginBottom : 5
+                            }} />
+                            <View style={{
+                                width: 18,
+                                height: 1,
+                                borderStyle: "solid",
+                                borderWidth: 2,
+                                borderColor: COLORS.primary,
+                                marginBottom : 5
+                            }} />
+                            <View style={{
+                                width: 18,
+                                height: 1,
+                                borderStyle: "solid",
+                                borderWidth: 2,
+                                borderColor: COLORS.primary
+                            }} />
+                        </View>
+
+                        <Text style={{
+                            flex: 1,
+                            width: 280,
+                            height: 27,
+                            fontFamily: "nunito-bold",
+                            fontSize: 20,
+                            fontWeight: "bold",
+                            fontStyle: "normal",
+                            letterSpacing: 0,
+                            textAlign: "center",
+                            color: COLORS.primary,
+                            textAlign: 'left',
+                            alignSelf: 'center',
+                            marginTop: 27
+                        }}>
+                            Valdepeñas
+                        </Text>
+                        <View style={styles.containerSVG}>
+                            <TouchableOpacity
+                                onPress={toggleFind}
+                            >
+                                <SVG nombre={'Buscar'} width={20} height={20} />
+                            </TouchableOpacity>
                         </View>
                     </View>
-
-                }
-                {
-                    (open === false && find === true) &&
-                    <View style={styles.searchSection}>
-                        <Icon style={styles.searchIcon} name="ios-search" size={20} color={COLORS.primary} />
-                        <TextInput
-                            value={searchString}
-                            ref={myRef}
-                            autoFocus={true}
-                            style={styles.input}
-                            placeholder="Buscar..."
-                            onChangeText={(searchStringInput) => {
-                                setSearchString(searchStringInput);
-                                FiltrarIncidencia(searchStringInput);
-                            }}
-                            underlineColorAndroid="transparent"
-                            onBlur={pressOut}
-                        />
-                        <Text
-                            onPress={() => {
-                                FiltrarIncidencia(searchString)
-                                toggleFind();
-                            }}
-                            style={{
-                                flex: 1,
-                                fontSize: 15,
-                                color: COLORS.primary,
-                                padding: 10,
-
-                            }}>
-                            Aplicar
-                        </Text>
-                    </View>
-
-                }
-                <View
-                    style={{
-                        width: '100%',
-                        zIndex: 9999,
-                        alignItems: 'center',
-                        backgroundColor: 'white',
-                        height: open === true ? 0 : 44,
-                        flexDirection: 'row',
-                    }}
-                    pointerEvents={find === true ? 'none' : 'auto'}
-                >
-                    {
-                        open === false &&
-                        <FilterBar navigation={navigation} showMap={ShowMap} />
-                    }
                 </View>
-                <MenuDrawer
-                    open={open}
-                    drawerContent={drawerContent()}
-                    drawerPercentage={100}
-                    animationTime={250}
-                    overlay={true}
-                    opacity={0.4}
-                >
-                </MenuDrawer>
-                {(showBody && map === false) &&
+
+            }
+            {
+                (open === false && find === true) &&
+                <View style={styles.searchSection}>
+                    <Icon style={styles.searchIcon} name="ios-search" size={20} color={COLORS.primary} />
+                    <TextInput
+                        value={searchString}
+                        ref={myRef}
+                        autoFocus={true}
+                        style={styles.input}
+                        placeholder="Buscar..."
+                        onChangeText={(searchStringInput) => {
+                            setSearchString(searchStringInput);
+                            FiltrarIncidencia(searchStringInput);
+                        }}
+                        underlineColorAndroid="transparent"
+                        onBlur={pressOut}
+                    />
+                    <Text
+                        onPress={() => {
+                            FiltrarIncidencia(searchString)
+                            toggleFind();
+                        }}
+                        style={{
+                            flex: 1,
+                            fontSize: 15,
+                            color: COLORS.primary,
+                            padding: 10,
+
+                        }}>
+                        Aplicar
+                    </Text>
+                </View>
+
+            }
+            <View
+                style={{
+                    width: '100%',
+                    zIndex: 9999,
+                    alignItems: 'center',
+                    backgroundColor: 'white',
+                    height: open === true ? 0 : 44,
+                    flexDirection: 'row',
+                }}
+                pointerEvents={find === true ? 'none' : 'auto'}
+            >
+                {
+                    open === false &&
+                    <FilterBar navigation={navigation} showMap={ShowMap} />
+                }
+            </View>
+            <MenuDrawer
+                open={open}
+                drawerContent={drawerContent()}
+                drawerPercentage={100}
+                animationTime={250}
+                overlay={true}
+                opacity={0.4}
+            >
+            </MenuDrawer>
+            {(showBody && map === false) &&
+                <View style={{ flex: 1 }}>
                     <ScrollView
                         style={{ flex: 1, opacity: find === false ? 1 : 0.3, }}
                         persistentScrollbar={true}
                         indicatorStyle={{ color: 'grey', }}
                     >
                         {(showBody && map === false && incidencias !== null && incidencias !== undefined) &&
-
-                            // <View style={{}}>
-                            <LinearGradient
-                                // Background Linear Gradient
-                                colors={['#edeffc', 'transparent', '#edeffc']}
-                                start={{ x: 1, y: 1 }} end={{ x: 1, y: 0.5 }}
-                            // style={styles.background}
+                            <View style={{
+                                zIndex: -1,
+                                marginBottom: 125
+                                // borderWidth: 3,
+                                // borderColor: 'pink'
+                            }}
                             >
+
                                 {incidencias.map((incidencia, indice) => {
+                                    console.log("inc ", incidencia)
                                     return (
-                                        <View style={{ marginTop: 8 }} key={incidencia.id}>
-                                            <CarIncidencia key={incidencia.id} navigation={navigation} incidencia={incidencia} />
-                                        </View>
+                                        <CarIncidencia key={incidencia.id} navigation={navigation} incidencia={incidencia} />
                                     );
                                 })}
-                            </LinearGradient>
-                            // </View>
+                            </View>
                         }
-
                     </ScrollView>
-                }
-                {
-                    map === true &&
-                    <View style={{
-                        height: '100%'
-                    }}>
-                        <Map filtroMapa={FiltrarIncidencia} cantidadIncidencias={incidenciasOriginals.length} incidencias={incidencias} />
-                    </View>
-                }
-                {(showBody && map === false) &&
-                    <TouchableOpacity
-                        onPress={() => {
-                            navigation.navigate('CrearIncidencia');
-                        }}
-                        style={{
-                            justifyContent: 'center',
-                            alignSelf: 'center',
-                            position: 'absolute',
-                            bottom: 10,
-                            alignItems: 'center',
-                            zIndex: 11111,
-                            width: 198,
-                            height: 44,
-                            borderRadius: 22,
-                            backgroundColor: COLORS.primary,
-                            shadowColor: "rgba(0, 0, 0, 0.1)",
-                            shadowOffset: {
-                                width: 0,
-                                height: 4
-                            },
-                            shadowRadius: 10,
-                            shadowOpacity: 1
-                        }}>
-                        <Text style={{
-                            textAlign: 'center',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            alignSelf: 'center',
-                            width: Platform.OS === 'ios' ? 155 : 175,
-                            height: 24,
-                            fontFamily: 'nunito-bold',
-                            fontSize: 18,
-                            fontWeight: "bold",
-                            fontStyle: "normal",
-                            letterSpacing: 0.45,
-                            textAlign: "center",
-                            color: 'white'
-                        }}> Crear incidencia </Text>
-                    </TouchableOpacity>
-                }
-            </View>
-        </SafeAreaView >
+                    {/* <View style= {{ backgroundColor : 'transparent', marginBottom : 100}} /> */}
+                </View>
+            }
+            {
+                map === true &&
+                <View style={{
+                    height: '100%'
+                }}>
+                    <Map filtroMapa={FiltrarIncidencia} cantidadIncidencias={incidenciasOriginals.length} incidencias={incidencias} />
+                </View>
+            }
+            {(showBody && map === false) &&
+
+                <View style={{ position: 'absolute', bottom: 0, height: 100, width: '100%', zIndex: 0, backgroundColor: 'transparent' }}>
+                    <LinearGradient
+                        colors={['transparent', 'transparent', '#e1e4e6']}
+                        style={styles.linearGradient}
+                    >
+                        <TouchableOpacity
+                            onPress={() => {
+                                navigation.navigate('CrearIncidencia');
+                            }}
+                            style={{
+                                justifyContent: 'center',
+                                alignSelf: 'center',
+                                position: 'absolute',
+                                bottom: 10,
+                                alignItems: 'center',
+                                zIndex: 11111,
+                                width: 198,
+                                height: 44,
+                                borderRadius: 22,
+                                backgroundColor: COLORS.primary,
+                                shadowColor: "rgba(0, 0, 0, 0.1)",
+                                shadowOffset: {
+                                    width: 0,
+                                    height: 4
+                                },
+                                shadowRadius: 10,
+                                shadowOpacity: 1
+                            }}>
+                            <Text style={{
+                                textAlign: 'center',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                alignSelf: 'center',
+                                width: Platform.OS === 'ios' ? 155 : 175,
+                                height: 24,
+                                fontFamily: 'nunito-bold',
+                                fontSize: 18,
+                                fontWeight: "bold",
+                                fontStyle: "normal",
+                                letterSpacing: 0.45,
+                                textAlign: "center",
+                                color: 'white'
+                            }}> Crear incidencia </Text>
+                        </TouchableOpacity>
+                    </LinearGradient>
+                </View>
+            }
+            {/* </View> */}
+            {/* </LinearGradient> */}
+        </SafeAreaView>
     );
 }
 const styles = StyleSheet.create({
+    linearGradient: {
+        //flex: 1,
+        height: 100,
+        // borderColor: 'red',
+        // borderWidth: 3,
+        zIndex: -111111,
+    },
     background: {
         position: 'absolute',
         left: 0,
         right: 0,
         top: 0,
         height: '100%',
-    },
-    linearGradient: {
-        width: '100%',
-        height: '100%',
-        borderRadius: hp('1.4%'),
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
     },
     searchSection: {
         flexDirection: 'row',
@@ -519,10 +580,10 @@ const styles = StyleSheet.create({
     container: {
         //marginTop: 20,
         flex: 1,
-        zIndex: 1111111,
+        // zIndex: 1111111,
         width: '100%',
         height: 88,
-        backgroundColor: 'white',
+        backgroundColor: COLORS.PALE_GREY,
         shadowColor: "rgba(0, 0, 0, 0.2)",
         shadowOffset: {
             width: 0,
@@ -530,15 +591,13 @@ const styles = StyleSheet.create({
         },
         shadowRadius: 15,
         shadowOpacity: 1,
-
     },
     containerSVG: {
-
+        borderStyle: "solid",
         left: -15,
         zIndex: 1111111,
         width: 15,
         height: 15,
-        borderStyle: "solid",
         borderColor: COLORS.primary,
         marginTop: 30
     },

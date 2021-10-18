@@ -150,7 +150,7 @@ export const favoritoComentario = async (access_token, csrf, id) => {
 
     return axios.post(URL_SERVER + 'rest/toogle/favorito-incidencia/' + id + '?_format=json',
         {
-            headers: {
+            headers: {                
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + access_token,
                 'X-CSRF-Token': csrf,
@@ -166,7 +166,7 @@ export const favoritoComentario = async (access_token, csrf, id) => {
 
 }
 export const loadIncidencias = async (access_token) => {
-    
+
     return axios.get(URL_SERVER + 'rest/incidencias?_format=json',
         {
             headers: {
@@ -183,7 +183,7 @@ export const loadIncidencias = async (access_token) => {
 
 }
 export const loadSecciones = async (access_token) => {
-    
+
     // axios.get(URL_SERVER + 'rest/secciones_textuales?_format=json',
     //         {
     //             headers: {
