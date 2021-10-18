@@ -11,7 +11,6 @@ import { COLORS } from "../constants";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { URL_SERVER } from '../constants/urls';
 import { SvgUri } from 'react-native-svg';
-import SwiperFlatList from 'react-native-swiper-flatlist';
 import { tomarIntros } from '../store/actions/userActions';
 
 const windowWidth = Dimensions.get('window').width;
