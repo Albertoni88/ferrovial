@@ -60,7 +60,7 @@ export default function WelcomeSlides({ navigation }) {
                         fontFamily: 'nunito-bold',
                         textAlign: 'center'
                     }}>
-                        {'item.titulo'}
+                        {item.titulo}
                     </Text>
                     <View style={{ marginTop: 30, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
                         <Text style={{
@@ -71,7 +71,7 @@ export default function WelcomeSlides({ navigation }) {
                             textAlign: 'center',
                             fontWeight: "normal",
                         }}>
-                            {'item.descripcion'}
+                            {item.descripcion}
                         </Text>
                     </View>
                 </View>
