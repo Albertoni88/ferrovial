@@ -240,7 +240,9 @@ export default function CarIncidencia({ navigation, props, incidencia, indice })
                 fontWeight: "600",
                 fontStyle: "normal",
                 letterSpacing: 0,
-                color: COLORS.primary, marginLeft: 12
+                color: COLORS.primary, 
+                marginLeft: 12,
+                marginTop : 7
             }}>
                 {incidencia?.titulo}
                 {/* Nombre de la incidencia que ocupa 2 líneas para tener el ejemplo en el diseño de la app */}

@@ -513,7 +513,9 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                             fontWeight: "600",
                             fontStyle: "normal",
                             letterSpacing: 0,
-                            color: COLORS.primary, marginLeft: 12
+                            color: COLORS.primary, 
+                            marginLeft: 12,
+                            marginTop : 7
                         }}>
                             {route.params.incidencia.titulo}
                             {/* Nombre de la incidencia que ocupa 2 líneas para tener el ejemplo en el diseño de la app */}
@@ -1580,8 +1582,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'center',
-        left: 265,
-        marginTop: 5,
+        left: 260,
+        marginTop: 10,
         zIndex: 1111111,
         width: 22,
         height: 18,

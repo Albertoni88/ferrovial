@@ -235,10 +235,12 @@ export default function CarIncidenciaMapa({ navigation, props, incidencia, indic
                     fontWeight: "600",
                     fontStyle: "normal",
                     letterSpacing: 0,
-                    color: COLORS.primary, marginLeft: 12
+                    color: COLORS.primary, 
+                    marginLeft: 12,
+                    marginTop : 7
                 }}>
-                    {/* {incidencia.nombre} */}
-                    Nombre de la incidencia que ocupa 2 líneas para tener el ejemplo en el diseño de la app
+                    {incidencia.titulo}
+                    {/* Nombre de la incidencia que ocupa 2 líneas para tener el ejemplo en el diseño de la app */}
                 </Text>
 
                 <View style={{ flexDirection: 'row' }}>
@@ -382,7 +384,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         height: (windowHeight * 22) / 100,
         width: (windowWidth * 95.7) / 100,
-        borderWidth: 1,
+        //borderWidth: 1,
         borderRadius: 20,
         marginVertical: 10,
     },
