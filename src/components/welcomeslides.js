@@ -105,7 +105,7 @@ export default function WelcomeSlides({ navigation }) {
                             // marginLeft: Platform.OS === 'android' ? 0 : -250,
                             // marginLeft: 145,
                             alignSelf: 'center',
-                            marginTop: Platform.OS === 'android' ? 760 : 650,
+                            marginTop: Platform.OS === 'android' ? 760 : 450,
                         }}
                     >
                         <TouchableOpacity
