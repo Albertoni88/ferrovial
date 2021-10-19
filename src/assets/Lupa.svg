@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>Iconos / Lupa</title>
-    <g id="Iconos-/-Lupa" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Group-18-Copy" transform="translate(3.000000, 3.000000)" stroke="#501731" stroke-width="2">
-            <circle id="Oval" cx="5.625" cy="5.625" r="5.625"></circle>
-            <line x1="9" y1="10.5" x2="13.5" y2="15" id="Path-13" stroke-linecap="round" stroke-linejoin="round"></line>
+<svg width="20px" height="22px" viewBox="0 0 20 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-4" fill="#501731" fill-rule="nonzero">
+            <g id="Group-5">
+                <path d="M8.5,0 C3.80557963,0 0,3.80557963 0,8.5 C0,13.1944204 3.80557963,17 8.5,17 C13.1944204,17 17,13.1944204 17,8.5 C17,3.80557963 13.1944204,0 8.5,0 Z M8.5,2 C12.0898509,2 15,4.91014913 15,8.5 C15,12.0898509 12.0898509,15 8.5,15 C4.91014913,15 2,12.0898509 2,8.5 C2,4.91014913 4.91014913,2 8.5,2 Z" id="Oval"></path>
+                <path d="M12.2928932,14.2928932 C12.6533772,13.9324093 13.2206082,13.9046797 13.6128994,14.2097046 L13.7071068,14.2928932 L19.7071068,20.2928932 C20.0976311,20.6834175 20.0976311,21.3165825 19.7071068,21.7071068 C19.3466228,22.0675907 18.7793918,22.0953203 18.3871006,21.7902954 L18.2928932,21.7071068 L12.2928932,15.7071068 C11.9023689,15.3165825 11.9023689,14.6834175 12.2928932,14.2928932 Z" id="Path-13"></path>
+            </g>
         </g>
     </g>
 </svg>

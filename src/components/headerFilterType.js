@@ -18,6 +18,8 @@ import {
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
+import Buscar from '../assets/Buscar.svg';
+
 
 export default function HeaderFilterType({ filtronombre, navigation, filtrar }) {
 
@@ -72,6 +74,7 @@ export default function HeaderFilterType({ filtronombre, navigation, filtrar }) 
                 {/* <Icon style={{ marginTop: 40, left: 35, zIndex: 111 }} name="ios-search" size={20} color="#000" /> */}
                 <View style={{ marginTop: 37, left: 20, zIndex: 111 }}>
                     <SVG nombre={'Buscar'} width={20} height={20} />
+                    {/* <Buscar width='20%' height='20%' /> */}
                 </View>
                 <TextInput
                     value={searchString}

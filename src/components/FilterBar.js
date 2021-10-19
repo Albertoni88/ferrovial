@@ -9,6 +9,7 @@ import {
 import Buscar from '../assets/Buscar.svg'
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
+import SVG from './svg';
 
 export default function FilterBar({ texto, navigation, showMap }) {
 
@@ -145,89 +146,54 @@ export default function FilterBar({ texto, navigation, showMap }) {
                     Interacción
                 </Text>
             </TouchableOpacity>
-            <View style={{ flexDirection: 'column', marginLeft : 90, marginRight : 10}}>
-                <View style={{
-                    width: 22,
-                    height: 7,
-                    borderRadius: 2,
-                    borderStyle: "solid",
-                    borderWidth: 1,
-                    borderColor: 'white',
-                }}>
-                    <View style={{
-                        width: 22,
-                        height: 4,
-                        borderRadius: 2,
-                        backgroundColor: 'white'
+            <TouchableOpacity
+                onPress={() => {
 
-                    }} />
-                </View>
-                <View style={{
-                    width: 22,
-                    height: 7,
-                    borderRadius: 2,
-                    borderStyle: "solid",
-                    borderWidth: 1,
-                    borderColor: 'white',
-                }}>
-                    <View style={{
-                        width: 22,
-                        height: 4,
-                        borderRadius: 2,
-                        backgroundColor: 'white'
-
-                    }} />
-                </View>
-                <View style={{
-                    width: 22,
-                    height: 7,
-                    borderRadius: 2,
-                    borderStyle: "solid",
-                    borderWidth: 1,
-                    borderColor: 'white',   
-                }}>
-                    <View style={{
-                        width: 22,
-                        height: 4,
-                        borderRadius: 2,
-                        backgroundColor: 'white'
-
-                    }} />
-                </View>
-            </View>
-            {/* <Icon
-                style={{
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    alignContent: 'center',
-                    color: 'white',                    
-                    textAlign: 'right'
                 }}
-                onPress={() => { }}
-                name="ios-menu"
-                size={30}
-            /> */}
-            <Icon
                 style={{
-                    //flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    alignContent: 'center',
-                    color: 'white',
-                    textAlign: 'right',
-                    opacity: 0.3,
+                    zIndex: 11111111,
+                    width: 20,
+                    height: 40,
+                    top: 0,
+                    position: 'absolute',
+                    marginLeft: 300,
+                    marginLeft: 355
                 }}
+            >
+                <SVG nombre={'Menu2'} width={0} height={40} />
+            </TouchableOpacity>
+
+            <TouchableOpacity
                 onPress={() => {
                     showMap()
                 }}
-                name="location-outline" size={30}
-            />
+                style={{
+                    zIndex: 11111111,
+                    width: 20,
+                    height: 40,
+                    top: 0,
+                    position: 'absolute',
+                    marginLeft: 385
+                }}
+            >
+                <SVG nombre={'Ubicacion'} width={20} height={40} />
+            </TouchableOpacity>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
+    containerSVG: {
+        //borderStyle: "solid",
+        left: 100,
+        zIndex: 1111111111,
+        width: 40,
+        height: 20,
+        //borderColor: COLORS.primary,
+        marginTop: 80,
+        // borderWidth : 3, 
+        // borderColor : 'red'
+    },
     containerWebView: {
         width: '100%',
         height: 44,

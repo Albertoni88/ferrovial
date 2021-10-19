@@ -301,7 +301,7 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                                 .then(response => {
                                     if (response.status === 200) {
                                         var listNueva = [];
-                                        
+
                                         listadoComentarios.forEach(element => {
                                             if (element.id !== idComentario) {
                                                 listNueva.push(element)
@@ -414,18 +414,19 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                             </ImageBackground>
                         </TouchableOpacity>
                         <View style={{ flexDirection: 'row' }}>
-                            <Icon
+                           
+                            <TouchableOpacity
                                 onPress={() => {
 
                                 }}
                                 style={{
                                     marginLeft: 12,
-                                    // marginTop: 3
+                                    marginTop: 5,
+                                    marginRight : 5
                                 }}
-                                name="location-outline"
-                                color="grey"
-                                size={30}
-                            />
+                            >
+                                <SVG nombre={'Ubicacion'} width={20} height={20} />
+                            </TouchableOpacity>
                             <Text style={{
                                 fontSize: 15,
                                 marginTop: 8,
@@ -438,19 +439,18 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                             }}>
                                 {route.params.incidencia.autor_username}
                             </Text>
-                            <Icon
+                            <TouchableOpacity
                                 onPress={() => {
 
                                 }}
                                 style={{
-                                    // marginLeft: 100,
-                                    //marginLeft: 40,
-                                    marginLeft: Platform.OS === 'ios' ? 50 : 40,
+                                    marginLeft: 85,
+                                    marginTop: 5,
+                                    marginRight : 5
                                 }}
-                                name="location-outline"
-                                color="grey"
-                                size={30}
-                            />
+                            >
+                                <SVG nombre={'Ubicacion'} width={20} height={20} />
+                            </TouchableOpacity>
                             <Text style={{
                                 fontSize: 15,
                                 marginTop: 8,
@@ -462,21 +462,20 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                                 color: COLORS.browngrey
                             }}>
                                 {route.params.incidencia.tipo_incidencia}
+                                {/* {'route.params'} */}
                             </Text>
-                            <Icon
+                            <TouchableOpacity
                                 onPress={() => {
 
                                 }}
                                 style={{
-                                    marginLeft: 8,
-                                    // marginTop: 10,
-                                    textAlign: 'right',
-                                    // flex: 3,
+                                    marginLeft: 12,
+                                    marginTop: 5,
+                                    marginRight : 5
                                 }}
-                                name="location-outline"
-                                color="grey"
-                                size={30}
-                            />
+                            >
+                                <SVG nombre={'Ubicacion'} width={20} height={20} />
+                            </TouchableOpacity>
                             <Text style={{
                                 fontSize: 15,
                                 marginTop: 8,
@@ -488,6 +487,7 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                                 color: COLORS.browngrey
                             }}>
                                 {route.params.incidencia.estado}
+                                {/* {'route.params'} */}
                             </Text>
                         </View>
                         <View
@@ -519,20 +519,18 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                             {/* Nombre de la incidencia que ocupa 2 líneas para tener el ejemplo en el diseño de la app */}
                         </Text>
                         <View style={{ flexDirection: 'row' }}>
-                            <Icon
+                        <TouchableOpacity
                                 onPress={() => {
 
                                 }}
                                 style={{
                                     marginLeft: 12,
-                                    marginTop: 10,
-                                    textAlign: 'left',
-                                    // flex: 1,
+                                    marginTop: 12,
+                                    marginRight : 5
                                 }}
-                                name="location-outline"
-                                color="grey"
-                                size={30}
-                            />
+                            >
+                                <SVG nombre={'Ubicacion'} width={20} height={20} />
+                            </TouchableOpacity>
                             <Text style={{
                                 color: 'grey',
                                 fontSize: 15,

@@ -57,7 +57,7 @@ export default function CarIncidenciaMapa({ navigation, props, incidencia, indic
                 dispatch(setFavoritoRdux({ "value": response.data.favorito, "indice": indice }))
             })
             .catch(error => {
-                
+
             });
     }
     return (
@@ -140,18 +140,18 @@ export default function CarIncidenciaMapa({ navigation, props, incidencia, indic
                     </ImageBackground>
                 </TouchableOpacity>
                 <View style={{ flexDirection: 'row' }}>
-                    <Icon
+                    <TouchableOpacity
                         onPress={() => {
 
                         }}
                         style={{
                             marginLeft: 12,
-                            // marginTop: 3
+                            marginTop: 5,
+                            marginRight: 5
                         }}
-                        name="location-outline"
-                        color="grey"
-                        size={30}
-                    />
+                    >
+                        <SVG nombre={'Ubicacion'} width={20} height={20} />
+                    </TouchableOpacity>
                     <Text style={{
                         fontSize: 15,
                         marginTop: 8,
@@ -164,18 +164,18 @@ export default function CarIncidenciaMapa({ navigation, props, incidencia, indic
                     }}>
                         {incidencia.autor_username}
                     </Text>
-                    <Icon
+                    <TouchableOpacity
                         onPress={() => {
 
                         }}
                         style={{
-                            marginLeft: 40,
-                            marginLeft: Platform.OS === 'ios' ? 50 : 40,
+                            marginLeft: 50,
+                            marginTop: 5,
+                            marginRight: 5
                         }}
-                        name="location-outline"
-                        color="grey"
-                        size={30}
-                    />
+                    >
+                        <SVG nombre={'Ubicacion'} width={20} height={20} />
+                    </TouchableOpacity>
                     <Text style={{
                         fontSize: 15,
                         marginTop: 8,
@@ -187,19 +187,20 @@ export default function CarIncidenciaMapa({ navigation, props, incidencia, indic
                         color: COLORS.browngrey
                     }}>
                         {incidencia.tipo_incidencia}
+                        {/* {'incidencia'} */}
                     </Text>
-                    <Icon
+                    <TouchableOpacity
                         onPress={() => {
 
                         }}
                         style={{
-                            marginLeft: 8,
-                            textAlign: 'right',
+                            marginLeft: 12,
+                            marginTop: 5,
+                            marginRight: 5
                         }}
-                        name="location-outline"
-                        color="grey"
-                        size={30}
-                    />
+                    >
+                        <SVG nombre={'Ubicacion'} width={20} height={20} />
+                    </TouchableOpacity>
                     <Text style={{
                         fontSize: 15,
                         marginTop: 8,
@@ -211,6 +212,7 @@ export default function CarIncidenciaMapa({ navigation, props, incidencia, indic
                         color: COLORS.browngrey
                     }}>
                         {incidencia.estado}
+                        {/* {'incidencia'} */}
                     </Text>
                 </View>
                 <View
@@ -240,19 +242,18 @@ export default function CarIncidenciaMapa({ navigation, props, incidencia, indic
                 </Text>
 
                 <View style={{ flexDirection: 'row' }}>
-                    <Icon
+                    <TouchableOpacity
                         onPress={() => {
 
                         }}
                         style={{
                             marginLeft: 12,
-                            marginTop: 10,
-                            textAlign: 'left',
+                            marginTop: 12,
+                            marginRight: 5
                         }}
-                        name="location-outline"
-                        color="grey"
-                        size={30}
-                    />
+                    >
+                        <SVG nombre={'Ubicacion'} width={20} height={20} />
+                    </TouchableOpacity>
                     <Text style={{
                         color: 'grey',
                         fontSize: 15,
@@ -355,7 +356,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'center',
-        left: 275,
+        left: 270,
+        marginTop : 10,
         zIndex: 1111111,
         width: 22,
         height: 18,

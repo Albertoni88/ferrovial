@@ -15,7 +15,7 @@ export default function SVG({ navigation, width, height, nombre }) {
                 <SvgUri
                     width={width}
                     height={height}
-                    source={require('../assets/Buscar.svg')}
+                    source={require('../assets/Lupa.svg')}
                 />
             }
             {
@@ -47,7 +47,7 @@ export default function SVG({ navigation, width, height, nombre }) {
                 <SvgUri
                     width={width}
                     height={height}
-                    source={require('../assets/Visible.svg')}
+                    source={require('../assets/Group2.svg')}
                 />
             }
             {
@@ -55,7 +55,7 @@ export default function SVG({ navigation, width, height, nombre }) {
                 <SvgUri
                     width={width}
                     height={height}
-                    source={require('../assets/No-visible.svg')}
+                    source={require('../assets/ojo.svg')}
                 />
             }
             {
@@ -119,7 +119,7 @@ export default function SVG({ navigation, width, height, nombre }) {
                 <SvgUri
                     width={width}
                     height={height}
-                    source={require('../assets/Corazon.svg')}
+                    source={require('../assets/like.svg')}
                 />
             }
             {
@@ -127,7 +127,7 @@ export default function SVG({ navigation, width, height, nombre }) {
                 <SvgUri
                     width={width}
                     height={height}
-                    source={require('../assets/Corazonrelleno.svg')}
+                    source={require('../assets/like2.svg')}
                 />
             }
             {
@@ -136,6 +136,22 @@ export default function SVG({ navigation, width, height, nombre }) {
                     width={width}
                     height={height}
                     source={require('../assets/Subir.svg')}
+                />
+            }
+            {
+                nombre === 'Menu2' &&
+                <SvgUri
+                    width={width}
+                    height={height}
+                    source={require('../assets/Group11.svg')}
+                />
+            }
+            {
+                nombre === 'Ubicacion' &&
+                <SvgUri
+                    width={width}
+                    height={height}
+                    source={require('../assets/ubicacion.svg')}
                 />
             }
         </View>

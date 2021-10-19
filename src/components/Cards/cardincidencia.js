@@ -48,10 +48,10 @@ export default function CarIncidencia({ navigation, props, incidencia, indice })
         favoritoComentario(token, CSRF, incidencia_id)
             .then(response => {
                 //setFavorito(response.data.favorito);
-                dispatch(setFavoritoRdux({ "value" : response.data.favorito, "indice" : indice})) 
+                dispatch(setFavoritoRdux({ "value": response.data.favorito, "indice": indice }))
             })
             .catch(error => {
-                
+
             });
     }
     return (
@@ -65,7 +65,7 @@ export default function CarIncidencia({ navigation, props, incidencia, indice })
             <TouchableOpacity
                 style={styles.container}
                 onPress={() => {
-                    navigation.navigate('IncidenciaDetalles', { incidencia: incidencia, indice : indice });
+                    navigation.navigate('IncidenciaDetalles', { incidencia: incidencia, indice: indice });
                 }}>
                 <ImageBackground
                     // source={require('../../assets/1.png')}
@@ -141,17 +141,17 @@ export default function CarIncidencia({ navigation, props, incidencia, indice })
                 </ImageBackground>
             </TouchableOpacity>
             <View style={{ flexDirection: 'row' }}>
-                <Icon
-                    onPress={() => {
+                
+                <View style={styles.containerSVG}>
+                    <TouchableOpacity
+                        onPress={() => {
 
-                    }}
-                    style={{
-                        marginLeft: 12,
-                    }}
-                    name="location-outline"
-                    color="grey"
-                    size={30}
-                />
+                        }}
+                        style={{}}
+                    >
+                        <SVG nombre={'Ubicacion'} width={20} height={20} />
+                    </TouchableOpacity>
+                </View>
                 <Text style={{
                     fontSize: 15,
                     marginTop: 8,
@@ -164,21 +164,23 @@ export default function CarIncidencia({ navigation, props, incidencia, indice })
                 }}>
                     {incidencia?.autor_username}
                 </Text>
-                <Icon
+                {/* <View style={styles.containerSVG1}> */}
+                <TouchableOpacity
                     onPress={() => {
 
                     }}
                     style={{
-                        // marginLeft: 100,
-                        marginLeft: Platform.OS === 'ios' ? 50 : 40,
+                        marginLeft: 85,
+                        marginTop: 5
                     }}
-                    name="location-outline"
-                    color="grey"
-                    size={30}
-                />
+                >
+                    <SVG nombre={'Ubicacion'} width={20} height={20} />
+                </TouchableOpacity>
+                {/* </View> */}
                 <Text style={{
                     fontSize: 15,
                     marginTop: 8,
+                    marginLeft : 5,
                     fontFamily: "nunito-regular",
                     fontSize: 15,
                     fontWeight: "normal",
@@ -186,26 +188,24 @@ export default function CarIncidencia({ navigation, props, incidencia, indice })
                     letterSpacing: 0,
                     color: COLORS.browngrey
                 }}>
-                    {/* {incidencia.categoria} */}
-                    {incidencia?.tipo_incidencia}
+                    {incidencia.categoria}
+                    {/* {'incidencia'} */}
                 </Text>
-                <Icon
+                <TouchableOpacity
                     onPress={() => {
 
                     }}
                     style={{
                         marginLeft: 8,
-                        // marginTop: 10,
-                        textAlign: 'right',
-                        // flex: 3,
+                        marginTop: 5
                     }}
-                    name="location-outline"
-                    color="grey"
-                    size={30}
-                />
+                >
+                    <SVG nombre={'Ubicacion'} width={20} height={20} />
+                </TouchableOpacity>
                 <Text style={{
                     fontSize: 15,
                     marginTop: 8,
+                    marginLeft : 5,
                     fontFamily: "nunito-regular",
                     fontSize: 15,
                     fontWeight: "normal",
@@ -213,6 +213,7 @@ export default function CarIncidencia({ navigation, props, incidencia, indice })
                     letterSpacing: 0,
                     color: COLORS.browngrey
                 }}>
+                    {/* {'incidencia'} */}
                     {incidencia?.estado}
                 </Text>
             </View>
@@ -246,20 +247,19 @@ export default function CarIncidencia({ navigation, props, incidencia, indice })
             </Text>
 
             <View style={{ flexDirection: 'row' }}>
-                <Icon
+                
+                <TouchableOpacity
                     onPress={() => {
 
                     }}
                     style={{
                         marginLeft: 12,
-                        marginTop: 10,
-                        textAlign: 'left',
-                        // flex: 1,
+                        marginTop: 12,
+                        marginRight : 5
                     }}
-                    name="location-outline"
-                    color="grey"
-                    size={30}
-                />
+                >
+                    <SVG nombre={'Ubicacion'} width={20} height={20} />
+                </TouchableOpacity>
                 <Text style={{
                     color: 'grey',
                     fontSize: 15,
@@ -360,6 +360,37 @@ export default function CarIncidencia({ navigation, props, incidencia, indice })
     );
 }
 const styles = StyleSheet.create({
+    containerSVG: {
+        //borderStyle: "solid",
+        // left: 2,
+        zIndex: 1111111,
+        marginLeft : 5,
+        width: 30,
+        height: 50,
+        backgroundColor: 'white',
+        alignContent: 'center',
+        alignItems: 'center',
+        alignSelf: 'center',
+        justifyContent: 'center',
+        //borderColor: COLORS.primary,
+        marginTop: -10,
+        // borderWidth : 3
+    },
+    containerSVG1: {
+        //borderStyle: "solid",
+        // left: 2,
+        zIndex: 1111111,
+        width: 30,
+        height: 50,
+        backgroundColor: 'white',
+        marginLeft: 150,
+        // alignContent: 'center',
+        // alignItems: 'center',
+        // alignSelf: 'center',
+        // justifyContent: 'center',
+        //borderColor: COLORS.primary,
+        marginTop: 10
+    },
     containerSVGheart: {
         alignContent: 'center',
         justifyContent: 'center',

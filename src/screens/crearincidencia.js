@@ -27,6 +27,7 @@ import {
     guardarCreada,
     guardarIncidenciaRedux
 } from '../store/actions/incidenciaActions';
+import SVG from '../components/svg';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
