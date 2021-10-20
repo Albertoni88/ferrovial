@@ -449,7 +449,7 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                                     marginRight: 5
                                 }}
                             >
-                                <SVG nombre={'Ubicacion'} width={20} height={20} />
+                                <SVG nombre={'CardUbicacion'} width={20} height={20} />
                             </TouchableOpacity>
                             <Text style={{
                                 fontSize: 15,
@@ -550,7 +550,7 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                                     marginRight: 5
                                 }}
                             >
-                                <SVG nombre={'Ubicacion'} width={20} height={20} />
+                                <SVG nombre={'CardUbicacion'} width={20} height={20} />
                             </TouchableOpacity>
                             <Text style={{
                                 color: 'grey',

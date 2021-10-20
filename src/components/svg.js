@@ -168,6 +168,14 @@ export default function SVG({ navigation, width, height, nombre }) {
                 />
             }
             {
+                nombre === 'CardUbicacion' &&
+                <SvgUri
+                    width={width}
+                    height={height}
+                    source={require('../assets/Cardubicacion.svg')}
+                />
+            }
+            {
                 nombre === 'Logo' &&
                 <SvgUri
                     width={width}

@@ -149,7 +149,7 @@ export default function CarIncidencia({ navigation, props, incidencia, indice })
                         }}
                         style={{ marginRight: 5, }}
                     >
-                        <SVG nombre={'Ubicacion'} width={20} height={20} />
+                        <SVG nombre={'CardUbicacion'} width={20} height={20} />
                     </TouchableOpacity>
                     {/* <Text style={{
                         fontSize: 15,
@@ -280,7 +280,7 @@ export default function CarIncidencia({ navigation, props, incidencia, indice })
                         marginRight: 5
                     }}
                 >
-                    <SVG nombre={'Ubicacion'} width={20} height={20} />
+                    <SVG nombre={'CardUbicacion'} width={20} height={20} />
                 </TouchableOpacity>
                 <Text style={{
                     color: 'grey',
