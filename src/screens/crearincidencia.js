@@ -25,7 +25,8 @@ import {
     guardarIncidencia,
     guardarImagen,
     guardarCreada,
-    guardarIncidenciaRedux
+    guardarIncidenciaRedux,
+    cargarIncidenciaDetalles
 } from '../store/actions/incidenciaActions';
 import SVG from '../components/svg';
 
@@ -76,7 +77,7 @@ export default function CrearIncidencia({ navigation, props }) {
             return;
         }
         let location = await Location.getCurrentPositionAsync({});
-        
+
         setLocation(location);
     };
 
@@ -94,8 +95,8 @@ export default function CrearIncidencia({ navigation, props }) {
                 "tipemime": "image/png",
                 "base64": photo
             })
-            
-            
+
+
             guardarImagen(token, imagenes).then(response => {
                 if (response.status === 200) {
                     var data = {
@@ -108,10 +109,28 @@ export default function CrearIncidencia({ navigation, props }) {
                             "lng": location.coords.longitude
                         }
                     }
-                    guardarIncidencia(token, data).then(response => {
-                        if (response === 200) {
+                    guardarIncidencia(token, data).then(respo => {
+                        if (respo.status === 200) {
                             setCreadaIncidencia(true);
-                            dispatch(guardarIncidenciaRedux(data));
+                            //alert("respo.id " + JSON.stringify(respo.data.id))
+                            cargarIncidenciaDetalles(token, respo.data.id)
+                                .then(response => {
+                                    //alert("res " + JSON.stringify(response))
+
+                                    if (response.status === 200) {
+                                        var temporal = {
+                                            ...data,
+                                            "created": response.data.created,
+                                            "description": response.data.description,
+                                            "estado": response.data.estado,
+                                            "imagen": response.data.imagen,
+                                            "imagen_resuelta": response.data.imagen_resuelta 
+                                        }
+                                        data = temporal;
+                                        //alert("data " + JSON.stringify(data))
+                                        dispatch(guardarIncidenciaRedux(data));
+                                    }
+                                })
                         }
                     });
                 } else {
@@ -129,7 +148,7 @@ export default function CrearIncidencia({ navigation, props }) {
             const data = await cameraRef.current.takePictureAsync(options)
                 .then(async photo => {
                     setIsPreview(false);
-                    showCamera(false);                    
+                    showCamera(false);
                     setPhoto(photo.base64);
                     setTomadaFoto(true);
                 });
@@ -254,7 +273,7 @@ export default function CrearIncidencia({ navigation, props }) {
                     <View
                         style={styles.descripcion}
                     >
-                        <Icon
+                        {/* <Icon
                             style={{
                                 justifyContent: 'center',
                                 alignItems: 'center',
@@ -272,7 +291,23 @@ export default function CrearIncidencia({ navigation, props }) {
                             }}
                             name="camera-outline" size={75}
                             color={'rgba(0, 0, 0, 0.26)'}
-                        />
+                        /> */}
+                        <View style={{
+                            width: 73,
+                            height: 58,
+                            //alignContent : 'center',
+                            alignItems: 'center',
+                            //justifyContent : 'center',
+                            alignSelf: 'center'
+                        }}>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    showCamera(true);
+                                }}
+                            >
+                                <SVG nombre={'Camara'} width={73} height={58} />
+                            </TouchableOpacity>
+                        </View>
                         {
                             tomadaFoto === true &&
                             <AntDesign name='checkcircleo' size={32} color={'rgba(0, 0, 0, 0.26)'} />
@@ -314,7 +349,7 @@ export default function CrearIncidencia({ navigation, props }) {
                             }}>
                                 {geoGuardada === false ? 'Geolocalización de la ubicación' : 'Ubicación guardada'}
                             </Text>
-                            <Icon
+                            {/* <Icon
                                 style={{
                                     // justifyContent: 'center',
                                     // alignItems: 'center',
@@ -330,7 +365,18 @@ export default function CrearIncidencia({ navigation, props }) {
                                     setMapa(true);
                                 }}
                                 name="location-outline" size={30}
-                            />
+                            /> */}
+                            <View style={{
+                                marginLeft: 335,
+                                position: 'absolute'
+                            }}>
+                                <TouchableOpacity onPress={() => {
+                                    setCurrentLocation();
+                                    setMapa(true);
+                                }}>
+                                    <SVG nombre={'Ubicacion'} width={30} height={30} ></SVG>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                         <TextInput
                             value={direccion}
@@ -352,9 +398,9 @@ export default function CrearIncidencia({ navigation, props }) {
                                 alignSelf: 'center',
                                 textAlign: 'center',
                                 alignItems: 'center',
-                                width: 83,
+                                width: 150,
                                 height: 24,
-                                fontFamily: "nunito-bold", 
+                                fontFamily: "nunito-bold",
                                 fontSize: 18,
                                 fontWeight: "bold",
                                 fontStyle: "normal",
@@ -362,7 +408,7 @@ export default function CrearIncidencia({ navigation, props }) {
                                 textAlign: "center",
                                 color: COLORS.primary
                             }}>
-                                Siguiente
+                                Crear incidencia
                             </Text>
                         </TouchableOpacity>
                     </View>
@@ -443,11 +489,14 @@ export default function CrearIncidencia({ navigation, props }) {
                             width: '50%',
                             // marginTop: 267,
                         }}>
-                            <Image style={{
+                            {/* <Image style={{
                                 height: '100%',
                                 width: '100%',
                                 borderRadius: 20
-                            }} source={require('../assets/1.png')} />
+                            }} source={require('../assets/1.png')} /> */}
+                            {/* <View style = {}> */}
+                            <SVG nombre={'CreadaIncidencia'} width={296} height={208} />
+                            {/* </View> */}
                             <View style={{
                                 flexDirection: 'column',
                                 width: 325,
@@ -553,7 +602,7 @@ export default function CrearIncidencia({ navigation, props }) {
                                         "longitude": e.nativeEvent.coordinate.longitude
                                     }
                                 });
-                                
+
                                 Alert.alert(
                                     'Ubicación',
                                     'Desea esta ubicación?',
@@ -606,7 +655,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     capture: {
-        backgroundColor: '#5A45FF',
+        backgroundColor: COLORS.primary,
         borderRadius: 5,
         height: CAPTURE_SIZE,
         width: CAPTURE_SIZE,
@@ -680,6 +729,8 @@ const styles = StyleSheet.create({
         borderColor: "#dfdfdf",
         marginTop: 4,
         marginLeft: 15,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     direccion: {
         // marginTop: 15,
@@ -713,7 +764,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         alignSelf: 'center',
-        width: 126,
+        width: 185,
         height: 44,
         borderRadius: 22,
         backgroundColor: 'white',
@@ -740,7 +791,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         alignSelf: 'center',
-        marginTop: (windowHeight * 27.8) / 100
+        //position : 'absolute',
+        // bottom : 20
+        // marginTop: (windowHeight * 21.5) / 100
+        marginTop: 175
     },
     localizacion: {
         alignItems: 'center',

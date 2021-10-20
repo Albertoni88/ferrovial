@@ -10,9 +10,12 @@ import {
 import { URL_SERVER } from '../constants/urls';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { loginUser } from '../store/actions/userActions';
-
+import { path1, path2, path3, path4, path5 } from '../components/logo';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
+import Svg, { Path } from "react-native-svg";
+import LOGO from '../components/logo';
+import SVG from '../components/svg';
 
 export default function Login({ props, navigation }) {
 
@@ -53,14 +56,14 @@ export default function Login({ props, navigation }) {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ImageBackground
-                source={require('../assets/fondo.jpg')}
-                //source={{ uri: incidencia.imagen }}
+                // source={require('../assets/Bitmap.jpg')}
+                source={require('../assets/fondo-login.jpg')}
                 style={{
-                    flex: 1
+                    flex: 1,
                 }}
-            // imageStyle={styles.image}
+                imageStyle={{}}
             >
-                <View style={{ opacity: 0.8, backgroundColor: COLORS.primary, textAlign: 'center', alignItems: 'center', flex: 1, }}>
+                <View style={{ textAlign: 'center', alignItems: 'center', flex: 1, }}>
                     <View style={{
                         alignContent: 'center',
                         // marginTop: 100,
@@ -73,7 +76,11 @@ export default function Login({ props, navigation }) {
                         marginLeft: 72,
                         marginRight: 74
                     }}>
-                        <Image style={styles.logo} source={require('../assets/group9.png')}></Image>
+                        <View style={{ zIndex: 1111111, width: (windowWidth * 61) / 100, height: (windowHeight * 12.9) / 100 }}>
+                            {/* <LOGO /> */}
+                            <SVG nombre={'Logo'} width={(windowWidth * 61) / 100} height={(windowHeight * 12.9) / 100} />
+                        </View>
+                        {/* <Image style={styles.logo} source={require('../assets/group9.png')}></Image> */}
                     </View>
                     <View style={{
                         // marginTop: 219,

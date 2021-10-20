@@ -6,6 +6,7 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import SVG from '../components/svg';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -18,7 +19,7 @@ export default function HeaderCrearIncidencia({ navigation }) {
                 style={styles.iconBackContainer}
                 onPress={() => navigation.goBack()}
             >
-                <Icon
+                {/* <Icon
                     style={{
                         marginLeft : 12,
                         marginTop : 10,
@@ -35,7 +36,18 @@ export default function HeaderCrearIncidencia({ navigation }) {
                     name="chevron-back-outline"
                     color="white"
                     size={25}
-                />
+                /> */}
+                <View style={styles.goBack}>
+                    <View style={styles.containerSVG}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                navigation.goBack();
+                            }}
+                        >
+                            <SVG nombre={'VolverBlanco'} width={20} height={20} />
+                        </TouchableOpacity>
+                    </View>
+                </View>
                 <Text style={{
                     width: 280,
                     height: 27,
@@ -44,13 +56,14 @@ export default function HeaderCrearIncidencia({ navigation }) {
                     fontWeight: "bold",
                     fontStyle: "normal",
                     letterSpacing: 0,
-                    marginLeft : 100,
+                    marginLeft: 135,
                     textAlign: "left",
-                    alignItems : 'center',
-                    justifyContent : 'center',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     alignSelf: 'center',
                     color: 'white',
-                    marginTop : 17
+                    marginTop: 4,
+                    position : 'absolute'
                 }}>
                     Crear incidencia
                 </Text>
@@ -93,6 +106,22 @@ export default function HeaderCrearIncidencia({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+    containerSVG: {
+        zIndex: 1111111,
+        width: 20,
+        height: 20,
+        borderStyle: "solid",
+        borderColor: COLORS.primary,
+    },
+    goBack: {
+        position: 'absolute',
+        // marginTop: 20,
+        // marginLeft: 12,
+        marginTop: (windowHeight * 10) / 100,
+        marginLeft: (windowWidth * 4.3) / 100,
+        width: 20,
+        height: 20,
+    },
     containerWebView: {
         top: 12,
         width: '100%',

@@ -117,7 +117,7 @@ export default function CarIncidencia({ navigation, props, incidencia, indice })
                                 {incidencia?.created}
                             </Text>
                         </View>
-                        {
+                        {/* {
                             favoritosRedux[indice] === 0 &&
                             <TouchableOpacity
                                 onPress={() => {
@@ -136,23 +136,35 @@ export default function CarIncidencia({ navigation, props, incidencia, indice })
                                 style={styles.containerSVGheart}>
                                 <SVG nombre={'CorazonRelleno'} width={25} height={25} />
                             </TouchableOpacity>
-                        }
+                        } */}
                     </View>
                 </ImageBackground>
             </TouchableOpacity>
             <View style={{ flexDirection: 'row' }}>
-                
+
                 <View style={styles.containerSVG}>
                     <TouchableOpacity
                         onPress={() => {
 
                         }}
-                        style={{}}
+                        style={{ marginRight: 5, }}
                     >
                         <SVG nombre={'Ubicacion'} width={20} height={20} />
                     </TouchableOpacity>
+                    {/* <Text style={{
+                        fontSize: 15,
+                        marginTop: 8,
+                        fontFamily: "nunito-regular",
+                        fontSize: 15,
+                        fontWeight: "normal",
+                        fontStyle: "normal",
+                        letterSpacing: 0,
+                        color: COLORS.browngrey
+                    }}>
+                        {incidencia?.estado}
+                    </Text> */}
                 </View>
-                <Text style={{
+                {/* <Text style={{
                     fontSize: 15,
                     marginTop: 8,
                     fontFamily: "nunito-regular",
@@ -163,9 +175,23 @@ export default function CarIncidencia({ navigation, props, incidencia, indice })
                     color: COLORS.browngrey
                 }}>
                     {incidencia?.autor_username}
+                </Text> */}
+                <Text style={{
+                    position : 'absolute',
+                    fontSize: 15,
+                    marginTop: 0,
+                    marginLeft : 40,
+                    zIndex : 11111,
+                    fontFamily: "nunito-regular",
+                    fontSize: 15,
+                    fontWeight: "normal",
+                    fontStyle: "normal",
+                    letterSpacing: 0,
+                    color: COLORS.browngrey
+                }}>
+                    {incidencia?.estado}
                 </Text>
-                {/* <View style={styles.containerSVG1}> */}
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     onPress={() => {
 
                     }}
@@ -176,7 +202,6 @@ export default function CarIncidencia({ navigation, props, incidencia, indice })
                 >
                     <SVG nombre={'Ubicacion'} width={20} height={20} />
                 </TouchableOpacity>
-                {/* </View> */}
                 <Text style={{
                     fontSize: 15,
                     marginTop: 8,
@@ -189,7 +214,6 @@ export default function CarIncidencia({ navigation, props, incidencia, indice })
                     color: COLORS.browngrey
                 }}>
                     {incidencia.categoria}
-                    {/* {'incidencia'} */}
                 </Text>
                 <TouchableOpacity
                     onPress={() => {
@@ -213,17 +237,13 @@ export default function CarIncidencia({ navigation, props, incidencia, indice })
                     letterSpacing: 0,
                     color: COLORS.browngrey
                 }}>
-                    {/* {'incidencia'} */}
                     {incidencia?.estado}
-                </Text>
+                </Text> */}
             </View>
             <View
                 style={{
-                    // borderBottomColor: 'black',
-                    // borderBottomWidth: 1,
-                    // marginHorizontal: 10,
                     alignSelf: 'center',
-                    marginTop: 6,
+                    marginTop: 0,
                     width: (windowWidth * 95.7) / 100,
                     height: 1,
                     opacity: 0.2,
@@ -240,16 +260,16 @@ export default function CarIncidencia({ navigation, props, incidencia, indice })
                 fontWeight: "600",
                 fontStyle: "normal",
                 letterSpacing: 0,
-                color: COLORS.primary, 
+                color: COLORS.primary,
                 marginLeft: 12,
-                marginTop : 7
+                marginTop: 7
             }}>
                 {incidencia?.titulo}
                 {/* Nombre de la incidencia que ocupa 2 líneas para tener el ejemplo en el diseño de la app */}
             </Text>
 
             <View style={{ flexDirection: 'row' }}>
-                
+
                 <TouchableOpacity
                     onPress={() => {
 
@@ -257,7 +277,7 @@ export default function CarIncidencia({ navigation, props, incidencia, indice })
                     style={{
                         marginLeft: 12,
                         marginTop: 12,
-                        marginRight : 5
+                        marginRight: 5
                     }}
                 >
                     <SVG nombre={'Ubicacion'} width={20} height={20} />
@@ -365,15 +385,17 @@ const styles = StyleSheet.create({
     containerSVG: {
         //borderStyle: "solid",
         // left: 2,
-        zIndex: 1111111,
-        marginLeft : 5,
+        //zIndex: 1111111,
+        marginLeft: 12,
         width: 30,
-        height: 50,
+        height: 35,
         backgroundColor: 'white',
         alignContent: 'center',
         alignItems: 'center',
         alignSelf: 'center',
         justifyContent: 'center',
+        flexDirection: 'row',
+
         //borderColor: COLORS.primary,
         marginTop: -10,
         // borderWidth : 3

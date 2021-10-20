@@ -3,13 +3,18 @@
 import React from 'react'
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
-import SvgUri from 'react-native-svg-uri'; // SVG Package
+// import SvgUri from 'react-native-svg-uri'; 
+import SvgUri from "expo-svg-uri";
 
 export default function SVG({ navigation, width, height, nombre }) {
 
 
     return (
         <View>
+            {/* {
+                nombre === 'Logo' &&
+                <SvgUri width="200" height="200" source={require("../assets/Logo.svg")} />
+            } */}
             {
                 nombre === 'Buscar' &&
                 <SvgUri
@@ -32,6 +37,14 @@ export default function SVG({ navigation, width, height, nombre }) {
                     width={width}
                     height={height}
                     source={require('../assets/Volver-gris.svg')}
+                />
+            }
+            {
+                nombre === 'VolverBlanco' &&
+                <SvgUri
+                    width={width}
+                    height={height}
+                    source={require('../assets/Volver-blanco.svg')}
                 />
             }
             {
@@ -152,6 +165,40 @@ export default function SVG({ navigation, width, height, nombre }) {
                     width={width}
                     height={height}
                     source={require('../assets/ubicacion.svg')}
+                />
+            }
+            {
+                nombre === 'Logo' &&
+                <SvgUri
+                    width={width}
+                    height={height}
+                    source={require('../assets/Logo.svg')}
+                />
+            }
+            {
+                nombre === 'Camara' &&
+                <SvgUri
+                    width={width}
+                    height={height}
+                    source={require('../assets/Group12.svg')}
+                />
+            }
+            {
+                nombre === 'CreadaIncidencia' &&
+                <SvgUri
+                    width={width}
+                    height={height}
+                    source={require('../assets/creada.svg')}
+                    styles
+                />
+            }
+            {
+                nombre === 'CombinedShape' &&
+                <SvgUri
+                    width={width}
+                    height={height}
+                    source={require('../assets/Fill1.svg')}
+                    styles
                 />
             }
         </View>

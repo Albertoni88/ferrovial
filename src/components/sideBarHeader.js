@@ -6,6 +6,7 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import SVG from './svg';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -14,7 +15,7 @@ export default function SideBarHeader({ texto, navigation }) {
 
     return (
         <View style={styles.containerWebView}>
-            <Icon
+            {/* <Icon
                 onPress={() => {
                     navigation.goBack();
                 }}
@@ -30,9 +31,21 @@ export default function SideBarHeader({ texto, navigation }) {
                 name="chevron-back-outline"
                 color="white"
                 size={30}
-            />
+            /> */}
+            <View style={styles.goBack}>
+                <View style={styles.containerSVGBack}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigation.goBack();
+                        }}
+                    >
+                        <SVG nombre={'VolverBlanco'} width={20} height={20} />
+                    </TouchableOpacity>
+                </View>
+            </View>
             <Text style={{
-                marginTop: 27,
+                marginTop: 30,
+                // marginTop: (windowHeight * 3.3) / 100,
                 width: 280,
                 height: Platform.OS === 'ios' ? 27 : 30,
                 fontFamily: 'nunito-bold',
@@ -41,8 +54,8 @@ export default function SideBarHeader({ texto, navigation }) {
                 fontStyle: "normal",
                 letterSpacing: 0,
                 textAlign: "center",
-                alignSelf : 'center',
-                marginLeft : -30,
+                alignSelf: 'center',
+                marginLeft: 35,
                 color: 'white'
             }}>
                 {texto}
@@ -52,13 +65,23 @@ export default function SideBarHeader({ texto, navigation }) {
 }
 
 const styles = StyleSheet.create({
+    containerSVGBack: {
+        borderStyle: "solid",
+        //left: -15,
+        zIndex: 1111111,
+        width: 15,
+        height: 15,
+        borderColor: COLORS.primary,
+        marginTop: (windowHeight * 2.4) / 100
+    },
     goBack: {
-        marginTop: 50,
+        //position: 'absolute',
+        // marginTop: 30,
+        // marginLeft: 12,
         marginLeft: 12,
-        textAlign: 'left',
-        alignContent: 'flex-start',
-        alignItems: 'flex-start',
-        alignSelf: 'flex-start'
+        //marginTop: 30,
+        width: 20,
+        height: 20,
     },
     containerWebView: {
         // marginTop: 20,

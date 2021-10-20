@@ -9,14 +9,6 @@ import {
 import Buscar from '../assets/Buscar.svg'
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
-// import { SvgXml } from 'react-native-svg';
-// import Svg, { Circle } from 'react-native-svg';
-
-// import SvgUri from 'react-native-svg-uri';
-// import Buscar from '../assets/Buscar.svg';
-// import { SvgXml } from 'react-native-svg'
-
-import SvgUri from 'react-native-svg-uri'; // SVG Package
 
 export default function DrawerContent({ navigation}) {
 

@@ -8,6 +8,7 @@ import {
 import SVG from '../components/svg';
 import { correoValidar } from '../constants/validation';
 import { reset } from '../store/actions/userActions';
+import LOGO from '../components/logo';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -44,14 +45,14 @@ export default function ResetPassword({ navigation, props }) {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ImageBackground
-                source={require('../assets/fondo.jpg')}
-                //source={{ uri: incidencia.imagen }}
+                // source={require('../assets/Bitmap.jpg')}
+                source={require('../assets/fondo-login.jpg')}
                 style={{
                     flex: 1
                 }}
             // imageStyle={styles.image}
             >
-                <View style={{ opacity : 0.8, backgroundColor: COLORS.primary, flex: 1, }}>
+                <View style={{ flex: 1, }}>
                     <View style={styles.goBack}>
                         <View style={styles.containerSVG}>
                             <TouchableOpacity
@@ -59,7 +60,7 @@ export default function ResetPassword({ navigation, props }) {
                                     navigation.goBack();
                                 }}
                             >
-                                <SVG nombre={'Volver'} width={20} height={20} />
+                                <SVG nombre={'VolverBlanco'} width={20} height={20} />
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -73,7 +74,11 @@ export default function ResetPassword({ navigation, props }) {
                         marginLeft: 78,
                         marginRight: 74
                     }}>
-                        <Image style={styles.logo} source={require('../assets/group9.png')}></Image>
+                        {/* <Image style={styles.logo} source={require('../assets/group9.png')}></Image> */}
+                        <View style={{ zIndex: 1111111, width: (windowWidth * 61) / 100, height: (windowHeight * 12.9) / 100 }}>
+                            {/* <LOGO /> */}
+                            <SVG nombre={'Logo'} width={(windowWidth * 61) / 100} height={(windowHeight * 12.9) / 100} />
+                        </View>
                     </View>
                     <View style={{ flexDirection: 'column' }}>
                         <TextInput

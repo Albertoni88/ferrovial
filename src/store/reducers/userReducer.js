@@ -26,6 +26,12 @@ const userReducer = (state, action) => {
       newState.csrf = action.payload.csrf;
       break;
     }
+    case actionTypes.LOGOUT: {
+      newState.access_token = null;
+      newState.csrf = null;
+      newState.userInfo = null;
+      break;
+    }
     case actionTypes.GUARDAR_CREADA: {
       newState.creadaIncidencia = action.payload;
       break;

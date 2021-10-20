@@ -98,14 +98,11 @@ export default function WelcomeSlides({ navigation }) {
                     <View
                         style={{
                             position: 'absolute',
-                            //borderWidth : 3,
-                            //zIndex: 1111111,
                             width: 112,
                             height: 44,
-                            // marginLeft: Platform.OS === 'android' ? 0 : -250,
-                            // marginLeft: 145,
                             alignSelf: 'center',
-                            marginTop: Platform.OS === 'android' ? 760 : 650,
+                            // marginTop: Platform.OS === 'android' ? 760 : 650,
+                            bottom : 20
                         }}
                     >
                         <TouchableOpacity
@@ -176,7 +173,6 @@ export default function WelcomeSlides({ navigation }) {
                         //     height: 10,
                         //     borderRadius: 7
                         // }}
-
                         dotStyle={hidePagination ? styles.hideDot : styles.inactiveDot}
                         onSlideChange={_onSlideChange}
                         renderDoneButton={_renderDoneButton}

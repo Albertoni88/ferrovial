@@ -35,7 +35,7 @@ export const guardarIncidencia = (access_token, data) => {
             if (response.status === 200) {
                 // dispatch(guardarCreada(1));
                 //dispatch(guardarIncidenciaRedux(data))
-                return response.status
+                return response
             }
         })
         .catch(error => {

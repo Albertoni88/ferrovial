@@ -18,7 +18,6 @@ import SVG from '../components/svg';
 import * as Permissions from 'expo-permissions';
 import { Camera } from 'expo-camera';
 import {
-    guardarIncidencia,
     guardarImagen,
     guardarComentario,
     editarComentario,
@@ -32,6 +31,7 @@ import {
     setFavoritoRdux,
     getCSRFToken
 } from '../store/actions/userActions';
+import { marginLeft } from 'styled-system';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -390,7 +390,7 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                                             {route.params.incidencia.created}
                                         </Text>
                                     </View>
-                                    {
+                                    {/* {
                                         favoritosRedux[route.params.indice] === 0 &&
                                         <TouchableOpacity
                                             onPress={() => {
@@ -409,13 +409,13 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                                             style={styles.containerSVGheart}>
                                             <SVG nombre={'CorazonRelleno'} width={25} height={25} />
                                         </TouchableOpacity>
-                                    }
+                                    } */}
                                 </View>
                             </ImageBackground>
                         </TouchableOpacity>
                         <View style={{ flexDirection: 'row' }}>
-                           
-                            <TouchableOpacity
+
+                            {/* <TouchableOpacity
                                 onPress={() => {
 
                                 }}
@@ -438,8 +438,32 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                                 color: COLORS.browngrey
                             }}>
                                 {route.params.incidencia.autor_username}
-                            </Text>
+                            </Text> */}
                             <TouchableOpacity
+                                onPress={() => {
+
+                                }}
+                                style={{
+                                    marginLeft: 12,
+                                    marginTop: 5,
+                                    marginRight: 5
+                                }}
+                            >
+                                <SVG nombre={'Ubicacion'} width={20} height={20} />
+                            </TouchableOpacity>
+                            <Text style={{
+                                fontSize: 15,
+                                marginTop: 8,
+                                fontFamily: "nunito-regular",
+                                fontSize: 15,
+                                fontWeight: "normal",
+                                fontStyle: "normal",
+                                letterSpacing: 0,
+                                color: COLORS.browngrey
+                            }}>
+                                {route.params.incidencia.estado}
+                            </Text>
+                            {/* <TouchableOpacity
                                 onPress={() => {
 
                                 }}
@@ -462,7 +486,6 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                                 color: COLORS.browngrey
                             }}>
                                 {route.params.incidencia.tipo_incidencia}
-                                {/* {'route.params'} */}
                             </Text>
                             <TouchableOpacity
                                 onPress={() => {
@@ -487,14 +510,10 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                                 color: COLORS.browngrey
                             }}>
                                 {route.params.incidencia.estado}
-                                {/* {'route.params'} */}
-                            </Text>
+                            </Text> */}
                         </View>
                         <View
                             style={{
-                                // borderBottomColor: 'black',
-                                // borderBottomWidth: 1,
-                                // marginHorizontal: 10,
                                 alignSelf: 'center',
                                 marginTop: 6,
                                 width: (windowWidth * 95.7) / 100,
@@ -513,22 +532,22 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                             fontWeight: "600",
                             fontStyle: "normal",
                             letterSpacing: 0,
-                            color: COLORS.primary, 
+                            color: COLORS.primary,
                             marginLeft: 12,
-                            marginTop : 7
+                            marginTop: 7
                         }}>
                             {route.params.incidencia.titulo}
                             {/* Nombre de la incidencia que ocupa 2 líneas para tener el ejemplo en el diseño de la app */}
                         </Text>
                         <View style={{ flexDirection: 'row' }}>
-                        <TouchableOpacity
+                            <TouchableOpacity
                                 onPress={() => {
 
                                 }}
                                 style={{
                                     marginLeft: 12,
                                     marginTop: 12,
-                                    marginRight : 5
+                                    marginRight: 5
                                 }}
                             >
                                 <SVG nombre={'Ubicacion'} width={20} height={20} />
@@ -536,7 +555,6 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                             <Text style={{
                                 color: 'grey',
                                 fontSize: 15,
-                                //textAlign: 'right',
                                 flex: 1,
                                 marginTop: 15
                             }}>
@@ -545,9 +563,6 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                         </View>
                         <View
                             style={{
-                                // borderBottomColor: 'black',
-                                // borderBottomWidth: 1,
-                                // marginHorizontal: 10,
                                 alignSelf: 'center',
                                 marginTop: 6,
                                 width: (windowWidth * 95.7) / 100,
@@ -561,29 +576,32 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                         />
                         <Text
                             style={{
-                                // color: 'grey',
-                                // fontSize: 15,
-                                // flex: 1,
-                                textAlign: 'center',
-                                alignSelf: 'center',
-                                // marginBottom: 5
+
                                 width: 351,
-                                height: 130,
+                                height: 95,
                                 fontFamily: "nunito-regular",
                                 fontSize: 14,
                                 fontWeight: "normal",
                                 fontStyle: "normal",
                                 letterSpacing: 0.16,
-                                color: COLORS.GREYISH_BROWN
+                                color: COLORS.GREYISH_BROWN,
+                                marginLeft: 12
                             }}
                         >
-                            Con una población de 570 006 habitantes en 2017,8​ Málaga es la sexta ciudad más poblada de España, la segunda de Andalucía y la número cuarenta y seis de la Unión Europea, así como la mayor de entre las que no son capitales autonómicas.
+                            {route.params.incidencia.description}
                         </Text>
-                        <View
+                        {
+                            route.params.incidencia.estado === 'Resuelta' && route.params.incidencia.imagen_resuelta !== '' &&
+                            <View style={styles.container}>
+                                <ImageBackground
+                                    source={{ uri: route.params.incidencia.imagen_resuelta }}
+                                    style={styles.imageContainer}
+                                    imageStyle={styles.image}>
+                                </ImageBackground>
+                            </View>
+                        }
+                        {/* <View
                             style={{
-                                // borderBottomColor: 'black',
-                                // borderBottomWidth: 1,
-                                // marginHorizontal: 10,
                                 alignSelf: 'center',
                                 marginTop: 43,
                                 width: (windowWidth * 95.7) / 100,
@@ -641,12 +659,11 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                                 color={COLORS.primary}
                                 size={30}
                             />
-                        </View>
-                        {listadoComentarios.map((com, indice) => {
+                        </View> */}
+                        {/* {listadoComentarios.map((com, indice) => {
 
                             return (
                                 <View key={indice} style={{
-                                    // borderWidth: 3,
                                     alignSelf: 'center',
                                     marginTop: 12,
                                     height: (windowHeight * 9.35) / 100,
@@ -661,7 +678,6 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                                     shadowRadius: 15,
                                     shadowOpacity: 1,
                                     flexDirection: 'row',
-                                    // borderWidth : 0.2
                                 }}>
 
                                     <Icon
@@ -671,7 +687,6 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                                         style={{
 
                                             marginTop: 10,
-                                            //textAlign: 'left',
                                             marginLeft: 14
                                         }}
                                         name="person-outline"
@@ -680,12 +695,7 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                                     />
                                     <Text
                                         style={{
-                                            // color: COLORS.primary,
-                                            // fontSize: 15,
-                                            // flex : 0.2,
                                             marginTop: 12,
-                                            //flex: 0.9,
-                                            //textAlign: 'left',
                                             marginLeft: 4,
                                             width: 82,
                                             height: 19,
@@ -697,7 +707,7 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                                             color: COLORS.GREYISH_BROWN,
                                         }}
                                     >
-                                        {/* {route.params.incidencia.autor_username} */}
+                                        
                                         {com.autor_username}
                                     </Text>
                                     <Icon
@@ -705,11 +715,10 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                                             editarComentarioFront(indice, com.id, com.comment_body)
                                         }}
                                         style={{
-                                            // flex: 0,
+                                            
                                             marginTop: 15,
                                             textAlign: 'right',
                                             zIndex: 111111,
-                                            //left: (route.params.incidencia.tipo === 1 || route.params.incidencia.tipo === 2) ? 150 : 140
                                             marginRight: 4,
                                             marginLeft: 210
                                         }}
@@ -722,13 +731,10 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                                             eliminarComentario(com.id, com.uid);
                                         }}
                                         style={{
-                                            // flex: 1,
                                             zIndex: 111111,
                                             marginTop: 15,
-                                            //left: (route.params.incidencia.tipo === 1 || route.params.incidencia.tipo === 2) ? 150 : 140
                                             textAlign: 'left',
                                             marginRight: 7,
-                                            // marginLeft : 100
                                         }}
                                         name="trash-outline"
                                         color={COLORS.primary}
@@ -740,13 +746,8 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                                             <Text
                                                 style={{
                                                     textAlign: 'left',
-                                                    // color: COLORS.primary,
-                                                    // fontSize: 15,
                                                     left: 14,
-                                                    // marginLeft : 140,
                                                     marginTop: 45,
-                                                    // width: 79.7,
-                                                    // height: 19,
                                                     fontFamily: "nunito-regular",
                                                     fontSize: 14,
                                                     fontWeight: "normal",
@@ -755,16 +756,13 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                                                     color: COLORS.GREYISH_BROWN,
                                                     top: -10
                                                 }}
-                                            >
-                                                {/* {'Muchas gracias '}{route.params.incidencia.autor}{'!'} */}
+                                            >                                               
                                                 {com.comment_body}
                                             </Text>
                                         }
                                         {
                                             commentEditar[indice] === true &&
                                             <TextInput
-                                                // value={name}
-                                                // value={user?.username}
                                                 value={editado}
                                                 placeholder={'Comentario'}
                                                 placeholderTextColor={COLORS.primary}
@@ -777,7 +775,7 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
                                     </View>
                                 </View>
                             );
-                        })}
+                        })} */}
                         {/* Tipo 1            */}
                         {
                             (votado === false && route.params.incidencia.tipo === 1) &&
@@ -1598,7 +1596,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         height: (windowHeight * 31.65) / 100,
         width: (windowWidth * 95.7) / 100,
-        borderWidth: 1,
+        //borderWidth: 1,
         borderRadius: 20,
         marginVertical: 10,
     },

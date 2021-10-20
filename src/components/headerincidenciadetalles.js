@@ -66,14 +66,14 @@ export default function HeaderIncidenciaDetalles({ navigation, filtrar }) {
                     color={COLORS.primary}
                     size={40}
                 /> */}
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     onPress={() => {
 
                     }}
                     style={styles.containerSVGSubir}
                 >
                     <SVG nombre={'Subir'} width={22} height={25} />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </TouchableOpacity>
         </View>
     )
