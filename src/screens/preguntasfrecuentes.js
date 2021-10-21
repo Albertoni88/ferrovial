@@ -165,7 +165,7 @@ export default function PreguntasFrecuentes({ navigation, props }) {
     };
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
+        // <SafeAreaView style={{ flex: 1 }}>
             <View style={{ backgroundColor: 'rgb(247, 247, 247)', textAlign: 'center', alignItems: 'center', flex: 1, }}>
                 <SideBarHeader texto={'Preguntas frecuentes'} navigation={navigation} />
                 <View style={{ alignItems: 'center', width: '100%', height: '100%' }}>
@@ -219,7 +219,7 @@ export default function PreguntasFrecuentes({ navigation, props }) {
             </View> */}
 
             </View>
-        </SafeAreaView>
+        // </SafeAreaView>
     );
 }
 const styles = StyleSheet.create({

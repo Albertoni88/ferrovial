@@ -15,23 +15,7 @@ export default function SideBarHeader({ texto, navigation }) {
 
     return (
         <View style={styles.containerWebView}>
-            {/* <Icon
-                onPress={() => {
-                    navigation.goBack();
-                }}
-                style={{
-                    marginTop: 30,
-                    marginLeft: 12,
-                    // marginTop : (windowHeight * 6.16) / 90,
-                    flex: 0.6,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    alignContent: 'center',
-                }}
-                name="chevron-back-outline"
-                color="white"
-                size={30}
-            /> */}
+           
             <View style={styles.goBack}>
                 <View style={styles.containerSVGBack}>
                     <TouchableOpacity
@@ -93,7 +77,7 @@ const styles = StyleSheet.create({
         // borderWidth : 3
 
         width: '100%',
-        height: 88,
+        height: 108,
         flexDirection: 'row',
         alignItems: 'center',
         // width: '100%',

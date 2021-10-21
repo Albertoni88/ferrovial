@@ -335,14 +335,9 @@ export default function MainHeader({ navigation, props }) {
 
     return (
 
-        <SafeAreaView
-            style={{ flex: 1, height: '100%' }}
+        <View
+            style={{ flex: 1, height: windowHeight }}
         >
-            {/* <LinearGradient
-                colors={[COLORS.PALE_GREY, COLORS.PALE_GREY, 'grey']}
-                style={styles.linearGradient}
-            > */}
-            {/* <View style={styles.container}> */}
             {
                 (open === false && find === false) &&
                 <View style={{
@@ -368,7 +363,7 @@ export default function MainHeader({ navigation, props }) {
                             style={{
                                 width: 25,
                                 height: 30,
-                                marginTop: 30,
+                                marginTop: 50,
                                 marginLeft: 12,
                                 marginRight: 120
                             }}
@@ -417,7 +412,7 @@ export default function MainHeader({ navigation, props }) {
                             textAlign: 'left',
                             alignSelf: 'center',
                             marginLeft: -5,
-                            marginTop: 27,
+                            marginTop: 47,
                             //borderWidth : 3
                         }}>
                             Valdepeñas
@@ -494,10 +489,10 @@ export default function MainHeader({ navigation, props }) {
             {(showBody && map === false) &&
                 <View style={{ flex: 1 }}>
                     <ScrollView
-                        onScrollEndDrag ={()=>{
+                        onScrollEndDrag={() => {
                             setEnd(true);
                         }}
-                        onScrollBeginDrag={()=>{
+                        onScrollBeginDrag={() => {
                             setEnd(false);
                         }}
                         style={{ flex: 1, opacity: find === false ? 1 : 0.3, }}
@@ -547,51 +542,51 @@ export default function MainHeader({ navigation, props }) {
                         end={{ x: 0, y: 1.5 }}
                         style={styles.linearGradient}
                     > */}
-                        <TouchableOpacity
-                            onPress={() => {
-                                navigation.navigate('CrearIncidencia');
-                            }}
-                            style={{
-                                justifyContent: 'center',
-                                alignSelf: 'center',
-                                position: 'absolute',
-                                bottom: 10,
-                                alignItems: 'center',
-                                zIndex: 11111,
-                                width: 198,
-                                height: 44,
-                                borderRadius: 22,
-                                backgroundColor: COLORS.primary,
-                                shadowColor: "rgba(0, 0, 0, 0.1)",
-                                shadowOffset: {
-                                    width: 0,
-                                    height: 4
-                                },
-                                shadowRadius: 10,
-                                shadowOpacity: 1
-                            }}>
-                            <Text style={{
-                                textAlign: 'center',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                alignSelf: 'center',
-                                width: Platform.OS === 'ios' ? 155 : 175,
-                                height: 24,
-                                fontFamily: 'nunito-bold',
-                                fontSize: 18,
-                                fontWeight: "bold",
-                                fontStyle: "normal",
-                                letterSpacing: 0.45,
-                                textAlign: "center",
-                                color: 'white'
-                            }}> Crear incidencia </Text>
-                        </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigation.navigate('CrearIncidencia');
+                        }}
+                        style={{
+                            justifyContent: 'center',
+                            alignSelf: 'center',
+                            position: 'absolute',
+                            bottom: 20,
+                            alignItems: 'center',
+                            zIndex: 11111,
+                            width: 198,
+                            height: 44,
+                            borderRadius: 22,
+                            backgroundColor: COLORS.primary,
+                            shadowColor: "rgba(0, 0, 0, 0.1)",
+                            shadowOffset: {
+                                width: 0,
+                                height: 4
+                            },
+                            shadowRadius: 10,
+                            shadowOpacity: 1
+                        }}>
+                        <Text style={{
+                            textAlign: 'center',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            alignSelf: 'center',
+                            width: Platform.OS === 'ios' ? 155 : 175,
+                            height: 24,
+                            fontFamily: 'nunito-bold',
+                            fontSize: 18,
+                            fontWeight: "bold",
+                            fontStyle: "normal",
+                            letterSpacing: 0.45,
+                            textAlign: "center",
+                            color: 'white'
+                        }}> Crear incidencia </Text>
+                    </TouchableOpacity>
                     {/* </LinearGradient> */}
                 </View>
             }
             {/* </View> */}
             {/* </LinearGradient> */}
-        </SafeAreaView>
+        </View>
     );
 }
 const styles = StyleSheet.create({
@@ -847,7 +842,7 @@ const styles = StyleSheet.create({
         //flex: 1,
         position: 'absolute',
         width: '100%',
-        top: 20,
+        //top: 20,
         height: '100%',
         zIndex: 99999999,
         zIndex: 11111111111111111
@@ -976,7 +971,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 5
     },
     footerContainer: {
-        padding: 30,
+        padding: 20,
         alignItems: 'center',
     }
 });

@@ -44,7 +44,7 @@ export default function AvisosLegales({ navigation, props }) {
     }, []);
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
+        // <SafeAreaView style={{ flex: 1 }}>
             <View style={{ backgroundColor: 'white', textAlign: 'center', alignItems: 'center', flex: 1, }}>
                 <SideBarHeader texto={'Avisos legales'} navigation={navigation} />
                 <ScrollView>
@@ -72,7 +72,7 @@ export default function AvisosLegales({ navigation, props }) {
                     </View>
                 </ScrollView>
             </View>
-        </SafeAreaView>
+        // </SafeAreaView>
     );
 }
 const styles = StyleSheet.create({

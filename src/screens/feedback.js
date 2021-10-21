@@ -69,7 +69,7 @@ export default function Feedback({ navigation, props }) {
 
     }
     return (
-        <SafeAreaView style={{ flex: 1 }}>
+        // <SafeAreaView style={{ flex: 1 }}>
             <View style={{ backgroundColor: 'white', textAlign: 'center', alignItems: 'center', flex: 1, }}>
                 <SideBarHeader texto={'Feedback'} navigation={navigation} />
                 <View style={{
@@ -158,7 +158,7 @@ export default function Feedback({ navigation, props }) {
                     </TouchableOpacity>
                 </View>
             </View >
-        </SafeAreaView>
+        // </SafeAreaView>
     );
 }
 const styles = StyleSheet.create({

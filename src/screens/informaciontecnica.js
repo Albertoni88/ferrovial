@@ -50,7 +50,7 @@ export default function InformacionTecnica({ navigation, props }) {
     }, []);
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
+        // <SafeAreaView style={{ flex: 1 }}>
             <View style={{ backgroundColor: 'white', textAlign: 'center', alignItems: 'center', flex: 1, }}>
                 <SideBarHeader texto={'Información técnica'} navigation={navigation} />
                 <ScrollView>
@@ -78,7 +78,7 @@ export default function InformacionTecnica({ navigation, props }) {
                     </View>
                 </ScrollView>
             </View>
-        </SafeAreaView>
+        // </SafeAreaView>
     );
 }
 const styles = StyleSheet.create({

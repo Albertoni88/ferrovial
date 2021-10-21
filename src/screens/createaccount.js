@@ -116,7 +116,7 @@ export default function CreateAccount({ navigation, props }) {
         }
     }
     return (
-        <SafeAreaView style={{ flex: 1 }}>
+        // <SafeAreaView style={{ flex: 1 }}>
             <ImageBackground
                 // source={require('../assets/Bitmap.jpg')}
                 source={require('../assets/fondo-login.jpg')}
@@ -305,7 +305,7 @@ export default function CreateAccount({ navigation, props }) {
                     </View>
                 </ScrollView>
             </ImageBackground>
-        </SafeAreaView>
+        // </SafeAreaView>
     );
 }
 const styles = StyleSheet.create({
@@ -321,7 +321,7 @@ const styles = StyleSheet.create({
     },
     goBack: {
         position: 'relative',
-        marginTop: 30,
+        marginTop: 50,
         marginLeft: 12,
         width: 20,
         height: 20,
