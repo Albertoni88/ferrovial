@@ -97,17 +97,17 @@ export default function WelcomeSlides({ navigation }) {
                 return (
                     <View
                         style={{
-                            position: 'absolute',
+                            //position: 'absolute',
                             width: 112,
                             height: 44,
                             alignSelf: 'center',
-                            // marginTop: Platform.OS === 'android' ? 760 : 650,
-                            bottom : 20
+                            //bottom : 20
                         }}
                     >
                         <TouchableOpacity
                             style={{
-
+                                position : 'absolute',
+                                bottom : 20,
                                 zIndex: 11111111111,
                                 width: 112,
                                 height: 44,
