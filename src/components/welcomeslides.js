@@ -202,8 +202,8 @@ export default function WelcomeSlides({ navigation }) {
         }
     };
     return (
-        <SafeAreaView style={{ zIndex: -11111, flex: 1 }}>
-            <View style={{ flex: 1, zIndex: -11111 }}>
+        // <SafeAreaView style={{ zIndex: -11111, flex: 1 }}>
+            <View style={{ flex: 1, zIndex: -11111, borderWidth : 3 }}>
 
                 {
                     slides !== null && slides !== undefined &&
@@ -228,7 +228,7 @@ export default function WelcomeSlides({ navigation }) {
                     />
                 }
             </View>
-        </SafeAreaView>
+        // </SafeAreaView>
     )
 }
 const styles = StyleSheet.create({

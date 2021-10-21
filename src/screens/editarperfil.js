@@ -146,7 +146,9 @@ export default function EditarPerfil({ navigation, props }) {
                             editarPerfil();
                         }}
                         style={{
-                            marginTop: (windowHeight * 27) / 100,
+                            position : 'absolute',
+                            // marginTop: (windowHeight * 27) / 100,
+                            marginTop : (windowHeight * 45.8) / 100,
                             alignSelf: 'center',
                             justifyContent: 'center',
                             width: 114,

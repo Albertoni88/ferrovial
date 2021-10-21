@@ -125,6 +125,9 @@ export default function Feedback({ navigation, props }) {
                             guardarFeedBack();
                         }}
                         style={{
+                            position : 'absolute',
+                            // marginTop: (windowHeight * 27) / 100,
+                            marginTop : (windowHeight * 48) / 100,
                             alignItems: 'center',
                             alignContent: 'center',
                             alignSelf: 'center',
