@@ -146,9 +146,10 @@ export default function EditarPerfil({ navigation, props }) {
                             editarPerfil();
                         }}
                         style={{
-                            position : 'absolute',
-                            // marginTop: (windowHeight * 27) / 100,
-                            marginTop : (windowHeight * 45.8) / 100,
+                            //position : 'fixed',
+                            bottom : 25,
+                            marginTop: (windowHeight * 30.2) / 100,
+                            //marginTop : 372,
                             alignSelf: 'center',
                             justifyContent: 'center',
                             width: 114,
