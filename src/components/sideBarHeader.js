@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
         width: 15,
         height: 15,
         borderColor: COLORS.primary,
-        marginTop: (windowHeight * 2.4) / 100
+        marginTop: 12
     },
     goBack: {
         //position: 'absolute',
@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
         //marginTop: 30,
         width: 20,
         height: 20,
+        borderWidth : 2
     },
     containerWebView: {
         // marginTop: 20,
