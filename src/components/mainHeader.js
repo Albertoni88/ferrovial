@@ -404,7 +404,7 @@ export default function MainHeader({ navigation, props }) {
                         </TouchableOpacity>
 
                         <Text style={{
-                            flex: 1,
+                            //flex: 1,
                             width: 280,
                             height: 27,
                             fontFamily: "nunito-bold",
@@ -416,7 +416,9 @@ export default function MainHeader({ navigation, props }) {
                             color: COLORS.primary,
                             textAlign: 'left',
                             alignSelf: 'center',
-                            marginTop: 27
+                            marginLeft: -5, 
+                            marginTop: 27,
+                            //borderWidth : 3
                         }}>
                             Valdepeñas
                         </Text>
@@ -700,7 +702,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'center',
-        left: 5,
+        marginLeft: 10,
         zIndex: 1111111,
         width: 20,
         height: 20,
@@ -712,7 +714,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'center',
-        left: 5,
+        marginLeft: 10,
         zIndex: 1111111,
         width: 20,
         height: 20,
@@ -724,7 +726,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'center',
-        left: 5,
+        marginLeft: 10,
         zIndex: 1111111,
         width: 20,
         height: 20,
@@ -736,7 +738,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'center',
-        left: 5,
+        marginLeft: 10,
         zIndex: 1111111,
         width: 20,
         height: 20,
@@ -748,7 +750,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'center',
-        left: 5,
+        marginLeft: 10,
         zIndex: 1111111,
         width: 20,
         height: 20,
@@ -760,7 +762,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'center',
-        left: 5,
+        marginLeft: 10,
         zIndex: 1111111,
         width: 20,
         height: 20,
@@ -772,7 +774,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'center',
-        left: 5,
+        marginLeft: 10,
         zIndex: 1111111,
         width: 20,
         height: 20,
@@ -844,7 +846,7 @@ const styles = StyleSheet.create({
     },
     navItemStyle: {
         width: 305,
-        height: 25,
+        height: 18,
         fontFamily: 'montserrat-medium',
         fontSize: 16,
         fontWeight: "500",
@@ -852,7 +854,8 @@ const styles = StyleSheet.create({
         letterSpacing: 0,
         color: COLORS.primary,
         alignSelf: 'center',
-        marginLeft: 12
+        marginLeft: 12,
+        alignSelf : 'center'
     },
     perfil: {
         marginTop: (windowHeight * 31) / 250,

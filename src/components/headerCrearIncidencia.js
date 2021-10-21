@@ -19,24 +19,6 @@ export default function HeaderCrearIncidencia({ navigation }) {
                 style={styles.iconBackContainer}
                 onPress={() => navigation.goBack()}
             >
-                {/* <Icon
-                    style={{
-                        marginLeft : 12,
-                        marginTop : 10,
-                        flex: 0.8,
-                        // width: 12,
-                        // height: 9,
-                        borderStyle: "solid",
-                        //borderWidth: 2,
-                        borderColor: 'white'
-                    }}
-                    onPress={() => {
-                        navigation.goBack()
-                    }}
-                    name="chevron-back-outline"
-                    color="white"
-                    size={25}
-                /> */}
                 <View style={styles.goBack}>
                     <View style={styles.containerSVG}>
                         <TouchableOpacity
@@ -56,14 +38,14 @@ export default function HeaderCrearIncidencia({ navigation }) {
                     fontWeight: "bold",
                     fontStyle: "normal",
                     letterSpacing: 0,
-                    marginLeft: 135,
+                    marginLeft: 85,
                     textAlign: "left",
                     alignItems: 'center',
                     justifyContent: 'center',
                     alignSelf: 'center',
                     color: 'white',
-                    marginTop: 4,
-                    position : 'absolute'
+                    marginTop:50,
+                    //position: 'absolute'
                 }}>
                     Crear incidencia
                 </Text>
@@ -114,13 +96,15 @@ const styles = StyleSheet.create({
         borderColor: COLORS.primary,
     },
     goBack: {
-        position: 'absolute',
-        // marginTop: 20,
+        //position: 'absolute',
+        //marginTop: 20,
         // marginLeft: 12,
-        marginTop: (windowHeight * 10) / 100,
+        // marginTop: (windowHeight * 10) / 100,
+        // marginLeft: (windowWidth * 4.3) / 100,
+        marginTop: 50,
         marginLeft: (windowWidth * 4.3) / 100,
-        width: 20,
-        height: 20,
+        width: 30,
+        height: 30,
     },
     containerWebView: {
         top: 12,

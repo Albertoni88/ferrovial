@@ -34,6 +34,8 @@ const userReducer = (state, action) => {
       newState.access_token = null;
       newState.csrf = null;
       newState.userInfo = null;
+      newState.userlogin = null;
+      newState.pass = null;
       break;
     }
     case actionTypes.GUARDAR_CREADA: {
