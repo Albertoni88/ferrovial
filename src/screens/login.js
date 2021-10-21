@@ -88,6 +88,7 @@ export default function Login({ props, navigation }) {
                         flexDirection: 'column'
                     }}>
                         <TextInput
+                            keyboardType={'email-address'}
                             placeholder={'email'}
                             placeholderTextColor={'white'}
                             style={styles.inputuser}
@@ -114,16 +115,17 @@ export default function Login({ props, navigation }) {
                                 alignSelf: 'center',
                                 textAlign: 'center',
                                 alignItems: 'center',
+                                justifyContent : 'center',
+                                textAlign: "center",
                                 // width: 231,
                                 // height: 18,
-                                height: (windowHeight * 2.2) / 100,
+                                height: 25,
                                 width: (windowWidth * 61.6) / 100,
                                 fontFamily: 'montserrat-bold',
                                 fontSize: 14,
                                 fontWeight: "bold",
                                 fontStyle: "normal",
                                 letterSpacing: 0,
-                                textAlign: "center",
                                 color: "#57233b"
                             }}>
                                 Iniciar sesión
@@ -173,7 +175,7 @@ export default function Login({ props, navigation }) {
                             <Text style={{
                                 // width: 105,
                                 // height: 18,
-                                height: (windowHeight * 2.2) / 100,
+                                height: 25,
                                 width: (windowWidth * 28) / 100,
                                 fontFamily: 'montserrat-bold',
                                 fontSize: 14,
