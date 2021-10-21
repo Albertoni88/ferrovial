@@ -849,7 +849,7 @@ const styles = StyleSheet.create({
     },
     navItemStyle: {
         width: 305,
-        height: 18,
+        height: 20,
         fontFamily: 'montserrat-medium',
         fontSize: 16,
         fontWeight: "500",

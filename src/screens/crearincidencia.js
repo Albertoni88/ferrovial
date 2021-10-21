@@ -528,7 +528,7 @@ export default function CrearIncidencia({ navigation, props }) {
                                 flexDirection: 'column',
                                 width: 325,
                                 height: 165,
-                                marginTop: 8,
+                                marginTop: 20,
                             }}>
                                 <Text style={{
                                     width: 295,
@@ -546,7 +546,7 @@ export default function CrearIncidencia({ navigation, props }) {
                                 }}>
                                     ¡Mil gracias por tu aportación!
                                 </Text>
-                                <Text style={{
+                                {/* <Text style={{
                                     width: 295,
                                     fontFamily: "nunito-regular",
                                     fontSize: 16,
@@ -560,7 +560,7 @@ export default function CrearIncidencia({ navigation, props }) {
                                     justifyContent: 'center'
                                 }}>
                                     Sigue el estado de las propuestas en cualquier momento.
-                                </Text>
+                                </Text> */}
                                 <TouchableOpacity
                                     onPress={() => {
                                         //setCreada(false);
@@ -738,6 +738,7 @@ const styles = StyleSheet.create({
     descripcion: {
         paddingLeft: 10,
         paddingRight: 8,
+        paddingTop : 14,
         // width: 345,
         // height: 157,
         width: (windowWidth * 92) / 100,
@@ -787,7 +788,8 @@ const styles = StyleSheet.create({
         borderColor: "#dfdfdf"
     },
     siguienteTouch: {
-        marginTop: (windowHeight * 3) / 100,
+        marginTop: 145,
+        position : 'absolute',
         alignItems: 'center',
         justifyContent: 'center',
         alignSelf: 'center',
@@ -804,6 +806,8 @@ const styles = StyleSheet.create({
         shadowOpacity: 1
     },
     salir: {
+        position : 'absolute',
+        bottom : -150,
         width: 83,
         height: 44,
         borderRadius: 22,
@@ -821,7 +825,7 @@ const styles = StyleSheet.create({
         //position : 'absolute',
         // bottom : 20
         // marginTop: (windowHeight * 21.5) / 100
-        marginTop: 175
+        // marginTop: 175
     },
     localizacion: {
         alignItems: 'center',

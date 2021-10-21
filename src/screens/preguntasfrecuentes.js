@@ -41,14 +41,17 @@ export default function PreguntasFrecuentes({ navigation, props }) {
     };
 
     const _renderHeader = (section, index) => {
-
+        var tit = section.nombre.replace(/<p>/g, '');
+        while (tit.includes('</p>')) {
+            tit = tit.replace('</p>', '');
+        }
         if (acordiones[index] === false) {
             return (
                 <View style={{
                     marginTop: 12,
                     width: (windowWidth * 93.6) / 100,
                     height: 44,
-                    borderRadius: 8,
+                    borderRadius : 8,
                     backgroundColor: "rgba(255, 255, 255, 0.25)",
                     textAlign: 'center',
                     justifyContent: 'center',
@@ -79,7 +82,7 @@ export default function PreguntasFrecuentes({ navigation, props }) {
                         justifyContent: 'center',
                         alignItems: 'center',
                         alignSelf: 'center'
-                    }}>{section.nombre}</Text>
+                    }}>{tit}</Text>
                 </View>
             );
         } else {
@@ -88,7 +91,8 @@ export default function PreguntasFrecuentes({ navigation, props }) {
                     width: (windowWidth * 93.6) / 100,
                     height: 43,
                     marginTop: 12,
-                    borderRadius: 8,
+                    borderTopLeftRadius: 8,
+                    borderTopRightRadius: 8,
                     backgroundColor: COLORS.primary,
                     textAlign: 'center',
                     justifyContent: 'center',
@@ -108,19 +112,23 @@ export default function PreguntasFrecuentes({ navigation, props }) {
                         justifyContent: 'center',
                         alignItems: 'center',
                         alignSelf: 'center',
-                    }}>{section.nombre}</Text>
+                    }}>{tit}</Text>
                 </View>
             );
         }
     };
 
     const _renderContent = (section) => {
+        var tit = section.descripcion.replace(/<p>/g, '');
+        while (tit.includes('</p>')) {
+            tit = tit.replace('</p>', '');
+        }
         return (
             <View style={{
                 width: (windowWidth * 93.6) / 100,
                 height: 107,
-                marginTop: 12,
-                borderRadius: 8,
+                borderBottomLeftRadius: 8,
+                borderBottomRightRadius: 8,
                 backgroundColor: 'white',
                 shadowColor: "rgba(0, 0, 0, 0.2)",
                 shadowOffset: {
@@ -131,7 +139,7 @@ export default function PreguntasFrecuentes({ navigation, props }) {
                 shadowOpacity: 0.5,
 
                 alignSelf: 'center',
-                marginTop: 12,
+                //marginTop: 12,
                 height: (windowHeight * 9.35) / 100,
                 width: (windowWidth * 93.6) / 100,
             }}>
@@ -150,7 +158,7 @@ export default function PreguntasFrecuentes({ navigation, props }) {
                     alignItems: 'center',
                     alignSelf: 'center',
                     marginTop: 12
-                }}>{section.descripcion}</Text>
+                }}>{tit}</Text>
             </View>
         );
     };
@@ -194,7 +202,7 @@ export default function PreguntasFrecuentes({ navigation, props }) {
                         {
                             SECTIONS !== null && SECTIONS !== undefined &&
                             <Accordion
-                                expandMultiple={true}
+                                expandMultiple={false}
                                 underlayColor={'transparent'}
                                 sections={SECTIONS}
                                 activeSections={activeSections}

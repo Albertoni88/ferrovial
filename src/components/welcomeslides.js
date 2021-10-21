@@ -128,7 +128,7 @@ export default function WelcomeSlides({ navigation }) {
                         <TouchableOpacity
                             style={{
                                 position: 'absolute',
-                                // bottom : 20,
+                                bottom : 0,
                                 zIndex: 11111111111,
                                 width: 112,
                                 height: 44,
