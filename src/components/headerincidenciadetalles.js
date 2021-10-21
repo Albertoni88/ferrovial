@@ -46,7 +46,7 @@ export default function HeaderIncidenciaDetalles({ navigation, filtrar }) {
                 </TouchableOpacity>
                 <Text
                     style={{
-                        flex: 1,
+                        flex: 0.9,
                         fontSize: 15,
                         color: COLORS.primary,
                         padding: 20,
