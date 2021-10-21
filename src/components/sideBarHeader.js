@@ -66,7 +66,6 @@ const styles = StyleSheet.create({
         //marginTop: 30,
         width: 20,
         height: 20,
-        borderWidth : 2
     },
     containerWebView: {
         // marginTop: 20,
