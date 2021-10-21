@@ -1,4 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import {
+    useDispatch as useReduxDispatch,
+    useSelector as useReduxSelector
+} from 'react-redux';
 import { StyleSheet, SafeAreaView, View, Text, Platform, Image, Dimensions, Button, TouchableOpacity } from 'react-native';
 import { Container } from 'native-base';
 import AppIntroSlider from 'react-native-app-intro-slider';
@@ -11,16 +15,20 @@ import { COLORS } from "../constants";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { URL_SERVER } from '../constants/urls';
 import { SvgUri } from 'react-native-svg';
-import { tomarIntros } from '../store/actions/userActions';
+import { tomarIntros, loginUser, guardarToken } from '../store/actions/userActions';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 export default function WelcomeSlides({ navigation }) {
 
+    const dispatch = useReduxDispatch();
     const [numero, setNumero] = useState(0);
     const [slides, setSlides] = useState([]);
     const [hidePagination, setHidePagination] = useState(false)
+    const token = useReduxSelector((state) => state.user.access_token);
+    const user = useReduxSelector((state) => state.user.userInfo);
+    const csrf = useReduxSelector((state) => state.user.csrf);
 
     useEffect(() => {
 
@@ -32,15 +40,26 @@ export default function WelcomeSlides({ navigation }) {
             });
     }, [])
     const _renderItem = ({ item, index }) => {
+        var tit = item.titulo.replace(/<p>/g, '');
+        while (tit.includes('</p>')) {
+            tit = tit.replace('</p>', '');
+        }
+
+        var des = item.descripcion.replace(/<p>/g, '');
+        while (des.includes('</p>')) {
+            des = des.replace('</p>', '');
+        }
         // setNumero(index)
 
         return (
             <View style={{
+
                 alignItems: 'center',
                 alignSelf: 'center',
                 height: '20%',
                 width: '50%',
                 marginTop: 267,
+                // position : 'absolute'
             }}>
                 <SvgUri
                     width="100%"
@@ -60,7 +79,7 @@ export default function WelcomeSlides({ navigation }) {
                         fontFamily: 'nunito-bold',
                         textAlign: 'center'
                     }}>
-                        {item.titulo}
+                        {tit}
                     </Text>
                     <View style={{ marginTop: 30, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
                         <Text style={{
@@ -71,7 +90,7 @@ export default function WelcomeSlides({ navigation }) {
                             textAlign: 'center',
                             fontWeight: "normal",
                         }}>
-                            {item.descripcion}
+                            {des}
                         </Text>
                     </View>
                 </View>
@@ -97,17 +116,17 @@ export default function WelcomeSlides({ navigation }) {
                 return (
                     <View
                         style={{
-                            //position: 'absolute',
                             width: 112,
                             height: 44,
                             alignSelf: 'center',
-                            //bottom : 20
+                            position: 'absolute',
+                            bottom: 20
                         }}
                     >
                         <TouchableOpacity
                             style={{
-                                position : 'absolute',
-                                bottom : 20,
+                                position: 'absolute',
+                                // bottom : 20,
                                 zIndex: 11111111111,
                                 width: 112,
                                 height: 44,
@@ -121,8 +140,6 @@ export default function WelcomeSlides({ navigation }) {
                                 shadowRadius: 10,
                                 shadowOpacity: 1,
                                 alignSelf: 'center',
-                                //marginLeft: -380,
-                                // marginTop : -100,
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 alignContent: 'center'
@@ -133,7 +150,11 @@ export default function WelcomeSlides({ navigation }) {
                         >
                             <Text
                                 onPress={() => {
-                                    navigation.navigate('Login');
+                                    if (token !== null && token !== undefined) {
+                                        navigation.navigate('Main');
+                                    } else {
+                                        navigation.navigate('Login');
+                                    }
                                 }}
                                 style={{
                                     //zIndex: 11111,

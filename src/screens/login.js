@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, createRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { guardarToken } from '../store/actions/userActions';
-import { Button, Dimensions, SafeAreaView, ImageBackground, Image, TextInput, View, Text, TouchableOpacity, Alert, Platform, StyleSheet } from 'react-native';
+import { Button, ScrollView, Dimensions, SafeAreaView, ImageBackground, Image, TextInput, View, Text, TouchableOpacity, Alert, Platform, StyleSheet } from 'react-native';
 import { COLORS } from '../constants';
 import {
     widthPercentageToDP as wp,
@@ -23,6 +23,8 @@ export default function Login({ props, navigation }) {
     const [pass, setPass] = useState('');
 
     const dispatch = useDispatch();
+    var uno = createRef();
+    var dos = createRef();
 
     useEffect(() => {
     }, []);
@@ -63,77 +65,97 @@ export default function Login({ props, navigation }) {
                 }}
                 imageStyle={{}}
             >
-                <View style={{ textAlign: 'center', alignItems: 'center', flex: 1, }}>
-                    <View style={{
-                        alignContent: 'center',
-                        // marginTop: 100,
-                        marginTop: (windowHeight * 9.85) / 100,
-                        flexDirection: 'row',
-                        // height: 64,
-                        height: (windowHeight * 7.8) / 100,
-                        // width: 228
-                        width: (windowWidth * 60.8) / 100,
-                        marginLeft: 72,
-                        marginRight: 74
-                    }}>
-                        <View style={{ zIndex: 1111111, width: (windowWidth * 61) / 100, height: (windowHeight * 12.9) / 100 }}>
-                            {/* <LOGO /> */}
-                            <SVG nombre={'Logo'} width={(windowWidth * 61) / 100} height={(windowHeight * 12.9) / 100} />
+                <ScrollView style={{ flex: 1 }}>
+                    <View style={{ textAlign: 'center', alignItems: 'center', flex: 1, }}>
+                        <View style={{
+                            alignContent: 'center',
+                            // marginTop: 100,
+                            marginTop: (windowHeight * 9.85) / 100,
+                            flexDirection: 'row',
+                            // height: 64,
+                            height: (windowHeight * 7.8) / 100,
+                            // width: 228
+                            width: (windowWidth * 60.8) / 100,
+                            marginLeft: 72,
+                            marginRight: 74
+                        }}>
+                            <View style={{ zIndex: 1111111, width: (windowWidth * 61) / 100, height: (windowHeight * 12.9) / 100 }}>
+                                {/* <LOGO /> */}
+                                <SVG nombre={'Logo'} width={(windowWidth * 61) / 100} height={(windowHeight * 12.9) / 100} />
+                            </View>
+                            {/* <Image style={styles.logo} source={require('../assets/group9.png')}></Image> */}
                         </View>
-                        {/* <Image style={styles.logo} source={require('../assets/group9.png')}></Image> */}
-                    </View>
-                    <View style={{
-                        // marginTop: 219,
-                        marginTop: (windowHeight * 26.97) / 100,
-                        flexDirection: 'column'
-                    }}>
-                        <TextInput
-                            placeholder={'email'}
-                            placeholderTextColor={'white'}
-                            style={styles.inputuser}
-                            onChangeText={(name) => {
-                                setName(name);
-                            }}
-                        />
-                        <TextInput
-                            secureTextEntry={true}
-                            placeholder={'contraseña'}
-                            placeholderTextColor={'white'}
-                            style={styles.inputpass}
-                            onChangeText={(pass) => {
-                                setPass(pass);
-                            }}
-                        />
-                        <TouchableOpacity
-                            onPress={() => {
-                                //navigation.navigate('Main');
-                                logIn();
-                            }}
-                            style={styles.session}>
-                            <Text style={{
-                                alignSelf: 'center',
-                                textAlign: 'center',
-                                alignItems: 'center',
-                                // width: 231,
-                                // height: 18,
-                                height: Platform.OS === 'ios' ? (windowHeight * 2.2) / 100 : 22,
-                                width: (windowWidth * 61.6) / 100,
-                                fontFamily: 'montserrat-bold',
-                                fontSize: 14,
-                                fontWeight: "bold",
-                                fontStyle: "normal",
-                                letterSpacing: 0,
-                                textAlign: "center",
-                                color: "#57233b"
-                            }}>
-                                Iniciar sesión
+                        <View style={{
+                            // marginTop: 219,
+                            marginTop: (windowHeight * 26.97) / 100,
+                            flexDirection: 'column'
+                        }}>
+                            <TextInput
+                                placeholder={'email'}
+                                onSubmitEditing={() => { dos.focus(); }}
+                                blurOnSubmit={false}
+                                returnKeyType="next"
+
+                                placeholderTextColor={'white'}
+                                style={styles.inputuser}
+                                onChangeText={(name) => {
+                                    setName(name);
+                                }}
+                            />
+                            <TextInput
+                                ref={(input) => { dos = input; }}
+                                secureTextEntry={true}
+                                placeholder={'contraseña'}
+                                placeholderTextColor={'white'}
+                                style={styles.inputpass}
+                                onChangeText={(pass) => {
+                                    setPass(pass);
+                                }}
+                            />
+                            <TouchableOpacity
+                                onPress={() => {
+                                    //navigation.navigate('Main');
+                                    logIn();
+                                }}
+                                style={styles.session}>
+                                <Text style={{
+                                    alignSelf: 'center',
+                                    textAlign: 'center',
+                                    alignItems: 'center',
+                                    // width: 231,
+                                    // height: 18,
+                                    height: Platform.OS === 'ios' ? (windowHeight * 2.2) / 100 : 22,
+                                    width: (windowWidth * 61.6) / 100,
+                                    fontFamily: 'montserrat-bold',
+                                    fontSize: 14,
+                                    fontWeight: "bold",
+                                    fontStyle: "normal",
+                                    letterSpacing: 0,
+                                    textAlign: "center",
+                                    color: "#57233b"
+                                }}>
+                                    Iniciar sesión
+                                </Text>
+                            </TouchableOpacity>
+                            <Text
+                                onPress={() => {
+                                    navigation.navigate('ResetPassword');
+                                }}
+                                style={{
+                                    fontFamily: 'montserrat-medium',
+                                    // fontSize: 14,
+                                    fontSize: (windowHeight * 1.72) / 100,
+                                    fontWeight: "500",
+                                    fontStyle: "normal",
+                                    letterSpacing: 0,
+                                    textAlign: "center",
+                                    color: 'white',
+                                    marginTop: (windowHeight * 2.9) / 100,
+                                    //marginBottom: (windowHeight * 15) / 121
+                                    marginBottom: (windowHeight * 14.9) / 100
+                                }}>No recuerdo mi contraseña...
                             </Text>
-                        </TouchableOpacity>
-                        <Text
-                            onPress={() => {
-                                navigation.navigate('ResetPassword');
-                            }}
-                            style={{
+                            <Text style={{
                                 fontFamily: 'montserrat-medium',
                                 // fontSize: 14,
                                 fontSize: (windowHeight * 1.72) / 100,
@@ -141,52 +163,39 @@ export default function Login({ props, navigation }) {
                                 fontStyle: "normal",
                                 letterSpacing: 0,
                                 textAlign: "center",
-                                color: 'white',
-                                marginTop: (windowHeight * 2.9) / 100,
-                                //marginBottom: (windowHeight * 15) / 121
-                                marginBottom: (windowHeight * 14.9) / 100
-                            }}>No recuerdo mi contraseña...
-                        </Text>
-                        <Text style={{
-                            fontFamily: 'montserrat-medium',
-                            // fontSize: 14,
-                            fontSize: (windowHeight * 1.72) / 100,
-                            fontWeight: "500",
-                            fontStyle: "normal",
-                            letterSpacing: 0,
-                            textAlign: "center",
-                            alignSelf: 'center',
-                            fontSize: 15,
-                            textAlign: 'center',
-                            alignItems: 'center',
-                            color: 'white'
-                        }}>
-                            ¿Aún no tienes cuenta?
-                        </Text>
-                        <TouchableOpacity
-                            onPress={() => {
-                                navigation.navigate('CreateAccount');
-                            }}
-                            style={
-                                styles.crear
-                            }>
-                            <Text style={{
-                                // width: 105,
-                                // height: 18,
-                                height: Platform.OS === 'ios' ? (windowHeight * 2.2) / 100 : 22,
-                                width: (windowWidth * 28) / 100,
-                                fontFamily: 'montserrat-bold',
-                                fontSize: 14,
-                                fontWeight: "bold",
-                                fontStyle: "normal",
-                                letterSpacing: 0,
-                                textAlign: "center",
-                                color: "#57233b"
+                                alignSelf: 'center',
+                                fontSize: 15,
+                                textAlign: 'center',
+                                alignItems: 'center',
+                                color: 'white'
+                            }}>
+                                ¿Aún no tienes cuenta?
+                            </Text>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    navigation.navigate('CreateAccount');
+                                }}
+                                style={
+                                    styles.crear
+                                }>
+                                <Text style={{
+                                    // width: 105,
+                                    // height: 18,
+                                    height: Platform.OS === 'ios' ? (windowHeight * 2.2) / 100 : 22,
+                                    width: (windowWidth * 28) / 100,
+                                    fontFamily: 'montserrat-bold',
+                                    fontSize: 14,
+                                    fontWeight: "bold",
+                                    fontStyle: "normal",
+                                    letterSpacing: 0,
+                                    textAlign: "center",
+                                    color: "#57233b"
 
-                            }}> Crear cuenta </Text>
-                        </TouchableOpacity>
+                                }}> Crear cuenta </Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                </View>
+                </ScrollView>
             </ImageBackground>
         </SafeAreaView>
     );
@@ -217,7 +226,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "#dfdfdf",
         marginBottom: 8,
-        color : 'white'
+        color: 'white'
 
     },
     crear: {
@@ -246,7 +255,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         // width: 290,
         // height: 44,
-        color : 'white',
+        color: 'white',
         height: (windowHeight * 5.4) / 100,
         width: (windowWidth * 77.3) / 100,
         borderRadius: 8,

@@ -632,9 +632,11 @@ const styles = StyleSheet.create({
     containerSVGBack: {
         borderStyle: "solid",
         //left: -15,
+        // borderWidth : 3,
+        // borderColor : 'white',
         zIndex: 1111111,
-        width: 15,
-        height: 15,
+        width: 25,
+        height: 25,
         borderColor: COLORS.primary,
         marginTop: 30
     },

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, createRef } from 'react';
-import { Button, ImageBackground, SafeAreaView, Dimensions, Image, TextInput, View, Text, TouchableOpacity, Alert, Platform, StyleSheet } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button, ScrollView, ImageBackground, SafeAreaView, Dimensions, Image, TextInput, View, Text, TouchableOpacity, Alert, Platform, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 //import CheckBox from '@react-native-community/checkbox';
 // import { Checkbox } from 'react-native-paper';
@@ -11,7 +12,7 @@ import {
 } from 'react-native-responsive-screen';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { registerAccount, getCSRFToken } from '../store/actions/userActions';
+import { registerAccount, getCSRFToken, loginUser, guardarToken } from '../store/actions/userActions';
 import { correoValidar } from '../constants/validation';
 import SVG from '../components/svg';
 import LOGO from '../components/logo';
@@ -21,6 +22,7 @@ const windowHeight = Dimensions.get('window').height;
 
 export default function CreateAccount({ navigation, props }) {
 
+    const dispatch = useDispatch();
     const [toggleCheckBox, setToggleCheckBox] = useState(false);
     const [checked, setChecked] = React.useState(false);
     const [name, setName] = useState('');
@@ -29,6 +31,11 @@ export default function CreateAccount({ navigation, props }) {
     const [field_nombre, setNombre] = useState('');
     const [field_apellido, setApellido] = useState('');
     const [CSRF, setCSRF] = useState('');
+
+    var uno = createRef();
+    var dos = createRef();
+    var tres = createRef();
+    var cuatro = createRef();
 
     useEffect(() => {
         getCSRFToken()
@@ -71,14 +78,31 @@ export default function CreateAccount({ navigation, props }) {
                             if (checked === true) {
                                 if (response.status === 200) {
                                     alert("Registrado correctamente");
-                                    navigation.navigate('Login');
+                                    const data = {
+                                        'name': mail,
+                                        'pass': pass
+                                    }
+                                    loginUser(data)
+                                        .then(async response => {
+                                            if (response.status === 200) {
+                                                dispatch(guardarToken({ "token": response.data.access_token, "csrf": response.data.csrf_token }))
+                                                navigation.navigate('Main');
+
+                                            } else {
+                                                alert("Usuario o contraseña incorrecto")
+                                            }
+                                        })
+                                        .catch(error => {
+                                            alert("error1 " + error)
+                                        });
+                                    //navigation.navigate('Login');
                                 }
                             } else {
                                 alert("No aceptó las políticas de privacidad");
                             }
                         })
                         .catch(error => {
-                            
+
                         });
                 } else {
                     alert("No aceptó las políticas de privacidad")
@@ -101,160 +125,185 @@ export default function CreateAccount({ navigation, props }) {
                 }}
             // imageStyle={styles.image}
             >
-                <View style={{ flex: 1, }}>
-                    <View style={styles.goBack}>
-                        <View style={styles.containerSVG}>
-                            <TouchableOpacity
-                                onPress={() => {
-                                    navigation.goBack();
-                                }}
-                            >
-                                <SVG nombre={'VolverBlanco'} width={20} height={20} />
-                            </TouchableOpacity>
+                <ScrollView style={{ flex: 1 }}>
+                    <View style={{ flex: 1, }}>
+                        <View style={styles.goBack}>
+                            <View style={styles.containerSVG}>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        navigation.goBack();
+                                    }}
+                                >
+                                    <SVG nombre={'VolverBlanco'} width={20} height={20} />
+                                </TouchableOpacity>
+                            </View>
                         </View>
-                    </View>
 
-                    <View style={{
-                        alignContent: 'center',
-                        flexDirection: 'row',
-                        marginTop: (windowHeight * 3) / 100,
-                        height: (windowHeight * 7.8) / 100,
-                        width: (windowWidth * 60.8) / 100,
-                        marginLeft: 78,
-                        marginRight: 74
-                    }}>
-                        <View style={{ zIndex: 1111111, width: (windowWidth * 61) / 100, height: (windowHeight * 12.9) / 100 }}>
-                            {/* <LOGO /> */}
-                            <SVG nombre={'Logo'} width={(windowWidth * 61) / 100} height={(windowHeight * 12.9) / 100} />
-                        </View>
-                        {/* <Image style={styles.logo} source={require('../assets/group9.png')}></Image> */}
-                    </View>
-                    <View style={{ flexDirection: 'column' }}>
-                        <TextInput
-                            placeholder={'Nombre'}
-                            placeholderTextColor={'white'}
-                            style={styles.inputuser}
-                            onChangeText={(nombre) => {
-                                setNombre(nombre)
-                            }}
-                        />
-                        <TextInput
-                            placeholder={'Apellidos'}
-                            placeholderTextColor={'white'}
-                            style={styles.apellidos}
-                            onChangeText={(apellidos) => {
-                                setApellido(apellidos)
-                            }}
-                        />
-                        <TextInput
-                            placeholder={'email'}
-                            placeholderTextColor={'white'}
-                            style={styles.apellidos}
-                            onChangeText={(email) => {
-                                setMail(email)
-                            }}
-                        />
-                        <TextInput
-                            secureTextEntry={true}
-                            placeholder={'contraseña'}
-                            placeholderTextColor={'white'}
-                            style={styles.pass}
-                            onChangeText={(contrasenna) => {
-                                setPass(contrasenna)
-                            }}
-                        />
                         <View style={{
-                            textAlign: 'center',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            alignSelf: 'center',
-                            marginTop: 5,
-                            marginBottom: 24,
-                            flexDirection: 'row'
+                            alignContent: 'center',
+                            flexDirection: 'row',
+                            marginTop: (windowHeight * 3) / 100,
+                            height: (windowHeight * 7.8) / 100,
+                            width: (windowWidth * 60.8) / 100,
+                            marginLeft: 78,
+                            marginRight: 74
                         }}>
-                            <CheckBox
-                                style={{
-                                    width: 15,
-                                    height: 15,
-                                    borderRadius: 2,
-                                    borderStyle: "solid",
-                                    borderWidth: 1,
-                                }}
-                                checked={checked}
-                                checkedColor={'white'}
-                                onPress={() => {
-                                    setChecked(!checked);
+                            <View style={{ zIndex: 1111111, width: (windowWidth * 61) / 100, height: (windowHeight * 12.9) / 100 }}>
+                                {/* <LOGO /> */}
+                                <SVG nombre={'Logo'} width={(windowWidth * 61) / 100} height={(windowHeight * 12.9) / 100} />
+                            </View>
+                            {/* <Image style={styles.logo} source={require('../assets/group9.png')}></Image> */}
+                        </View>
+                        <View style={{ flexDirection: 'column' }}>
+                            <TextInput
+                                onSubmitEditing={() => { dos.focus(); }}
+                                blurOnSubmit={false}
+                                returnKeyType="next"
+
+                                placeholder={'Nombre'}
+                                placeholderTextColor={'white'}
+                                style={styles.inputuser}
+                                onChangeText={(nombre) => {
+                                    setNombre(nombre)
                                 }}
                             />
-                            <Text style={{
-                                marginLeft: -15,
-                                marginTop: 5,
-                                fontFamily: 'montserrat-medium',
-                                fontSize: 14,
-                                fontWeight: "500",
-                                fontStyle: "normal",
-                                letterSpacing: 0,
-                                textAlign: "center",
-                                color: 'white'
+                            <TextInput
+                                ref={(input) => { dos = input; }}
+                                onSubmitEditing={() => { tres.focus(); }}
+                                blurOnSubmit={false}
+                                returnKeyType="next"
 
-                            }}>Acepto</Text>
-                            <Text style={{
-                                marginTop: 5,
-                                marginLeft: 3,
-                                textDecorationLine: 'underline',
-                                fontFamily: 'montserrat-medium',
-                                fontSize: 14,
-                                fontWeight: "500",
-                                fontStyle: "normal",
-                                letterSpacing: 0,
-                                textAlign: "center",
-                                color: 'white',
+                                placeholder={'Apellidos'}
+                                placeholderTextColor={'white'}
+                                style={styles.apellidos}
+                                onChangeText={(apellidos) => {
+                                    setApellido(apellidos)
+                                }}
+                            />
+                            <TextInput
+                                ref={(input) => { tres = input; }}
+                                onSubmitEditing={() => { cuatro.focus(); }}
+                                blurOnSubmit={false}
+                                returnKeyType="next"
 
-                            }}>política de privacidad</Text>
-                        </View>
-                        <TouchableOpacity
-                            onPress={() => {
-                                register();
-                            }}
-                            style={{
-                                marginTop: -15,
-                                borderRadius: 10,
+                                keyboardType={'email-address'}
+                                placeholder={'email'}
+                                placeholderTextColor={'white'}
+                                style={styles.apellidos}
+                                onChangeText={(email) => {
+                                    setMail(email)
+                                }}
+                            />
+                            <TextInput
+                                ref={(input) => { cuatro = input; }}
+                                // onSubmitEditing={() => { tres.focus(); }}
+                                // blurOnSubmit={false}
+                                // returnKeyType="next"
+                                secureTextEntry={true}
+                                placeholder={'contraseña'}
+                                placeholderTextColor={'white'}
+                                style={styles.pass}
+                                onChangeText={(contrasenna) => {
+                                    setPass(contrasenna)
+                                }}
+                            />
+                            <View style={{
                                 textAlign: 'center',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 alignSelf: 'center',
-                                width: 290,
-                                height: 44,
-                                borderRadius: 8,
-                                backgroundColor: 'white',
-                                shadowColor: "rgba(0, 0, 0, 0.05)",
-                                shadowOffset: {
-                                    width: 0,
-                                    height: 5
-                                },
-                                shadowRadius: 15,
-                                shadowOpacity: 1,
-                                borderStyle: "solid",
-                                borderWidth: 1,
-                                borderColor: "#dfdfdf"
+                                marginTop: 5,
+                                marginBottom: 24,
+                                flexDirection: 'row'
                             }}>
-                            <Text style={{
-                                alignSelf: 'center',
-                                textAlign: 'center',
-                                alignItems: 'center',
-                                width: 231,
-                                height: 18,
-                                fontFamily: 'montserrat-bold',
-                                fontSize: 14,
-                                fontWeight: "bold",
-                                fontStyle: "normal",
-                                letterSpacing: 0,
-                                textAlign: "center",
-                                color: "#57233b"
-                            }}> Crear cuenta </Text>
-                        </TouchableOpacity>
+                                <CheckBox
+                                    style={{
+                                        width: 15,
+                                        height: 15,
+                                        borderRadius: 2,
+                                        borderStyle: "solid",
+                                        borderWidth: 1,
+                                    }}
+                                    checked={checked}
+                                    checkedColor={'white'}
+                                    onPress={() => {
+                                        setChecked(!checked);
+                                    }}
+                                />
+                                <Text style={{
+                                    marginLeft: -15,
+                                    marginTop: 5,
+                                    fontFamily: 'montserrat-medium',
+                                    fontSize: 14,
+                                    fontWeight: "500",
+                                    fontStyle: "normal",
+                                    letterSpacing: 0,
+                                    textAlign: "center",
+                                    color: 'white'
+
+                                }}>Acepto</Text>
+                                <Text
+                                    onPress={() => {
+                                        navigation.navigate('Politicas')
+                                    }}
+                                    style={{
+                                        marginTop: 5,
+                                        marginLeft: 3,
+                                        textDecorationLine: 'underline',
+                                        fontFamily: 'montserrat-medium',
+                                        fontSize: 14,
+                                        fontWeight: "500",
+                                        fontStyle: "normal",
+                                        letterSpacing: 0,
+                                        textAlign: "center",
+                                        color: 'white',
+
+                                    }}>política de privacidad</Text>
+                            </View>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    register();
+                                }}
+                                style={{
+                                    marginTop: -15,
+                                    borderRadius: 10,
+                                    textAlign: 'center',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    alignSelf: 'center',
+                                    width: 290,
+                                    height: 44,
+                                    borderRadius: 8,
+                                    backgroundColor: 'white',
+                                    shadowColor: "rgba(0, 0, 0, 0.05)",
+                                    shadowOffset: {
+                                        width: 0,
+                                        height: 5
+                                    },
+                                    shadowRadius: 15,
+                                    shadowOpacity: 1,
+                                    borderStyle: "solid",
+                                    borderWidth: 1,
+                                    borderColor: "#dfdfdf"
+                                }}>
+                                <Text style={{
+                                    alignSelf: 'center',
+                                    textAlign: 'center',
+                                    alignItems: 'center',
+                                    width: 231,
+                                    height: 18,
+                                    fontFamily: 'montserrat-bold',
+                                    fontSize: 14,
+                                    fontWeight: "bold",
+                                    fontStyle: "normal",
+                                    letterSpacing: 0,
+                                    textAlign: "center",
+                                    color: "#57233b"
+                                }}> Crear cuenta </Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                </View>
+                </ScrollView>
             </ImageBackground>
         </SafeAreaView>
     );
@@ -292,7 +341,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         width: 290,
         height: 44,
-        color : 'white',
+        color: 'white',
         borderRadius: 8,
         backgroundColor: "rgba(0, 0, 0, 0.2)",
         shadowColor: "rgba(0, 0, 0, 0.05)",
@@ -314,7 +363,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         width: 290,
         height: 44,
-        color : 'white',
+        color: 'white',
         borderRadius: 8,
         backgroundColor: "rgba(0, 0, 0, 0.2)",
         shadowColor: "rgba(0, 0, 0, 0.05)",
@@ -348,7 +397,7 @@ const styles = StyleSheet.create({
         borderStyle: "solid",
         borderWidth: 1,
         borderColor: "#dfdfdf",
-        color : 'white'
+        color: 'white'
     },
     inputpass: {
         marginTop: 20,
