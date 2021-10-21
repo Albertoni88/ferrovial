@@ -15,7 +15,6 @@ import {
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import SVG from '../components/svg';
-import * as Permissions from 'expo-permissions';
 import { Camera } from 'expo-camera';
 import {
     guardarImagen,

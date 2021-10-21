@@ -136,27 +136,4 @@ const styles = StyleSheet.create({
         marginTop: 15,
         left : 50,        
     },
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignContent: 'center',
-        alignItems: 'center',
-        alignSelf: 'center',
-        height: 200,
-        width: 350,
-        borderWidth: 1,
-        borderRadius: 20,
-        marginVertical: 10,
-    },
-    imageContainer: {
-        flex: 1,
-        width: '100%',
-        height: '100%',
-    },
-    image: {
-        width: '100%',
-        height: '100%',
-        borderRadius: 15,
-        //resizeMode: 'contain',
-    },
 });

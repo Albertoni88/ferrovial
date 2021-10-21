@@ -98,8 +98,6 @@ export default function CarIncidenciaMapa({ navigation, props, incidencia, indic
                                     size={15}
                                 />
                                 <Text style={{
-                                    textAlign: 'left',
-                                    // width: Platform.OS === 'ios' ? 54 : 65,
                                     width: Platform.OS === 'ios' ? 54 : 65,
                                     height: 14,
                                     fontFamily: "nunito-regular",
@@ -153,7 +151,6 @@ export default function CarIncidenciaMapa({ navigation, props, incidencia, indic
                         <SVG nombre={'Ubicacion'} width={20} height={20} />
                     </TouchableOpacity>
                     <Text style={{
-                        fontSize: 15,
                         marginTop: 8,
                         fontFamily: "nunito-regular",
                         fontSize: 15,
@@ -180,7 +177,6 @@ export default function CarIncidenciaMapa({ navigation, props, incidencia, indic
                         fontSize: 15,
                         marginTop: 8,
                         fontFamily: "nunito-regular",
-                        fontSize: 15,
                         fontWeight: "normal",
                         fontStyle: "normal",
                         letterSpacing: 0,
@@ -202,7 +198,6 @@ export default function CarIncidenciaMapa({ navigation, props, incidencia, indic
                         <SVG nombre={'Ubicacion'} width={20} height={20} />
                     </TouchableOpacity>
                     <Text style={{
-                        fontSize: 15,
                         marginTop: 8,
                         fontFamily: "nunito-regular",
                         fontSize: 15,
@@ -372,10 +367,6 @@ const styles = StyleSheet.create({
         height: 480,
     },
     bottomView: {
-    },
-    textStyle: {
-        color: '#fff',
-        fontSize: 18,
     },
     container: {
         justifyContent: 'center',

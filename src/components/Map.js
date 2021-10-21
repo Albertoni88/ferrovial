@@ -1,7 +1,7 @@
 import React, { useState, useEffect, createRef } from 'react';
 import { ActivityIndicator, Platform, Text, View, StyleSheet, ImageBackground, TouchableOpacity, SafeAreaView, Image } from 'react-native';
 import * as Location from 'expo-location';
-import * as Permissions from 'expo-permissions';
+//import * as Permissions from 'expo-permissions';
 import MapView, {
     AnimatedRegion,
     animateCamera,
@@ -49,15 +49,15 @@ export default function Map({ navigation, cantidadIncidencias, incidencias, filt
         setIncidencia(inc);
     }
 
-    const getLocationAsync = async () => {
-        // permissions returns only for location permissions on iOS and under certain conditions, see Permissions.LOCATION
-        const { status, permissions } = await Permissions.askAsync(Permissions.LOCATION_FOREGROUND);
-        if (status === 'granted') {
-            return Location.getCurrentPositionAsync({ enableHighAccuracy: true });
-        } else {
-            throw new Error('Location permission not granted');
-        }
-    }
+    // const getLocationAsync = async () => {
+        
+    //     const { status, permissions } = await Permissions.askAsync(Permissions.LOCATION_FOREGROUND);
+    //     if (status === 'granted') {
+    //         return Location.getCurrentPositionAsync({ enableHighAccuracy: true });
+    //     } else {
+    //         throw new Error('Location permission not granted');
+    //     }
+    // }
     const setCurrentLocation = async () => {
         let { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted') {

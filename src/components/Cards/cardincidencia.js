@@ -97,10 +97,6 @@ export default function CarIncidencia({ navigation, props, incidencia, indice })
                                 size={15}
                             />
                             <Text style={{
-                                // color: 'white',
-                                // fontSize: 15,
-                                textAlign: 'left',
-                                // marginTop: 5
                                 width: 65,
                                 height: 14,
                                 fontFamily: "nunito-regular",
