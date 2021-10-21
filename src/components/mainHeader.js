@@ -59,7 +59,7 @@ export default function MainHeader({ navigation, props }) {
     const incidenciasOriginals = useReduxSelector((state) => state.incidencia.incidenciasOriginals);
     const token = useReduxSelector((state) => state.user.access_token);
     const user = useReduxSelector((state) => state.user.userInfo);
-
+    const [end, setEnd] = useState(false);
     const [load, setLoad] = useState(true)
 
 
@@ -416,7 +416,7 @@ export default function MainHeader({ navigation, props }) {
                             color: COLORS.primary,
                             textAlign: 'left',
                             alignSelf: 'center',
-                            marginLeft: -5, 
+                            marginLeft: -5,
                             marginTop: 27,
                             //borderWidth : 3
                         }}>
@@ -494,6 +494,12 @@ export default function MainHeader({ navigation, props }) {
             {(showBody && map === false) &&
                 <View style={{ flex: 1 }}>
                     <ScrollView
+                        onScrollEndDrag ={()=>{
+                            setEnd(true);
+                        }}
+                        onScrollBeginDrag={()=>{
+                            setEnd(false);
+                        }}
                         style={{ flex: 1, opacity: find === false ? 1 : 0.3, }}
                         persistentScrollbar={true}
                         indicatorStyle={{ color: 'grey', }}
@@ -535,10 +541,12 @@ export default function MainHeader({ navigation, props }) {
             {(showBody && map === false) &&
 
                 <View style={{ position: 'absolute', bottom: 0, height: 100, width: '100%', zIndex: 0, backgroundColor: 'transparent' }}>
-                    <LinearGradient
-                        colors={['transparent', 'transparent', '#e1e4e6']}
+                    {/* <LinearGradient
+                        colors={['transparent', COLORS.PALE_GREY,end === true ? COLORS.PALE_GREY : 'transparent']}
+                        start={{ x: 0, y: 0.5 }}
+                        end={{ x: 0, y: 1.5 }}
                         style={styles.linearGradient}
-                    >
+                    > */}
                         <TouchableOpacity
                             onPress={() => {
                                 navigation.navigate('CrearIncidencia');
@@ -578,7 +586,7 @@ export default function MainHeader({ navigation, props }) {
                                 color: 'white'
                             }}> Crear incidencia </Text>
                         </TouchableOpacity>
-                    </LinearGradient>
+                    {/* </LinearGradient> */}
                 </View>
             }
             {/* </View> */}
@@ -855,7 +863,7 @@ const styles = StyleSheet.create({
         color: COLORS.primary,
         alignSelf: 'center',
         marginLeft: 12,
-        alignSelf : 'center'
+        alignSelf: 'center'
     },
     perfil: {
         marginTop: (windowHeight * 31) / 250,

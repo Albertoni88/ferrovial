@@ -126,7 +126,7 @@ export default function CreateAccount({ navigation, props }) {
             // imageStyle={styles.image}
             >
                 <ScrollView style={{ flex: 1 }}>
-                    <View style={{ flex: 1, }}>
+                    <View style={{ flex: 1, height : windowHeight -20 }}>
                         <View style={styles.goBack}>
                             <View style={styles.containerSVG}>
                                 <TouchableOpacity

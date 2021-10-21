@@ -56,17 +56,18 @@ export default function Login({ props, navigation }) {
 
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1, height : '100%' }}>
             <ImageBackground
                 // source={require('../assets/Bitmap.jpg')}
                 source={require('../assets/fondo-login.jpg')}
                 style={{
                     flex: 1,
+                    height : '100%'
                 }}
-                imageStyle={{}}
+                imageStyle={{ height : '100%' }}
             >
-                <ScrollView style={{ flex: 1 }}>
-                    <View style={{ textAlign: 'center', alignItems: 'center', flex: 1, }}>
+                <ScrollView style={{ flex: 1, height : '100%' }}>
+                    <View style={{ textAlign: 'center', alignItems: 'center', flex: 1, height : windowHeight - 20, }}>
                         <View style={{
                             alignContent: 'center',
                             // marginTop: 100,
