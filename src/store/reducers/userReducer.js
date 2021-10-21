@@ -2,7 +2,7 @@ import * as actionTypes from '../types/userTypes';
 
 const initialState = {
   userInfo: null,
-  access_token: '',
+  access_token: null,
   csrf: '',
   filtros: null,
   filtrosOriginals: null,
@@ -11,7 +11,9 @@ const initialState = {
   secciones: null,
   idArchivo: null,
   creadaIncidencia: false,
-  favoritosRedux: []
+  favoritosRedux: [],
+  pass: '',
+  userlogin: ''
 };
 
 const userReducer = (state, action) => {
@@ -24,6 +26,8 @@ const userReducer = (state, action) => {
     case actionTypes.GUARDAR_TOKEN: {
       newState.access_token = action.payload.token;
       newState.csrf = action.payload.csrf;
+      newState.pass = action.payload.pass;
+      newState.userlogin = action.payload.userlogin;
       break;
     }
     case actionTypes.LOGOUT: {

@@ -3,7 +3,7 @@ import {
     useDispatch as useReduxDispatch,
     useSelector as useReduxSelector
 } from 'react-redux';
-import {  SafeAreaView, Dimensions, View, Text, TouchableOpacity, Alert, Platform, StyleSheet, ScrollView } from 'react-native';
+import { SafeAreaView, Dimensions, View, Text, TouchableOpacity, Alert, Platform, StyleSheet, ScrollView } from 'react-native';
 
 import SideBarHeader from '../components/sideBarHeader';
 import { COLORS } from '../constants';
@@ -24,11 +24,17 @@ export default function Politicas({ navigation, props }) {
     const secciones = useReduxSelector((state) => state.user.secciones);
     const token = useReduxSelector((state) => state.user.access_token);
     const dispatch = useReduxDispatch();
+    const [contenido, setContenido] = useState('');
 
     useEffect(() => {
         loadSecciones()
             .then(response => {
                 dispatch(guardarSeccionesPerfil(response.data));
+                var tit = response.data[0].contenido.replace(/<p>/g, '');
+                while (tit.includes('</p>')) {
+                    tit = tit.replace('</p>', '');
+                }
+                setContenido(tit);
             })
             .catch(error => {
             });
@@ -56,7 +62,8 @@ export default function Politicas({ navigation, props }) {
                                     textAlign: "center",
                                     color: COLORS.browngrey
                                 }}>
-                                    {secciones[0].contenido}
+                                    {/* {secciones[0].contenido} */}
+                                    {contenido}
                                 </Text>
                             }
                         </View>

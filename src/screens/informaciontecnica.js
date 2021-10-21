@@ -13,6 +13,13 @@ import {
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { height } from 'styled-system';
+import {
+    loadSecciones
+} from '../store/actions/incidenciaActions';
+
+import {
+    guardarSeccionesPerfil,
+} from '../store/actions/userActions';
 
 
 
@@ -23,9 +30,23 @@ export default function InformacionTecnica({ navigation, props }) {
 
     const [toggleCheckBox, setToggleCheckBox] = useState(false);
     const [checked, setChecked] = React.useState(false);
+
     const secciones = useReduxSelector((state) => state.user.secciones);
+    const dispatch = useReduxDispatch();
+    const [contenido, setContenido] = useState('');
 
     useEffect(() => {
+        loadSecciones()
+            .then(response => {
+                dispatch(guardarSeccionesPerfil(response.data));
+                var tit = response.data[2].contenido.replace(/<p>/g, '');
+                while (tit.includes('</p>')) {
+                    tit = tit.replace('</p>', '');
+                }
+                setContenido(tit);
+            })
+            .catch(error => {
+            });
     }, []);
 
     return (
@@ -50,7 +71,7 @@ export default function InformacionTecnica({ navigation, props }) {
                                     textAlign: "center",
                                     color: COLORS.browngrey
                                 }}>
-                                    {secciones[2].contenido}
+                                    {contenido}
                                 </Text>
                             }
                         </View>

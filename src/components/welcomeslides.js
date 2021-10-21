@@ -28,6 +28,8 @@ export default function WelcomeSlides({ navigation }) {
     const [hidePagination, setHidePagination] = useState(false)
     const token = useReduxSelector((state) => state.user.access_token);
     const user = useReduxSelector((state) => state.user.userInfo);
+    const userlogin = useReduxSelector((state) => state.user.userlogin);
+    const contra = useReduxSelector((state) => state.user.pass);
     const csrf = useReduxSelector((state) => state.user.csrf);
 
     useEffect(() => {
@@ -145,17 +147,37 @@ export default function WelcomeSlides({ navigation }) {
                                 alignContent: 'center'
                             }}
                             onPress={() => {
-                                navigation.navigate('Login');
+                                if (token !== null && token !== undefined) {
+                                    const data = {
+                                        'name': userlogin,
+                                        'pass': contra
+                                    }
+                                    loginUser(data)
+                                        .then(async response => {
+                                            if (response.status === 200) {
+                                                dispatch(guardarToken({ "pass": pass, "token": response.data.access_token, "csrf": response.data.csrf_token }))
+                                                navigation.navigate('Main');
+
+                                            } else {
+                                                alert("Usuario o contraseña incorrecto")
+                                            }
+                                        })
+                                        .catch(error => {
+                                            //alert("error1 " + error)
+                                        });
+                                } else {
+                                    navigation.navigate('Login');
+                                }
                             }}
                         >
                             <Text
-                                onPress={() => {
-                                    if (token !== null && token !== undefined) {
-                                        navigation.navigate('Main');
-                                    } else {
-                                        navigation.navigate('Login');
-                                    }
-                                }}
+                                // onPress={() => {
+                                //     if (token !== null && token !== undefined) {
+                                //         navigation.navigate('Main');
+                                //     } else {
+                                //         navigation.navigate('Login');
+                                //     }
+                                // }}
                                 style={{
                                     //zIndex: 11111,
                                     width: 78,

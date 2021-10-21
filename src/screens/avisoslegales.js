@@ -4,8 +4,7 @@ import {
     useSelector as useReduxSelector
 } from 'react-redux';
 import { Button, SafeAreaView, Dimensions, Image, TextInput, View, Text, TouchableOpacity, Alert, Platform, StyleSheet, ScrollView } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { CheckBox } from 'react-native-elements'
+
 import SideBarHeader from '../components/sideBarHeader';
 import { COLORS } from '../constants';
 import {
@@ -13,20 +12,35 @@ import {
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { height } from 'styled-system';
+import {
+    loadSecciones
+} from '../store/actions/incidenciaActions';
 
-
+import {
+    guardarSeccionesPerfil,
+} from '../store/actions/userActions';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 export default function AvisosLegales({ navigation, props }) {
-
-    const [toggleCheckBox, setToggleCheckBox] = useState(false);
-    const [checked, setChecked] = React.useState(false);
+    
     const secciones = useReduxSelector((state) => state.user.secciones);
+    const dispatch = useReduxDispatch();
+    const [contenido, setContenido] = useState('');
 
     useEffect(() => {
-        
+        loadSecciones()
+            .then(response => {
+                dispatch(guardarSeccionesPerfil(response.data));
+                var tit = response.data[1].contenido.replace(/<p>/g, '');
+                while (tit.includes('</p>')) {
+                    tit = tit.replace('</p>', '');
+                }
+                setContenido(tit);
+            })
+            .catch(error => {
+            });
     }, []);
 
     return (
@@ -51,7 +65,7 @@ export default function AvisosLegales({ navigation, props }) {
                                     textAlign: "center",
                                     color: COLORS.browngrey
                                 }}>
-                                    {secciones[1].contenido}
+                                    {contenido}
                                 </Text>
                             }
                         </View>
