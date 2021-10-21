@@ -237,7 +237,7 @@ export default function MainHeader({ navigation, props }) {
                                     <SVG nombre={'Politicas'} width={20} height={20} />
                                 </TouchableOpacity>
                                 <Text style={styles.navItemStyle}>
-                                    Política de privacidad
+                                    Políticas de privacidad
                                 </Text>
                             </TouchableOpacity>
                             <TouchableOpacity
