@@ -88,7 +88,6 @@ export default function Login({ props, navigation }) {
                         flexDirection: 'column'
                     }}>
                         <TextInput
-                            keyboardType={'email-address'}
                             placeholder={'email'}
                             placeholderTextColor={'white'}
                             style={styles.inputuser}
@@ -115,17 +114,16 @@ export default function Login({ props, navigation }) {
                                 alignSelf: 'center',
                                 textAlign: 'center',
                                 alignItems: 'center',
-                                justifyContent : 'center',
-                                textAlign: "center",
                                 // width: 231,
                                 // height: 18,
-                                height: 25,
+                                height: Platform.OS === 'ios' ? (windowHeight * 2.2) / 100 : 22,
                                 width: (windowWidth * 61.6) / 100,
                                 fontFamily: 'montserrat-bold',
                                 fontSize: 14,
                                 fontWeight: "bold",
                                 fontStyle: "normal",
                                 letterSpacing: 0,
+                                textAlign: "center",
                                 color: "#57233b"
                             }}>
                                 Iniciar sesión
@@ -175,7 +173,7 @@ export default function Login({ props, navigation }) {
                             <Text style={{
                                 // width: 105,
                                 // height: 18,
-                                height: 25,
+                                height: Platform.OS === 'ios' ? (windowHeight * 2.2) / 100 : 22,
                                 width: (windowWidth * 28) / 100,
                                 fontFamily: 'montserrat-bold',
                                 fontSize: 14,
@@ -218,7 +216,8 @@ const styles = StyleSheet.create({
         borderStyle: "solid",
         borderWidth: 1,
         borderColor: "#dfdfdf",
-        marginBottom: 8
+        marginBottom: 8,
+        color : 'white'
 
     },
     crear: {
@@ -247,6 +246,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         // width: 290,
         // height: 44,
+        color : 'white',
         height: (windowHeight * 5.4) / 100,
         width: (windowWidth * 77.3) / 100,
         borderRadius: 8,

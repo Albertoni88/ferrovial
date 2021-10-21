@@ -292,6 +292,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         width: 290,
         height: 44,
+        color : 'white',
         borderRadius: 8,
         backgroundColor: "rgba(0, 0, 0, 0.2)",
         shadowColor: "rgba(0, 0, 0, 0.05)",
@@ -313,6 +314,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         width: 290,
         height: 44,
+        color : 'white',
         borderRadius: 8,
         backgroundColor: "rgba(0, 0, 0, 0.2)",
         shadowColor: "rgba(0, 0, 0, 0.05)",
@@ -345,7 +347,8 @@ const styles = StyleSheet.create({
         shadowOpacity: 1,
         borderStyle: "solid",
         borderWidth: 1,
-        borderColor: "#dfdfdf"
+        borderColor: "#dfdfdf",
+        color : 'white'
     },
     inputpass: {
         marginTop: 20,
