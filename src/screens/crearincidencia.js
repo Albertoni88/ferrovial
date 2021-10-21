@@ -9,7 +9,6 @@ import MapView, {
     PROVIDER_GOOGLE,
 } from 'react-native-maps';
 import * as Location from 'expo-location';
-import * as Permissions from 'expo-permissions';
 
 import { Button, ActivityIndicator, Dimensions, Image, TextInput, View, Text, TouchableOpacity, Modal, Alert, Platform, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';

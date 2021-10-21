@@ -56,7 +56,7 @@ export default function IncidenciaDetalles({ navigation, props, route, incidenci
             .catch(error => {
             });
 
-        onHandlePermission();
+        //onHandlePermission();
 
         getCSRFToken()
             .then(response => {
