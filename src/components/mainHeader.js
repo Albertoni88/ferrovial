@@ -67,7 +67,7 @@ export default function MainHeader({ navigation, props }) {
 
         dispatch(guardarUsuario(token));
 
-        loadSecciones(token)
+        loadSecciones()
             .then(response => {
                 dispatch(guardarSeccionesPerfil(response.data));
             })
@@ -156,7 +156,11 @@ export default function MainHeader({ navigation, props }) {
                                 <Image style={styles.logo} source={require('../assets/group9.png')}></Image>
                             </View>
                         </View>
-                        <View style={styles.perfil}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                navigation.navigate('EditarPerfil')
+                            }}
+                            style={styles.perfil}>
                             <TouchableOpacity
                                 onPress={() => {
                                     navigation.navigate('EditarPerfil')
@@ -167,10 +171,14 @@ export default function MainHeader({ navigation, props }) {
                             <Text style={styles.navItemStyle}>
                                 Editar perfil
                             </Text>
-                        </View>
+                        </TouchableOpacity>
 
                         <View>
-                            <View style={styles.feedback}>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    navigation.navigate('Feedback')
+                                }}
+                                style={styles.feedback}>
                                 <TouchableOpacity
                                     onPress={() => {
                                         navigation.navigate('Feedback')
@@ -181,8 +189,12 @@ export default function MainHeader({ navigation, props }) {
                                 <Text style={styles.navItemStyle}>
                                     Feedback
                                 </Text>
-                            </View>
-                            <View style={styles.navSectionStyle}>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    navigation.navigate('PreguntasFrecuentes')
+                                }}
+                                style={styles.navSectionStyle}>
                                 <TouchableOpacity
                                     onPress={() => {
                                         navigation.navigate('PreguntasFrecuentes')
@@ -193,10 +205,14 @@ export default function MainHeader({ navigation, props }) {
                                 <Text style={styles.navItemStyle}>
                                     Preguntas frecuentes
                                 </Text>
-                            </View>
+                            </TouchableOpacity>
                         </View>
                         <View>
-                            <View style={styles.avisos}>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    navigation.navigate('AvisosLegales')
+                                }}
+                                style={styles.avisos}>
                                 <TouchableOpacity
                                     onPress={() => {
                                         navigation.navigate('AvisosLegales')
@@ -207,8 +223,12 @@ export default function MainHeader({ navigation, props }) {
                                 <Text style={styles.navItemStyle}>
                                     Avisos legales
                                 </Text>
-                            </View>
-                            <View style={styles.politicas}>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    navigation.navigate('Politicas')
+                                }}
+                                style={styles.politicas}>
                                 <TouchableOpacity
                                     onPress={() => {
                                         navigation.navigate('Politicas')
@@ -219,8 +239,12 @@ export default function MainHeader({ navigation, props }) {
                                 <Text style={styles.navItemStyle}>
                                     Política de privacidad
                                 </Text>
-                            </View>
-                            <View style={styles.informacion}>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    navigation.navigate('InformacionTecnica')
+                                }}
+                                style={styles.informacion}>
                                 <TouchableOpacity
                                     onPress={() => {
                                         navigation.navigate('InformacionTecnica')
@@ -231,10 +255,14 @@ export default function MainHeader({ navigation, props }) {
                                 <Text style={styles.navItemStyle}>
                                     Información técnica
                                 </Text>
-                            </View>
+                            </TouchableOpacity>
                         </View>
                         <View>
-                            <View style={styles.infoproduct}>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    navigation.navigate('WelcomeSlides')
+                                }}
+                                style={styles.infoproduct}>
                                 <TouchableOpacity
                                     onPress={() => {
                                         navigation.navigate('WelcomeSlides')
@@ -246,7 +274,7 @@ export default function MainHeader({ navigation, props }) {
                                 <Text style={styles.navItemStyle}>
                                     Info de producto
                                 </Text>
-                            </View>
+                            </TouchableOpacity>
                         </View>
                     </ScrollView>
                     <View style={styles.footerContainer}>
@@ -488,7 +516,7 @@ export default function MainHeader({ navigation, props }) {
                             <ActivityIndicator
                                 size="large"
                                 color={COLORS.primary}
-                                style={{ marginTop : 250, alignItems: 'center', justifyContent: 'center', alignSelf : 'center', flex: 1 }}
+                                style={{ marginTop: 250, alignItems: 'center', justifyContent: 'center', alignSelf: 'center', flex: 1 }}
                             />
                         }
                     </ScrollView>

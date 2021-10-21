@@ -24,9 +24,9 @@ export default function Politicas({ navigation, props }) {
     const secciones = useReduxSelector((state) => state.user.secciones);
     const token = useReduxSelector((state) => state.user.access_token);
     const dispatch = useReduxDispatch();
-    
+
     useEffect(() => {
-        loadSecciones(token)
+        loadSecciones()
             .then(response => {
                 dispatch(guardarSeccionesPerfil(response.data));
             })

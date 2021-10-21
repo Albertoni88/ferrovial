@@ -210,30 +210,9 @@ export const loadIncidencias = async (access_token) => {
         });
 
 }
-export const loadSecciones = async (access_token) => {
+export const loadSecciones = async (access_token) => {   
 
-    // axios.get(URL_SERVER + 'rest/secciones_textuales?_format=json',
-    //         {
-    //             headers: {
-    //                 'Authorization': 'Bearer ' + token,
-    //             }
-    //         }
-    //     )
-    //         .then(async response => {
-    //             if (response.status === 200) {
-    //                 dispatch(guardarSeccionesPerfil(response.data));
-    //             }
-    //         })
-    //         .catch(error => {
-    //         });
-
-    return axios.get(URL_SERVER + 'rest/secciones_textuales?_format=json',
-        {
-            headers: {
-                'Authorization': 'Bearer ' + access_token,
-            }
-        }
-    )
+    return axios.get(URL_SERVER + 'rest/secciones_textuales?_format=json')
         .then(response => {
             return response
         })
