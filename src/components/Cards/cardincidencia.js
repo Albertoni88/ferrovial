@@ -396,21 +396,6 @@ const styles = StyleSheet.create({
         marginTop: -10,
         // borderWidth : 3
     },
-    containerSVG1: {
-        //borderStyle: "solid",
-        // left: 2,
-        zIndex: 1111111,
-        width: 30,
-        height: 50,
-        backgroundColor: 'white',
-        marginLeft: 150,
-        // alignContent: 'center',
-        // alignItems: 'center',
-        // alignSelf: 'center',
-        // justifyContent: 'center',
-        //borderColor: COLORS.primary,
-        marginTop: 10
-    },
     containerSVGheart: {
         alignContent: 'center',
         justifyContent: 'center',
