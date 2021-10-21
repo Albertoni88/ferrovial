@@ -30,26 +30,27 @@ export default function HeaderCrearIncidencia({ navigation }) {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <Text style={{
-                    width: 280,
-                    height: 27,
-                    fontFamily: 'nunito-bold',
-                    fontSize: 20,
-                    fontWeight: "bold",
-                    fontStyle: "normal",
-                    letterSpacing: 0,
-                    marginLeft: 85,
-                    textAlign: "left",
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    alignSelf: 'center',
-                    color: 'white',
-                    marginTop:50,
-                    //position: 'absolute'
-                }}>
-                    Crear incidencia
-                </Text>
-                {/* <Text style={{
+            </TouchableOpacity>
+            <Text style={{
+                width: 280,
+                height: 27,
+                fontFamily: 'nunito-bold',
+                fontSize: 20,
+                fontWeight: "bold",
+                fontStyle: "normal",
+                letterSpacing: 0,
+                marginLeft: 85,
+                textAlign: "center",
+                alignItems: 'center',
+                justifyContent: 'center',
+                alignSelf: 'center',
+                color: 'white',
+                marginTop: 50,
+                position: 'absolute'
+            }}>
+                Crear incidencia
+            </Text>
+            {/* <Text style={{
                     flex : 0.35,
                     //width: 76,
                     height: 27,
@@ -81,7 +82,7 @@ export default function HeaderCrearIncidencia({ navigation }) {
                 }}>
                     /1
                 </Text> */}
-            </TouchableOpacity>
+
 
         </View>
     )
