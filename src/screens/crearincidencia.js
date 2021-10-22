@@ -10,7 +10,7 @@ import MapView, {
 } from 'react-native-maps';
 import * as Location from 'expo-location';
 
-import { Button, ScrollView, ActivityIndicator, Dimensions, Image, TextInput, View, Text, TouchableOpacity, Modal, Alert, Platform, StyleSheet } from 'react-native';
+import { Button, ScrollView, Permission, ActivityIndicator, Dimensions, Image, ImageBackground, TextInput, View, Text, TouchableOpacity, Modal, Alert, Platform, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import HeaderCrearIncidencia from '../components/headerCrearIncidencia';
 import { Camera } from 'expo-camera';
@@ -100,7 +100,7 @@ export default function CrearIncidencia({ navigation, props }) {
                 "tipemime": "image/png",
                 "base64": photo
             })
-
+            console.log("photo ", photo);
 
             guardarImagen(token, imagenes).then(response => {
                 if (response.status === 200) {
@@ -155,6 +155,7 @@ export default function CrearIncidencia({ navigation, props }) {
                     setIsPreview(false);
                     showCamera(false);
                     setPhoto(photo.base64);
+                    console.log("photo ", photo.base64);
                     setTomadaFoto(true);
                 });
         }
@@ -170,12 +171,12 @@ export default function CrearIncidencia({ navigation, props }) {
     const onCameraReady = () => {
         setIsCameraReady(true);
     };
-    if (hasPermission === null) {
-        return <View />;
-    }
-    if (hasPermission === false) {
-        return <Text style={styles.text}>No access to camera</Text>;
-    }
+    // if (hasPermission === null) {
+    //     return <View />;
+    // }
+    // if (hasPermission === false) {
+    //     return <Text style={styles.text}>No access to camera</Text>;
+    // }
     const switchCamera = () => {
         if (isPreview) {
             return;
@@ -287,8 +288,31 @@ export default function CrearIncidencia({ navigation, props }) {
                         </Text>
                         <View
 
-                            style={styles.descripcion}
+                            style={ tomadaFoto === true ? styles.descripcion1 : styles.descripcion}
                         >
+                            {
+                                tomadaFoto === true &&
+                                // <AntDesign name='checkcircleo' size={32} color={'rgba(0, 0, 0, 0.26)'} />
+                                <View style={{
+                                    position: 'absolute',
+                                    width: '100%',
+                                    height: '100%',
+                                    // flex : 1
+                                }}>
+                                    <ImageBackground style={{
+                                        width: '100%',
+                                        height: '100%',
+                                        resizeMode: 'cover',
+                                        borderRadius : 5
+                                        // flex: 1
+                                    }}
+                                    imageStyle = {{ borderRadius : 8, width : '100%', height : '100%' }}
+                                        // source={{ uri: photo }} />
+                                        source={{ uri: `data:image/jpeg;base64,${photo}` }}
+
+                                    />
+                                </View>
+                            }
                             {/* <Icon
                             style={{
                                 justifyContent: 'center',
@@ -316,19 +340,21 @@ export default function CrearIncidencia({ navigation, props }) {
                                 //justifyContent : 'center',
                                 alignSelf: 'center'
                             }}>
-                                <TouchableOpacity
-                                    
-                                    onPress={() => {
-                                        showCamera(true);
-                                    }}
-                                >
-                                    <SVG nombre={'Camara'} width={73} height={58} />
-                                </TouchableOpacity>
+                                {
+                                    tomadaFoto === false &&
+                                    < TouchableOpacity
+                                        disabled = {hasPermission === null || hasPermission === false}
+                                        onPress={() => {
+                                            //if(hasPermission ===)                                            
+                                            showCamera(true);
+                                        }}
+                                    >
+
+                                        <SVG nombre={'Camara'} width={73} height={58} />
+                                    </TouchableOpacity>
+                                }
+
                             </View>
-                            {
-                                tomadaFoto === true &&
-                                <AntDesign name='checkcircleo' size={32} color={'rgba(0, 0, 0, 0.26)'} />
-                            }
                         </View>
                         <View
                         //style={styles.localizacion}
@@ -623,6 +649,8 @@ export default function CrearIncidencia({ navigation, props }) {
 
                         <MapView.Marker
                             onDragEnd={(e) => {
+                                console.log("e.nativeEvent ", e.nativeEvent);
+                                
                                 setLocation({
                                     "coords": {
                                         "latitude": e.nativeEvent.coordinate.latitude,
@@ -654,7 +682,7 @@ export default function CrearIncidencia({ navigation, props }) {
                     </MapView>
                 </View>
             }
-        </View>
+        </View >
     );
 }
 const styles = StyleSheet.create({
@@ -738,7 +766,32 @@ const styles = StyleSheet.create({
     descripcion: {
         paddingLeft: 10,
         paddingRight: 8,
-        paddingTop : 14,
+        paddingTop: 14,
+        // width: 345,
+        // height: 157,
+        width: (windowWidth * 92) / 100,
+        height: (windowHeight * 19.3) / 100,
+        borderRadius: 8,
+        backgroundColor: 'white',
+        shadowColor: "rgba(0, 0, 0, 0.05)",
+        shadowOffset: {
+            width: 0,
+            height: 5
+        },
+        shadowRadius: 15,
+        shadowOpacity: 1,
+        borderStyle: "solid",
+        borderWidth: 1,
+        borderColor: "#dfdfdf",
+        marginTop: 4,
+        marginLeft: 15,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    descripcion1: {
+        paddingLeft: 0,
+        paddingRight: 0,
+        paddingTop: 0,
         // width: 345,
         // height: 157,
         width: (windowWidth * 92) / 100,
@@ -789,7 +842,7 @@ const styles = StyleSheet.create({
     },
     siguienteTouch: {
         marginTop: 145,
-        position : 'absolute',
+        position: 'absolute',
         alignItems: 'center',
         justifyContent: 'center',
         alignSelf: 'center',
@@ -806,8 +859,8 @@ const styles = StyleSheet.create({
         shadowOpacity: 1
     },
     salir: {
-        position : 'absolute',
-        bottom : -150,
+        position: 'absolute',
+        bottom: -150,
         width: 83,
         height: 44,
         borderRadius: 22,

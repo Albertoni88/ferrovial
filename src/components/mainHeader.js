@@ -369,33 +369,7 @@ export default function MainHeader({ navigation, props }) {
                             }}
                             onPress={toggleOpen}
                         >
-                            <View
-                                style={{ flexDirection: 'column' }}>
-                                <View style={{
-                                    width: 18,
-                                    height: 1,
-                                    borderStyle: "solid",
-                                    borderWidth: 2,
-                                    borderColor: COLORS.primary,
-                                    // marginBottom : (windowHeight * 0.98) /100
-                                    marginBottom: 5
-                                }} />
-                                <View style={{
-                                    width: 18,
-                                    height: 1,
-                                    borderStyle: "solid",
-                                    borderWidth: 2,
-                                    borderColor: COLORS.primary,
-                                    marginBottom: 5
-                                }} />
-                                <View style={{
-                                    width: 18,
-                                    height: 1,
-                                    borderStyle: "solid",
-                                    borderWidth: 2,
-                                    borderColor: COLORS.primary
-                                }} />
-                            </View>
+                            <SVG nombre={'Menu'} width={20} height={20} />
                         </TouchableOpacity>
 
                         <Text style={{
@@ -489,12 +463,18 @@ export default function MainHeader({ navigation, props }) {
             {(showBody && map === false) &&
                 <View style={{ flex: 1 }}>
                     <ScrollView
-                        onScrollEndDrag={() => {
-                            setEnd(true);
-                        }}
-                        onScrollBeginDrag={() => {
-                            setEnd(false);
-                        }}
+                        // onScrollEndDrag={() => {
+                        //     setEnd(true);
+                        // }}
+                        // onTouchStart={() => {
+                        //     setEnd(true);
+                        // }}
+                        // onTouchEnd={() => {
+                        //     setEnd(true);
+                        // }}
+                        // onScrollBeginDrag={() => {
+                        //     setEnd(false);
+                        // }}
                         style={{ flex: 1, opacity: find === false ? 1 : 0.3, }}
                         persistentScrollbar={true}
                         indicatorStyle={{ color: 'grey', }}
@@ -537,50 +517,50 @@ export default function MainHeader({ navigation, props }) {
 
                 <View style={{ position: 'absolute', bottom: 0, height: 100, width: '100%', zIndex: 0, backgroundColor: 'transparent' }}>
                     {/* <LinearGradient
-                        colors={['transparent', COLORS.PALE_GREY,end === true ? COLORS.PALE_GREY : 'transparent']}
-                        start={{ x: 0, y: 0.5 }}
-                        end={{ x: 0, y: 1.5 }}
+                        colors={['transparent', 'transparent', end === true ? 'transparent' : COLORS.PALE_GREY]}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 0, y: 1 }}
                         style={styles.linearGradient}
                     > */}
-                    <TouchableOpacity
-                        onPress={() => {
-                            navigation.navigate('CrearIncidencia');
-                        }}
-                        style={{
-                            justifyContent: 'center',
-                            alignSelf: 'center',
-                            position: 'absolute',
-                            bottom: 20,
-                            alignItems: 'center',
-                            zIndex: 11111,
-                            width: 198,
-                            height: 44,
-                            borderRadius: 22,
-                            backgroundColor: COLORS.primary,
-                            shadowColor: "rgba(0, 0, 0, 0.1)",
-                            shadowOffset: {
-                                width: 0,
-                                height: 4
-                            },
-                            shadowRadius: 10,
-                            shadowOpacity: 1
-                        }}>
-                        <Text style={{
-                            textAlign: 'center',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            alignSelf: 'center',
-                            width: Platform.OS === 'ios' ? 155 : 175,
-                            height: 24,
-                            fontFamily: 'nunito-bold',
-                            fontSize: 18,
-                            fontWeight: "bold",
-                            fontStyle: "normal",
-                            letterSpacing: 0.45,
-                            textAlign: "center",
-                            color: 'white'
-                        }}> Crear incidencia </Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => {
+                                navigation.navigate('CrearIncidencia');
+                            }}
+                            style={{
+                                justifyContent: 'center',
+                                alignSelf: 'center',
+                                position: 'absolute',
+                                bottom: 20,
+                                alignItems: 'center',
+                                zIndex: 11111,
+                                width: 198,
+                                height: 44,
+                                borderRadius: 22,
+                                backgroundColor: COLORS.primary,
+                                shadowColor: "rgba(0, 0, 0, 0.1)",
+                                shadowOffset: {
+                                    width: 0,
+                                    height: 4
+                                },
+                                shadowRadius: 10,
+                                shadowOpacity: 1
+                            }}>
+                            <Text style={{
+                                textAlign: 'center',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                alignSelf: 'center',
+                                width: Platform.OS === 'ios' ? 155 : 175,
+                                height: 24,
+                                fontFamily: 'nunito-bold',
+                                fontSize: 18,
+                                fontWeight: "bold",
+                                fontStyle: "normal",
+                                letterSpacing: 0.45,
+                                textAlign: "center",
+                                color: 'white'
+                            }}> Crear incidencia </Text>
+                        </TouchableOpacity>
                     {/* </LinearGradient> */}
                 </View>
             }
