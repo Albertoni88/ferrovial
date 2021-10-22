@@ -10,7 +10,7 @@ import MapView, {
 } from 'react-native-maps';
 import * as Location from 'expo-location';
 
-import { Button, ScrollView, ActivityIndicator, Dimensions, Image, ImageBackground, TextInput, View, Text, TouchableOpacity, Modal, Alert, Platform, StyleSheet } from 'react-native';
+import { Button, ScrollView, Permission, ActivityIndicator, Dimensions, Image, ImageBackground, TextInput, View, Text, TouchableOpacity, Modal, Alert, Platform, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import HeaderCrearIncidencia from '../components/headerCrearIncidencia';
 import { Camera } from 'expo-camera';
@@ -171,12 +171,12 @@ export default function CrearIncidencia({ navigation, props }) {
     const onCameraReady = () => {
         setIsCameraReady(true);
     };
-    if (hasPermission === null) {
-        return <View />;
-    }
-    if (hasPermission === false) {
-        return <Text style={styles.text}>No access to camera</Text>;
-    }
+    // if (hasPermission === null) {
+    //     return <View />;
+    // }
+    // if (hasPermission === false) {
+    //     return <Text style={styles.text}>No access to camera</Text>;
+    // }
     const switchCamera = () => {
         if (isPreview) {
             return;
@@ -343,8 +343,9 @@ export default function CrearIncidencia({ navigation, props }) {
                                 {
                                     tomadaFoto === false &&
                                     < TouchableOpacity
-
+                                        disabled = {hasPermission === null || hasPermission === false}
                                         onPress={() => {
+                                            //if(hasPermission ===)                                            
                                             showCamera(true);
                                         }}
                                     >
