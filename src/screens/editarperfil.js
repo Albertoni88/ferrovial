@@ -302,8 +302,4 @@ const styles = StyleSheet.create({
     borderColor: "white",
     borderWidth: 2,
   },
-<<<<<<< HEAD
 });
-=======
-});
->>>>>>> cd59d4856ec89caba9da6482c501e1af35e03c21
