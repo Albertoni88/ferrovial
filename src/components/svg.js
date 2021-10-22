@@ -209,6 +209,15 @@ export default function SVG({ navigation, width, height, nombre }) {
                     styles
                 />
             }
+            {
+                nombre === 'Menu' &&
+                <SvgUri
+                    width={width}
+                    height={height}
+                    source={require('../assets/menu.svg')}
+                    styles
+                />
+            }
         </View>
     )
 

@@ -369,33 +369,7 @@ export default function MainHeader({ navigation, props }) {
                             }}
                             onPress={toggleOpen}
                         >
-                            <View
-                                style={{ flexDirection: 'column' }}>
-                                <View style={{
-                                    width: 18,
-                                    height: 1,
-                                    borderStyle: "solid",
-                                    borderWidth: 2,
-                                    borderColor: COLORS.primary,
-                                    // marginBottom : (windowHeight * 0.98) /100
-                                    marginBottom: 5
-                                }} />
-                                <View style={{
-                                    width: 18,
-                                    height: 1,
-                                    borderStyle: "solid",
-                                    borderWidth: 2,
-                                    borderColor: COLORS.primary,
-                                    marginBottom: 5
-                                }} />
-                                <View style={{
-                                    width: 18,
-                                    height: 1,
-                                    borderStyle: "solid",
-                                    borderWidth: 2,
-                                    borderColor: COLORS.primary
-                                }} />
-                            </View>
+                            <SVG nombre={'Menu'} width={20} height={20} />
                         </TouchableOpacity>
 
                         <Text style={{
