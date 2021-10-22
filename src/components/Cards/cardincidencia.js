@@ -14,6 +14,7 @@ import {
     getCSRFToken,
     setFavoritoRdux
 } from '../../store/actions/userActions';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -67,53 +68,60 @@ export default function CarIncidencia({ navigation, props, incidencia, indice })
                 onPress={() => {
                     navigation.navigate('IncidenciaDetalles', { incidencia: incidencia, indice: indice });
                 }}>
+
+
                 <ImageBackground
-                    // source={require('../../assets/1.png')}
                     source={{ uri: incidencia.imagen }}
                     style={styles.imageContainer}
                     imageStyle={styles.image}>
-                    <View style={{ flexDirection: 'row' }}>
-                        <View style={{
-                            flexDirection: 'row',
-                            width: 95,
-                            height: 24,
-                            opacity: 0.9,
-                            borderRadius: 12,
-                            backgroundColor: COLORS.primary,
-                            alignSelf: 'center',
-                            marginLeft: 8,
-                            marginTop: 8
-                        }}>
-                            <Feather
-                                onPress={() => {
-
-                                }}
-                                style={{
-                                    alignSelf: 'center',
-                                    marginLeft: 8
-                                }}
-                                name="calendar"
-                                color="white"
-                                size={15}
-                            />
-                            <Text style={{
-                                width: 65,
-                                height: 14,
-                                fontFamily: "nunito-regular",
-                                fontSize: 10,
-                                fontWeight: "normal",
-                                fontStyle: "normal",
-                                letterSpacing: 0,
-                                color: 'white',
-                                textAlign: 'center',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                alignSelf: 'center'
+                    {/* <LinearGradient
+                        colors={['transparent', 'transparent', 'white']}
+                        start={{ x: 0, y: 0.6 }}
+                        end={{ x: 0, y: 1 }}
+                        style={styles.linearGradient}
+                    > */}
+                        <View style={{ flexDirection: 'row' }}>
+                            <View style={{
+                                flexDirection: 'row',
+                                width: 95,
+                                height: 24,
+                                opacity: 0.9,
+                                borderRadius: 12,
+                                backgroundColor: COLORS.primary,
+                                alignSelf: 'center',
+                                marginLeft: 8,
+                                marginTop: 8
                             }}>
-                                {incidencia?.created}
-                            </Text>
-                        </View>
-                        {/* {
+                                <Feather
+                                    onPress={() => {
+
+                                    }}
+                                    style={{
+                                        alignSelf: 'center',
+                                        marginLeft: 8
+                                    }}
+                                    name="calendar"
+                                    color="white"
+                                    size={15}
+                                />
+                                <Text style={{
+                                    width: 65,
+                                    height: 14,
+                                    fontFamily: "nunito-regular",
+                                    fontSize: 10,
+                                    fontWeight: "normal",
+                                    fontStyle: "normal",
+                                    letterSpacing: 0,
+                                    color: 'white',
+                                    textAlign: 'center',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    alignSelf: 'center'
+                                }}>
+                                    {incidencia?.created}
+                                </Text>
+                            </View>
+                            {/* {
                             favoritosRedux[indice] === 0 &&
                             <TouchableOpacity
                                 onPress={() => {
@@ -133,7 +141,8 @@ export default function CarIncidencia({ navigation, props, incidencia, indice })
                                 <SVG nombre={'CorazonRelleno'} width={25} height={25} />
                             </TouchableOpacity>
                         } */}
-                    </View>
+                        </View>
+                    {/* </LinearGradient> */}
                 </ImageBackground>
             </TouchableOpacity>
             <View style={{ flexDirection: 'row' }}>
@@ -173,11 +182,11 @@ export default function CarIncidencia({ navigation, props, incidencia, indice })
                     {incidencia?.autor_username}
                 </Text> */}
                 <Text style={{
-                    position : 'absolute',
+                    position: 'absolute',
                     fontSize: 15,
                     marginTop: 0,
-                    marginLeft : 40,
-                    zIndex : 11111,
+                    marginLeft: 40,
+                    zIndex: 11111,
                     fontFamily: "nunito-regular",
                     fontSize: 15,
                     fontWeight: "normal",
@@ -378,6 +387,16 @@ export default function CarIncidencia({ navigation, props, incidencia, indice })
     );
 }
 const styles = StyleSheet.create({
+    linearGradient: {
+        //flex: 1,
+        height: 100,
+        // borderColor: 'red',
+        // borderWidth: 3,
+        zIndex: 111111,
+        height: (windowHeight * 31.65) / 100,
+        width: (windowWidth * 95.7) / 100,
+        alignSelf: 'center'
+    },
     containerSVG: {
         //borderStyle: "solid",
         // left: 2,
