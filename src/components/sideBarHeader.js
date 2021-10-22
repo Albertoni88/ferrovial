@@ -51,7 +51,6 @@ export default function SideBarHeader({ texto, navigation }) {
 const styles = StyleSheet.create({
     containerSVGBack: {
         borderStyle: "solid",
-        //left: -15,
         zIndex: 1111111,
         width: 15,
         height: 15,
@@ -59,22 +58,11 @@ const styles = StyleSheet.create({
         marginTop: 12
     },
     goBack: {
-        //position: 'absolute',
-        // marginTop: 30,
-        // marginLeft: 12,
         marginLeft: 12,
-        //marginTop: 30,
         width: 20,
         height: 20,
     },
-    containerWebView: {
-        // marginTop: 20,
-        // width: '100%',
-        // height: 55,
-        // zIndex: 9999,
-        // backgroundColor: 'brown',
-        // borderColor : 'blue',
-        // borderWidth : 3
+    containerWebView: { 
 
         width: '100%',
         height: 108,
