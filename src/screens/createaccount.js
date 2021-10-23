@@ -118,7 +118,7 @@ export default function CreateAccount({ navigation, props }) {
     return (
         // <SafeAreaView style={{ flex: 1 }}>
         <KeyboardAwareScrollView
-            style={{ backgroundColor: '#4c69a5' }}
+            style={{ backgroundColor: 'transparent' }}
             resetScrollToCoords={{ x: 0, y: 0 }}
             contentContainerStyle={{ flex: 1 }}
             scrollEnabled={false}

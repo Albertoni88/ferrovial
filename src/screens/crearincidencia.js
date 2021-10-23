@@ -17,6 +17,7 @@ import HeaderCrearIncidencia from '../components/headerCrearIncidencia';
 import { Camera } from 'expo-camera';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import { COLORS } from '../constants';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
@@ -43,6 +44,8 @@ const CAPTURE_SIZE = Math.floor(WINDOW_HEIGHT * 0.08);
 export default function CrearIncidencia({ navigation, props }) {
 
     //const [hasPermission, setHasPermission] = useState(null);
+
+    const [habilitar, setHabilitar] = useState(false);
     const [type, setType] = useState(Camera.Constants.Type.back);
     const [camera, showCamera] = useState(false);
     const [creada, setCreada] = useState(false);
@@ -80,18 +83,18 @@ export default function CrearIncidencia({ navigation, props }) {
     const NY = {
         lat: 40.7809261,
         lng: -73.9637594
-      };
+    };
     useEffect(() => {
         //Geocoder.init("AIzaSyAqkCacdKeQKy_A3lmqlrZforWvMTLtp64");
-//Geocoder.fallbackToGoogle("AIzaSyAqkCacdKeQKy_A3lmqlrZforWvMTLtp64");
+        //Geocoder.fallbackToGoogle("AIzaSyAqkCacdKeQKy_A3lmqlrZforWvMTLtp64");
 
-        
-          
-          Geocoder.geocodePosition(NY).then(res => {
-              console.log("res ", res)
-              // res is an Array of geocoding object (see below)
-          })
-          .catch(err => console.log(err))
+
+
+        //   Geocoder.geocodePosition(NY).then(res => {
+        //       console.log("res ", res)
+        //       // res is an Array of geocoding object (see below)
+        //   })
+        //   .catch(err => console.log(err))
         // Geocoder.from(21.84, -78.76194)
         // .then(json => {
         // 	var location = json.results[0].geometry.location;
@@ -103,7 +106,7 @@ export default function CrearIncidencia({ navigation, props }) {
         // .then(json => {
         //     console.log(json);
         //     var addressComponent = json.results[0].address_components;
-            
+
         //     console.log(addressComponent);
         // })
         // .catch(error => console.warn(error));
@@ -129,6 +132,7 @@ export default function CrearIncidencia({ navigation, props }) {
     };
 
     const guardarInc = async () => {
+        setHabilitar(true)
         var d = new Date();
         var n = d.getMilliseconds();
         const generatedNombre = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) + n;
@@ -176,11 +180,13 @@ export default function CrearIncidencia({ navigation, props }) {
                                         data = temporal;
                                         //alert("data " + JSON.stringify(data))
                                         dispatch(guardarIncidenciaRedux(data));
+                                        setHabilitar(false)
                                     }
                                 })
                         }
                     });
                 } else {
+                    setHabilitar(false)
                     alert("Hubo error al subir la imagen");
                 }
             });
@@ -238,149 +244,155 @@ export default function CrearIncidencia({ navigation, props }) {
             <HeaderCrearIncidencia were={were} closemap={closeMap} navigation={navigation} />
             {
                 mapa === false &&
-                <ScrollView style={{ flex: 1 }}>
-                    <View style={{}}>
-                        <Text style={{
-                            textAlign: 'left',
-                            marginTop: (windowHeight * 10) / 100,
-                            marginLeft: (windowWidth * 4.3) / 100,
-                            width: 55,
-                            height: 22,
-                            fontFamily: 'nunito-semibold',
-                            fontSize: 16,
-                            fontWeight: "600",
-                            fontStyle: "normal",
-                            letterSpacing: 0,
-                            color: 'white',
-
-
-                        }}>
-                            *Título
-                        </Text>
-                        <TextInput
-                            onSubmitEditing={() => { dos.focus(); }}
-                            blurOnSubmit={false}
-                            returnKeyType="next"
-
-                            value={titulo}
-                            placeholder={'Pon un título corto y conciso...'}
-                            placeholderTextColor={COLORS.primary}
-                            style={styles.inputtitulo}
-                            placeholderStyle={{
-                                width: 342,
-                                height: 17,
-                                fontSize: 14,
-                                fontWeight: "normal",
+                <KeyboardAwareScrollView
+                    style={{ backgroundColor: 'transparent' }}
+                    resetScrollToCoords={{ x: 0, y: 0 }}
+                    contentContainerStyle={{ flex: 1 }}
+                    scrollEnabled={false}
+                >
+                    <ScrollView style={{ flex: 1 }}>
+                        <View style={{}}>
+                            <Text style={{
+                                textAlign: 'left',
+                                marginTop: (windowHeight * 10) / 100,
+                                marginLeft: (windowWidth * 4.3) / 100,
+                                width: 55,
+                                height: 22,
+                                fontFamily: 'nunito-semibold',
+                                fontSize: 16,
+                                fontWeight: "600",
                                 fontStyle: "normal",
                                 letterSpacing: 0,
-                                color: "#9d9d9d"
-                            }}
-                            onChangeText={(titulo) => {
-                                setTitulo(titulo)
-                            }}
-                        />
-                        <Text style={{
-                            // marginTop: 15,
-                            // fontSize: 15,
-                            // fontWeight: 'bold',
-                            // color: 'white'
-                            textAlign: 'left',
-                            marginTop: (windowHeight * 1.47) / 100,
-                            marginLeft: (windowWidth * 4.3) / 100,
-                            width: 95,
-                            height: 22,
-                            fontFamily: 'nunito-semibold',
-                            fontSize: 16,
-                            fontWeight: "600",
-                            fontStyle: "normal",
-                            letterSpacing: 0,
-                            color: 'white',
-                        }}>
-                            *Descripción
-                        </Text>
-                        <TextInput
-                            ref={(input) => { dos = input; }}
-                            // onBlur={()=>{
-                            //     if(descripcion === ''){
-                            //         setDescripcion('Describe la incidencia de forma clara...') 
-                            //         dos.current.reset();                            
-                            //         alert("des " + descripcion)
-                            //     }
-                            //     //tres.focus();
-                            // }}
-                            onSubmitEditing={() => { 
-                                // if(descripcion === ''){
-                                //     setDescripcion('Describe la incidencia de forma clara...')                             
-                                // }                  
-                                // dos.clear();              
-                                // setDescripcion('Describe la incidencia de forma clara...') 
-                                tres.focus(); 
-                            }}
-                            blurOnSubmit={false}
-                            returnKeyType="next"
+                                color: 'white',
 
-                            value={descripcion}
-                            multiline={true}
-                            numberOfLines={3}
-                            placeholder={'Describe la incidencia de forma clara...'}
-                            placeholderTextColor={COLORS.primary}
-                            style={styles.descripcion}
-                            onChangeText={(descripcion) => {
-                                setDescripcion(descripcion)
-                            }}
-                        />
-                        <Text style={{
-                            // marginTop: 15,
-                            // fontSize: 15,
-                            // fontWeight: 'bold',
-                            // color: 'white'
-                            width: 115,
-                            height: 22,
-                            fontFamily: 'nunito-semibold',
-                            fontSize: 16,
-                            fontWeight: "600",
-                            fontStyle: "normal",
-                            letterSpacing: 0,
-                            color: 'white',
-                            marginTop: (windowHeight * 1.47) / 100,
-                            marginLeft: (windowWidth * 4.3) / 100,
-                        }}>
-                            *Sube una foto
-                        </Text>
-                        <View
 
-                            style={tomadaFoto === true ? styles.descripcion1 : styles.descripcion}
-                        >
-                            {
-                                tomadaFoto === true &&
-                                // <AntDesign name='checkcircleo' size={32} color={'rgba(0, 0, 0, 0.26)'} />
-                                <View
-                                    // ref={(input) => { tres = input; }}
-                                    // onSubmitEditing={() => { cuatro.focus(); }}
-                                    // blurOnSubmit={false}
-                                    // returnKeyType="next"
+                            }}>
+                                *Título
+                            </Text>
+                            <TextInput
+                                onSubmitEditing={() => { dos.focus(); }}
+                                blurOnSubmit={false}
+                                returnKeyType="next"
 
-                                    style={{
-                                        position: 'absolute',
-                                        width: '100%',
-                                        height: '100%',
-                                        // flex : 1
-                                    }}>
-                                    <ImageBackground style={{
-                                        width: '100%',
-                                        height: '100%',
-                                        resizeMode: 'cover',
-                                        borderRadius: 5
-                                        // flex: 1
-                                    }}
-                                        imageStyle={{ borderRadius: 8, width: '100%', height: '100%' }}
-                                        // source={{ uri: photo }} />
-                                        source={{ uri: `data:image/jpeg;base64,${photo}` }}
+                                value={titulo}
+                                placeholder={'Pon un título corto y conciso...'}
+                                placeholderTextColor={COLORS.primary}
+                                style={styles.inputtitulo}
+                                placeholderStyle={{
+                                    width: 342,
+                                    height: 17,
+                                    fontSize: 14,
+                                    fontWeight: "normal",
+                                    fontStyle: "normal",
+                                    letterSpacing: 0,
+                                    color: "#9d9d9d"
+                                }}
+                                onChangeText={(titulo) => {
+                                    setTitulo(titulo)
+                                }}
+                            />
+                            <Text style={{
+                                // marginTop: 15,
+                                // fontSize: 15,
+                                // fontWeight: 'bold',
+                                // color: 'white'
+                                textAlign: 'left',
+                                marginTop: (windowHeight * 1.47) / 100,
+                                marginLeft: (windowWidth * 4.3) / 100,
+                                width: 95,
+                                height: 22,
+                                fontFamily: 'nunito-semibold',
+                                fontSize: 16,
+                                fontWeight: "600",
+                                fontStyle: "normal",
+                                letterSpacing: 0,
+                                color: 'white',
+                            }}>
+                                *Descripción
+                            </Text>
+                            <TextInput
+                                ref={(input) => { dos = input; }}
+                                // onBlur={()=>{
+                                //     if(descripcion === ''){
+                                //         setDescripcion('Describe la incidencia de forma clara...') 
+                                //         dos.current.reset();                            
+                                //         alert("des " + descripcion)
+                                //     }
+                                //     //tres.focus();
+                                // }}
+                                onSubmitEditing={() => {
+                                    // if(descripcion === ''){
+                                    //     setDescripcion('Describe la incidencia de forma clara...')                             
+                                    // }                  
+                                    // dos.clear();              
+                                    // setDescripcion('Describe la incidencia de forma clara...') 
+                                    tres.focus();
+                                }}
+                                blurOnSubmit={false}
+                                returnKeyType="next"
 
-                                    />
-                                </View>
-                            }
-                            {/* <Icon
+                                value={descripcion}
+                                multiline={true}
+                                numberOfLines={3}
+                                placeholder={'Describe la incidencia de forma clara...'}
+                                placeholderTextColor={COLORS.primary}
+                                style={styles.descripcion}
+                                onChangeText={(descripcion) => {
+                                    setDescripcion(descripcion)
+                                }}
+                            />
+                            <Text style={{
+                                // marginTop: 15,
+                                // fontSize: 15,
+                                // fontWeight: 'bold',
+                                // color: 'white'
+                                width: 115,
+                                height: 22,
+                                fontFamily: 'nunito-semibold',
+                                fontSize: 16,
+                                fontWeight: "600",
+                                fontStyle: "normal",
+                                letterSpacing: 0,
+                                color: 'white',
+                                marginTop: (windowHeight * 1.47) / 100,
+                                marginLeft: (windowWidth * 4.3) / 100,
+                            }}>
+                                *Sube una foto
+                            </Text>
+                            <View
+
+                                style={tomadaFoto === true ? styles.descripcion1 : styles.descripcion}
+                            >
+                                {
+                                    tomadaFoto === true &&
+                                    // <AntDesign name='checkcircleo' size={32} color={'rgba(0, 0, 0, 0.26)'} />
+                                    <View
+                                        // ref={(input) => { tres = input; }}
+                                        // onSubmitEditing={() => { cuatro.focus(); }}
+                                        // blurOnSubmit={false}
+                                        // returnKeyType="next"
+
+                                        style={{
+                                            position: 'absolute',
+                                            width: '100%',
+                                            height: '100%',
+                                            // flex : 1
+                                        }}>
+                                        <ImageBackground style={{
+                                            width: '100%',
+                                            height: '100%',
+                                            resizeMode: 'cover',
+                                            borderRadius: 5
+                                            // flex: 1
+                                        }}
+                                            imageStyle={{ borderRadius: 8, width: '100%', height: '100%' }}
+                                            // source={{ uri: photo }} />
+                                            source={{ uri: `data:image/jpeg;base64,${photo}` }}
+
+                                        />
+                                    </View>
+                                }
+                                {/* <Icon
                             style={{
                                 justifyContent: 'center',
                                 alignItems: 'center',
@@ -399,81 +411,81 @@ export default function CrearIncidencia({ navigation, props }) {
                             name="camera-outline" size={75}
                             color={'rgba(0, 0, 0, 0.26)'}
                         /> */}
-                            <View                             
-                            style={{
-                                width: 73,
-                                height: 58,
-                                //alignContent : 'center',
-                                alignItems: 'center',
-                                //justifyContent : 'center',
-                                alignSelf: 'center'
-                            }}>
-                                {
-                                    tomadaFoto === false &&
+                                <View
+                                    style={{
+                                        width: 73,
+                                        height: 58,
+                                        //alignContent : 'center',
+                                        alignItems: 'center',
+                                        //justifyContent : 'center',
+                                        alignSelf: 'center'
+                                    }}>
+                                    {
+                                        tomadaFoto === false &&
 
-                                    < TouchableOpacity
-                                        ref={(input) => { tres = input; }}
-                                        onSubmitEditing={() => { cuatro.focus(); }}
-                                        blurOnSubmit={false}
-                                        returnKeyType="next"
+                                        < TouchableOpacity
+                                            ref={(input) => { tres = input; }}
+                                            onSubmitEditing={() => { cuatro.focus(); }}
+                                            blurOnSubmit={false}
+                                            returnKeyType="next"
 
-                                        disabled={hasPermission === null || hasPermission === false}
-                                        onPress={() => {
-                                            //if(hasPermission ===)                                            
-                                            showCamera(true);
-                                        }}
-                                    >
+                                            disabled={hasPermission === null || hasPermission === false}
+                                            onPress={() => {
+                                                //if(hasPermission ===)                                            
+                                                showCamera(true);
+                                            }}
+                                        >
 
-                                        <SVG nombre={'Camara'} width={73} height={58} />
-                                    </TouchableOpacity>
-                                }
+                                            <SVG nombre={'Camara'} width={73} height={58} />
+                                        </TouchableOpacity>
+                                    }
 
+                                </View>
                             </View>
-                        </View>
-                        <View
-                        //style={styles.localizacion}
-                        >
-                            <Text style={{
-                                width: 212,
-                                height: 22,
-                                fontFamily: 'nunito-semibold',
-                                fontSize: 16,
-                                fontWeight: "600",
-                                fontStyle: "normal",
-                                letterSpacing: 0,
-                                color: 'white',
-                                marginTop: (windowHeight * 1.47) / 100,
-                                marginLeft: (windowWidth * 4.3) / 100,
-                            }}>
-                                Donde ha sido la incidencia?
-                            </Text>
                             <View
-
-                                ref={(input) => { cuatro = input; }}
-                                onSubmitEditing={() => { cinco.focus(); }}
-                                blurOnSubmit={false}
-                                returnKeyType="next"
-                                // blurOnSubmit={false}
-                                // returnKeyType="next"
-                                style={styles.localizacion}
+                            //style={styles.localizacion}
                             >
                                 <Text style={{
-                                    marginLeft: 10,
-                                    textAlign: 'left',
-                                    // fontSize: 15,
-                                    // color: 'brown'
-                                    // width: 342,
-                                    // height: 17,
-                                    //fontFamily: "VarelaRound",
-                                    fontSize: 14,
-                                    fontWeight: "normal",
+                                    width: 212,
+                                    height: 22,
+                                    fontFamily: 'nunito-semibold',
+                                    fontSize: 16,
+                                    fontWeight: "600",
                                     fontStyle: "normal",
                                     letterSpacing: 0,
-                                    color: "#9d9d9d"
+                                    color: 'white',
+                                    marginTop: (windowHeight * 1.47) / 100,
+                                    marginLeft: (windowWidth * 4.3) / 100,
                                 }}>
-                                    {geoGuardada === false ? 'Geolocalización de la ubicación' : 'Ubicación guardada'}
+                                    Donde ha sido la incidencia?
                                 </Text>
-                                {/* <Icon
+                                <View
+
+                                    ref={(input) => { cuatro = input; }}
+                                    onSubmitEditing={() => { cinco.focus(); }}
+                                    blurOnSubmit={false}
+                                    returnKeyType="next"
+                                    // blurOnSubmit={false}
+                                    // returnKeyType="next"
+                                    style={styles.localizacion}
+                                >
+                                    <Text style={{
+                                        marginLeft: 10,
+                                        textAlign: 'left',
+                                        // fontSize: 15,
+                                        // color: 'brown'
+                                        // width: 342,
+                                        // height: 17,
+                                        //fontFamily: "VarelaRound",
+                                        fontSize: 14,
+                                        fontWeight: "normal",
+                                        fontStyle: "normal",
+                                        letterSpacing: 0,
+                                        color: "#9d9d9d"
+                                    }}>
+                                        {geoGuardada === false ? 'Geolocalización de la ubicación' : 'Ubicación guardada'}
+                                    </Text>
+                                    {/* <Icon
                                 style={{
                                     // justifyContent: 'center',
                                     // alignItems: 'center',
@@ -490,60 +502,63 @@ export default function CrearIncidencia({ navigation, props }) {
                                 }}
                                 name="location-outline" size={30}
                             /> */}
-                                <View style={{
-                                    marginLeft: 335,
-                                    position: 'absolute'
-                                }}>
-                                    <TouchableOpacity onPress={() => {
-                                        // setCurrentLocation();
-                                        setMapa(true);
-                                        setWere('map');
+                                    <View style={{
+                                        marginLeft: 335,
+                                        position: 'absolute'
                                     }}>
-                                        <SVG nombre={'Ubicacion'} width={30} height={30} ></SVG>
-                                    </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => {
+                                            // setCurrentLocation();
+                                            setMapa(true);
+                                            setWere('map');
+                                        }}>
+                                            <SVG nombre={'Ubicacion'} width={30} height={30} ></SVG>
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
-                            </View>
-                            <TextInput
-                                ref={(input) => { tres = input; }}
-                                // onSubmitEditing={() => { cuatro.focus(); }}
-                                // blurOnSubmit={false}
-                                // returnKeyType="next"
+                                <TextInput
+                                    ref={(input) => { tres = input; }}
+                                    // onSubmitEditing={() => { cuatro.focus(); }}
+                                    // blurOnSubmit={false}
+                                    // returnKeyType="next"
 
-                                value={direccion}
-                                placeholder={'Nombre amigable para la dirección'}
-                                placeholderTextColor={"#9d9d9d"}
-                                style={styles.direccion}
-                                onChangeText={(direccion) => {
-                                    setDireccion(direccion);
-                                }}
-                            />
-                            <TouchableOpacity
-                                onPress={() => {
-                                    //setCreada(true);
-                                    guardarInc();
-                                }}
-                                style={styles.siguienteTouch}>
-                                <Text style={{
-                                    alignItems: 'center',
-                                    alignSelf: 'center',
-                                    textAlign: 'center',
-                                    alignItems: 'center',
-                                    width: 150,
-                                    height: 24,
-                                    fontFamily: "nunito-bold",
-                                    fontSize: 18,
-                                    fontWeight: "bold",
-                                    fontStyle: "normal",
-                                    letterSpacing: 0.45,
-                                    textAlign: "center",
-                                    color: COLORS.primary
-                                }}>
-                                    Crear incidencia
-                                </Text>
-                            </TouchableOpacity>
+                                    value={direccion}
+                                    placeholder={'Nombre amigable para la dirección'}
+                                    placeholderTextColor={"#9d9d9d"}
+                                    style={styles.direccion}
+                                    onChangeText={(direccion) => {
+                                        setDireccion(direccion);
+                                    }}
+                                />
+                                <TouchableOpacity
+                                    disabled={habilitar}
+                                    onPress={() => {
+                                        //setCreada(true);
+                                        //alert("ss")
+                                        guardarInc();
+                                    }}
+                                    style={styles.siguienteTouch}>
+                                    <Text style={{
+                                        alignItems: 'center',
+                                        alignSelf: 'center',
+                                        textAlign: 'center',
+                                        alignItems: 'center',
+                                        width: 150,
+                                        height: 24,
+                                        fontFamily: "nunito-bold",
+                                        fontSize: 18,
+                                        fontWeight: "bold",
+                                        fontStyle: "normal",
+                                        letterSpacing: 0.45,
+                                        textAlign: "center",
+                                        color: COLORS.primary
+                                    }}>
+                                        Crear incidencia
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
-                    </View>
-                </ScrollView>
+                    </ScrollView>
+                </KeyboardAwareScrollView>
             }
             {
                 camera &&
