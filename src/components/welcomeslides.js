@@ -16,6 +16,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { URL_SERVER } from '../constants/urls';
 import { SvgUri } from 'react-native-svg';
 import { tomarIntros, loginUser, guardarToken } from '../store/actions/userActions';
+import Splash from './splash';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -24,6 +25,7 @@ export default function WelcomeSlides({ navigation }) {
 
     const dispatch = useReduxDispatch();
     const [numero, setNumero] = useState(0);
+    const [splash, setSplash] = useState(false)
     const [slides, setSlides] = useState([]);
     const [hidePagination, setHidePagination] = useState(false)
     const token = useReduxSelector((state) => state.user.access_token);
@@ -33,13 +35,16 @@ export default function WelcomeSlides({ navigation }) {
     const csrf = useReduxSelector((state) => state.user.csrf);
 
     useEffect(() => {
-
+        setTimeout(()=>{
+            setSplash(true);
+        },2000)
         tomarIntros()
             .then(response => {
                 setSlides(response);
             })
             .catch(error => {
             });
+
     }, [])
     const _renderItem = ({ item, index }) => {
         var tit = item.titulo.replace(/<p>/g, '');
@@ -128,7 +133,7 @@ export default function WelcomeSlides({ navigation }) {
                         <TouchableOpacity
                             style={{
                                 position: 'absolute',
-                                bottom : 0,
+                                bottom: 0,
                                 zIndex: 11111111111,
                                 width: 112,
                                 height: 44,
@@ -152,10 +157,11 @@ export default function WelcomeSlides({ navigation }) {
                                         'name': userlogin,
                                         'pass': contra
                                     }
+
                                     loginUser(data)
                                         .then(async response => {
                                             if (response.status === 200) {
-                                                dispatch(guardarToken({ "pass": pass, "token": response.data.access_token, "csrf": response.data.csrf_token }))
+                                                dispatch(guardarToken({ "userlogin" : userlogin, "pass": contra, "token": response.data.access_token, "csrf": response.data.csrf_token }))
                                                 navigation.navigate('Main');
 
                                             } else {
@@ -163,7 +169,7 @@ export default function WelcomeSlides({ navigation }) {
                                             }
                                         })
                                         .catch(error => {
-                                            //alert("error1 " + error)
+                                            alert("error1 " + error)
                                         });
                                 } else {
                                     navigation.navigate('Login');
@@ -201,9 +207,14 @@ export default function WelcomeSlides({ navigation }) {
             }
         }
     };
-    return (
-        // <SafeAreaView style={{ zIndex: -11111, flex: 1 }}>
-            <View style={{ flex: 1, zIndex: -11111, borderWidth : 3 }}>
+
+    // <SafeAreaView style={{ zIndex: -11111, flex: 1 }}>
+    if (splash === false) {
+        return (<Splash />);
+    }
+    else
+        return (
+            <View style={{ flex: 1, zIndex: -11111, borderWidth: 3 }}>
 
                 {
                     slides !== null && slides !== undefined &&
@@ -228,8 +239,8 @@ export default function WelcomeSlides({ navigation }) {
                     />
                 }
             </View>
-        // </SafeAreaView>
-    )
+        )
+    // </SafeAreaView>
 }
 const styles = StyleSheet.create({
     inactiveDot: {
