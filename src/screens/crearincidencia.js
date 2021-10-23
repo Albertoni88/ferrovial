@@ -44,6 +44,7 @@ const CAPTURE_SIZE = Math.floor(WINDOW_HEIGHT * 0.08);
 export default function CrearIncidencia({ navigation, props }) {
   //const [hasPermission, setHasPermission] = useState(null);
 
+<<<<<<< HEAD
     //const [hasPermission, setHasPermission] = useState(null);
 
     const [habilitar, setHabilitar] = useState(false);
@@ -76,6 +77,24 @@ export default function CrearIncidencia({ navigation, props }) {
     const [geoGuardada, setgeoGuardada] = useState(false);
     const [tomadaFoto, setTomadaFoto] = useState(false);
     const [were, setWere] = useState('back');
+=======
+  const [habilitar, setHabilitar] = useState(false);
+  const [type, setType] = useState(Camera.Constants.Type.back);
+  const [camera, showCamera] = useState(false);
+  const [creada, setCreada] = useState(false);
+  const myRef = createRef();
+  const cameraRef = useRef();
+  //const cameraRef = createRef();
+  const [hasPermission, setHasPermission] = useState(null);
+  const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
+  const [isPreview, setIsPreview] = useState(false);
+  const [isCameraReady, setIsCameraReady] = useState(false);
+  const [photo, setPhoto] = useState("");
+  const [titulo, setTitulo] = useState("");
+  const [descripcion, setDescripcion] = useState("");
+  const [direccion, setDireccion] = useState("");
+  const [geo, setGeo] = useState({});
+>>>>>>> develop
 
   const dispatch = useReduxDispatch();
   const token = useReduxSelector((state) => state.user.access_token);
@@ -135,6 +154,7 @@ export default function CrearIncidencia({ navigation, props }) {
     onHandlePermission();
   }, []);
 
+<<<<<<< HEAD
     const setCurrentLocation = async () => {
         let { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted') {
@@ -146,6 +166,18 @@ export default function CrearIncidencia({ navigation, props }) {
         setLocation(location);
         
     };
+=======
+  const setCurrentLocation = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      setErrorMsg("Permission to access location was denied");
+      return;
+    }
+    let location = await Location.getCurrentPositionAsync({});
+    dispatch(saveLocation(location));
+    setLocation(location);
+  };
+>>>>>>> develop
 
   const guardarInc = async () => {
     setHabilitar(true);
@@ -231,6 +263,7 @@ export default function CrearIncidencia({ navigation, props }) {
           setTomadaFoto(true);
         });
     }
+<<<<<<< HEAD
     return (
         <View style={styles.container}>
             <HeaderCrearIncidencia were={were} closemap={closeMap} navigation={navigation} />
@@ -380,6 +413,181 @@ export default function CrearIncidencia({ navigation, props }) {
                                             imageStyle={{ borderRadius: 8, width: '100%', height: '100%' }}
                                             // source={{ uri: photo }} />
                                             source={{ uri: `data:image/jpeg;base64,${photo}` }}
+=======
+  };
+  const cancelPreview = async () => {
+    await cameraRef.current.resumePreview();
+    setIsPreview(false);
+  };
+  const onHandlePermission = async () => {
+    const { status } = await Camera.requestPermissionsAsync();
+    setHasPermission(status === "granted");
+  };
+  const onCameraReady = () => {
+    setIsCameraReady(true);
+  };
+  // if (hasPermission === null) {
+  //     return <View />;
+  // }
+  // if (hasPermission === false) {
+  //     return <Text style={styles.text}>No access to camera</Text>;
+  // }
+  const switchCamera = () => {
+    if (isPreview) {
+      return;
+    }
+    setCameraType((prevCameraType) =>
+      prevCameraType === Camera.Constants.Type.back
+        ? Camera.Constants.Type.front
+        : Camera.Constants.Type.back
+    );
+  };
+  const closeMap = () => {
+    setMapa(false);
+    setWere("back");
+  };
+  return (
+    <View style={styles.container}>
+      <HeaderCrearIncidencia
+        were={were}
+        closemap={closeMap}
+        navigation={navigation}
+      />
+      {mapa === false && (
+        <KeyboardAwareScrollView
+          style={{ backgroundColor: "transparent" }}
+          resetScrollToCoords={{ x: 0, y: 0 }}
+          contentContainerStyle={{ flex: 1 }}
+          scrollEnabled={false}
+        >
+          <ScrollView style={{ flex: 1 }}>
+            <View style={{}}>
+              <Text
+                style={{
+                  textAlign: "left",
+                  marginTop: 10,
+                  marginLeft: (windowWidth * 4.3) / 100,
+                  width: 55,
+                  height: 22,
+                  fontFamily: "nunito-semibold",
+                  fontSize: 16,
+                  fontWeight: "600",
+                  fontStyle: "normal",
+                  letterSpacing: 0,
+                  color: "white",
+                }}
+              >
+                *Título
+              </Text>
+              <TextInput
+                onSubmitEditing={() => {
+                  dos.focus();
+                }}
+                blurOnSubmit={false}
+                returnKeyType="next"
+                value={titulo}
+                placeholder={"Pon un título corto y conciso..."}
+                placeholderTextColor={COLORS.primary}
+                style={styles.inputtitulo}
+                placeholderStyle={{
+                  width: 342,
+                  height: 17,
+                  fontSize: 14,
+                  fontWeight: "normal",
+                  fontStyle: "normal",
+                  letterSpacing: 0,
+                  color: "#9d9d9d",
+                }}
+                onChangeText={(titulo) => {
+                  setTitulo(titulo);
+                }}
+              />
+              <Text
+                style={{
+                  // marginTop: 15,
+                  // fontSize: 15,
+                  // fontWeight: 'bold',
+                  // color: 'white'
+                  textAlign: "left",
+                  marginTop: (windowHeight * 1.47) / 100,
+                  marginLeft: (windowWidth * 4.3) / 100,
+                  width: 95,
+                  height: 22,
+                  fontFamily: "nunito-semibold",
+                  fontSize: 16,
+                  fontWeight: "600",
+                  fontStyle: "normal",
+                  letterSpacing: 0,
+                  color: "white",
+                }}
+              >
+                *Descripción
+              </Text>
+              <TextInput
+                ref={(input) => {
+                  dos = input;
+                }}
+                // onBlur={()=>{
+                //     if(descripcion === ''){
+                //         setDescripcion('Describe la incidencia de forma clara...')
+                //         dos.current.reset();
+                //         alert("des " + descripcion)
+                //     }
+                //     //tres.focus();
+                // }}
+                onSubmitEditing={() => {
+                  // if(descripcion === ''){
+                  //     setDescripcion('Describe la incidencia de forma clara...')
+                  // }
+                  // dos.clear();
+                  // setDescripcion('Describe la incidencia de forma clara...')
+                  tres.focus();
+                }}
+                blurOnSubmit={false}
+                returnKeyType="next"
+                value={descripcion}
+                multiline={true}
+                numberOfLines={3}
+                placeholder={"Describe la incidencia de forma clara..."}
+                placeholderTextColor={COLORS.primary}
+                style={styles.descripcion}
+                onChangeText={(descripcion) => {
+                  setDescripcion(descripcion);
+                }}
+              />
+              <Text
+                style={{
+                  // marginTop: 15,
+                  // fontSize: 15,
+                  // fontWeight: 'bold',
+                  // color: 'white'
+                  width: 115,
+                  height: 22,
+                  fontFamily: "nunito-semibold",
+                  fontSize: 16,
+                  fontWeight: "600",
+                  fontStyle: "normal",
+                  letterSpacing: 0,
+                  color: "white",
+                  marginTop: (windowHeight * 1.47) / 100,
+                  marginLeft: (windowWidth * 4.3) / 100,
+                }}
+              >
+                *Sube una foto
+              </Text>
+              <View
+                style={
+                  tomadaFoto === true ? styles.descripcion1 : styles.descripcion
+                }
+              >
+                {tomadaFoto === true && (
+                  // <AntDesign name='checkcircleo' size={32} color={'rgba(0, 0, 0, 0.26)'} />
+                  <View
+                    // ref={(input) => { tres = input; }}
+                    // onSubmitEditing={() => { cuatro.focus(); }}
+                    // blurOnSubmit={false}
+                    // returnKeyType="next"
+>>>>>>> develop
 
                     style={{
                       position: "absolute",
@@ -425,6 +633,7 @@ export default function CrearIncidencia({ navigation, props }) {
                             name="camera-outline" size={75}
                             color={'rgba(0, 0, 0, 0.26)'}
                         /> */}
+<<<<<<< HEAD
                                 <View
                                     style={{
                                         width: 73,
@@ -500,6 +709,94 @@ export default function CrearIncidencia({ navigation, props }) {
                                         {geoGuardada === false ? 'Geolocalización de la ubicación' : address}
                                     </Text>
                                     {/* <Icon
+=======
+                <View
+                  style={{
+                    width: 73,
+                    height: 58,
+                    //alignContent : 'center',
+                    alignItems: "center",
+                    //justifyContent : 'center',
+                    alignSelf: "center",
+                  }}
+                >
+                  {tomadaFoto === false && (
+                    <TouchableOpacity
+                      ref={(input) => {
+                        tres = input;
+                      }}
+                      onSubmitEditing={() => {
+                        cuatro.focus();
+                      }}
+                      blurOnSubmit={false}
+                      returnKeyType="next"
+                      disabled={
+                        hasPermission === null || hasPermission === false
+                      }
+                      onPress={() => {
+                        //if(hasPermission ===)
+                        showCamera(true);
+                      }}
+                    >
+                      <SVG nombre={"Camara"} width={73} height={58} />
+                    </TouchableOpacity>
+                  )}
+                </View>
+              </View>
+              <View
+              //style={styles.localizacion}
+              >
+                <Text
+                  style={{
+                    width: 212,
+                    height: 22,
+                    fontFamily: "nunito-semibold",
+                    fontSize: 16,
+                    fontWeight: "600",
+                    fontStyle: "normal",
+                    letterSpacing: 0,
+                    color: "white",
+                    marginTop: (windowHeight * 1.47) / 100,
+                    marginLeft: (windowWidth * 4.3) / 100,
+                  }}
+                >
+                  Donde ha sido la incidencia?
+                </Text>
+                <View
+                  ref={(input) => {
+                    cuatro = input;
+                  }}
+                  onSubmitEditing={() => {
+                    cinco.focus();
+                  }}
+                  blurOnSubmit={false}
+                  returnKeyType="next"
+                  // blurOnSubmit={false}
+                  // returnKeyType="next"
+                  style={styles.localizacion}
+                >
+                  <Text
+                    style={{
+                      marginLeft: 10,
+                      textAlign: "left",
+                      // fontSize: 15,
+                      // color: 'brown'
+                      // width: 342,
+                      // height: 17,
+                      //fontFamily: "VarelaRound",
+                      fontSize: 14,
+                      fontWeight: "normal",
+                      fontStyle: "normal",
+                      letterSpacing: 0,
+                      color: "#9d9d9d",
+                    }}
+                  >
+                    {geoGuardada === false
+                      ? "Geolocalización de la ubicación"
+                      : "Ubicación guardada"}
+                  </Text>
+                  {/* <Icon
+>>>>>>> develop
                                 style={{
                                     // justifyContent: 'center',
                                     // alignItems: 'center',
@@ -674,6 +971,7 @@ export default function CrearIncidencia({ navigation, props }) {
                                 }}>
                                     Sigue el estado de las propuestas en cualquier momento.
                                 </Text> */}
+<<<<<<< HEAD
                                 <TouchableOpacity
                                     onPress={() => {
                                         //setCreada(false);
@@ -872,6 +1170,202 @@ export default function CrearIncidencia({ navigation, props }) {
             }
         </View >
     );
+=======
+                <TouchableOpacity
+                  onPress={() => {
+                    //setCreada(false);
+                    navigation.navigate("Main");
+                    setCreadaIncidencia(false);
+                  }}
+                  style={styles.salir}
+                >
+                  <Text
+                    style={{
+                      width: 40,
+                      height: 24,
+                      fontFamily: "nunito-bold",
+                      fontSize: 18,
+                      fontWeight: "bold",
+                      fontStyle: "normal",
+                      letterSpacing: 0.45,
+                      textAlign: "center",
+                      color: COLORS.primary,
+                    }}
+                  >
+                    Salir
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
+      )}
+      {mapa === true && (location === null || location == undefined) && (
+        <ActivityIndicator
+          size="large"
+          color={"white"}
+          style={{ alignItems: "center", justifyContent: "center", flex: 1 }}
+        />
+      )}
+      {mapa === true && location && (
+        <View style={{ flex: 1, marginTop: 80, zIndex: 11111 }}>
+          <MapView
+            ref={myRef}
+            style={{
+              flex: 1,
+              width: "100%",
+              // borderWidth : 3
+            }}
+            provider={PROVIDER_GOOGLE}
+            //onMapReady={() => this._onMapReady()}
+            // onLayout={ ()=> this._onMapReady()}
+            loadingEnabled={true}
+            loadingIndicatorColor={"brown"}
+            initialRegion={{
+              latitude: location.coords.latitude,
+              longitude: location.coords.longitude,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}
+            // onRegionChange={this.onRegionChange}
+          >
+            <MapView.Marker
+              onDragEnd={(e) => {
+                console.log("e.nativeEvent ", e.nativeEvent);
+
+                setLocation({
+                  coords: {
+                    latitude: e.nativeEvent.coordinate.latitude,
+                    longitude: e.nativeEvent.coordinate.longitude,
+                  },
+                });
+
+                Alert.alert(
+                  "Ubicación",
+                  "Desea esta ubicación?",
+                  [
+                    {
+                      text: "No",
+                      onPress: () => console.log("Cancel Pressed"),
+                      style: "cancel",
+                    },
+                    // { text: 'Yes', onPress: () => BackHandler.exitApp() },
+                    {
+                      text: "Si",
+                      onPress: () => {
+                        setgeoGuardada(true);
+                        setMapa(false);
+                        setWere("back");
+                      },
+                    },
+                  ],
+                  { cancelable: false }
+                );
+              }}
+              draggable
+              onPress={() => {}}
+              tracksViewChanges={false}
+              coordinate={{
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
+              }}
+            >
+              {/* <View style={{ zIndex: 1111, justifyContent: 'center', alignItems: 'center', height: 35, width: 35, borderWidth: 3 }}>
+                                <Image source={require('../assets/navigate-icon.png')} style={{ zIndex : 11111, borderWidth: 3, height: 35, width: 35 }} />
+                            </View> */}
+              <MaterialCommunityIcons
+                name="map-marker-radius-outline"
+                size={40}
+                color={COLORS.primary}
+              />
+            </MapView.Marker>
+          </MapView>
+          <TouchableOpacity
+            onPress={() => {
+              setgeoGuardada(true);
+              setMapa(false);
+              setWere("back");
+            }}
+            style={styles.save}
+          >
+            <Text
+              style={{
+                alignItems: "center",
+                alignSelf: "center",
+                textAlign: "center",
+                alignItems: "center",
+                width: 175,
+                height: 24,
+                fontFamily: "nunito-bold",
+                fontSize: 18,
+                fontWeight: "bold",
+                fontStyle: "normal",
+                letterSpacing: 0.45,
+                textAlign: "center",
+                color: "white",
+              }}
+            >
+              Guardar ubicación
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
+      <View
+        style={{
+          position: "absolute",
+          bottom: 0,
+          height: 100,
+          width: "100%",
+          zIndex: 0,
+          backgroundColor: "transparent",
+        }}
+      >
+        <TouchableOpacity
+          disabled={habilitar}
+          onPress={() => {
+            //setCreada(true);
+            //alert("ss")
+            guardarInc();
+          }}
+          style={{
+            justifyContent: "center",
+            alignSelf: "center",
+            position: "absolute",
+            bottom: 20,
+            alignItems: "center",
+            backgroundColor: "white",
+            zIndex: 11111,
+            width: 198,
+            height: 44,
+            borderRadius: 22,
+            shadowColor: "rgba(0, 0, 0, 0.1)",
+            shadowOffset: {
+              width: 0,
+              height: 4,
+            },
+            shadowRadius: 10,
+            shadowOpacity: 1,
+          }}
+        >
+          <Text
+            style={{
+              fontFamily: "nunito-bold",
+              fontSize: 18,
+              fontWeight: "bold",
+              fontStyle: "normal",
+              letterSpacing: 0.45,
+              textAlign: "center",
+              color: COLORS.primary,
+            }}
+          >
+            {" "}
+            Crear incidencia{" "}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+>>>>>>> develop
 }
 const styles = StyleSheet.create({
   text: {
