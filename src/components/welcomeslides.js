@@ -169,7 +169,7 @@ export default function WelcomeSlides({ navigation }) {
                                             }
                                         })
                                         .catch(error => {
-                                            alert("error1 " + error)
+                                            
                                         });
                                 } else {
                                     navigation.navigate('Login');
@@ -214,7 +214,7 @@ export default function WelcomeSlides({ navigation }) {
     }
     else
         return (
-            <View style={{ flex: 1, zIndex: -11111, borderWidth: 3 }}>
+            <View style={{ flex: 1, zIndex: -11111,  }}>
 
                 {
                     slides !== null && slides !== undefined &&

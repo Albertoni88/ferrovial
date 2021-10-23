@@ -93,7 +93,7 @@ export default function CreateAccount({ navigation, props }) {
                                             }
                                         })
                                         .catch(error => {
-                                            alert("error1 " + error)
+                                            //alert("error1 " + error)
                                         });
                                     //navigation.navigate('Login');
                                 }
@@ -121,7 +121,7 @@ export default function CreateAccount({ navigation, props }) {
             style={{ backgroundColor: 'transparent' }}
             resetScrollToCoords={{ x: 0, y: 0 }}
             contentContainerStyle={{ flex: 1 }}
-            scrollEnabled={false}
+            scrollEnabled={true}
         >
             <ImageBackground
                 // source={require('../assets/Bitmap.jpg')}

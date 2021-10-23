@@ -35,6 +35,7 @@ import Svg, { Path } from 'react-native-svg';
 import LOGO from '../components/logo';
 import SVG from '../components/svg';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import axios from 'axios';
 
 export default function Login({ props, navigation }) {
     const [name, setName] = useState('');
@@ -47,6 +48,7 @@ export default function Login({ props, navigation }) {
     useEffect(() => { }, []);
 
     async function logIn() {
+        
         const data = {
             name: name,
             pass: pass,
@@ -56,13 +58,18 @@ export default function Login({ props, navigation }) {
         } else {
             loginUser(data)
                 .then(async (response) => {
+                    // alert(JSON.stringify(response.data))
                     if (response.status === 200) {
                         dispatch(
                             guardarToken({
-                                userlogin: name,
-                                pass: pass,
-                                token: response.data.access_token,
-                                csrf: response.data.csrf_token,
+                                // userlogin: name,
+                                // pass: pass,
+                                // token: response.data.access_token,
+                                // csrf: response.data.csrf_token,
+                                 "userlogin" : data.name, 
+                                 "pass": data.pass, 
+                                 "token": response.data.access_token,
+                                  "csrf": response.data.csrf_token 
                             })
                         );
                         navigation.navigate('Main');
@@ -71,7 +78,7 @@ export default function Login({ props, navigation }) {
                     }
                 })
                 .catch((error) => {
-                    alert('error1 ' + error);
+                    //alert('error1 ' + error);
                 });
         }
     }
@@ -91,7 +98,7 @@ export default function Login({ props, navigation }) {
             style={{ backgroundColor: 'transparent' }}
             resetScrollToCoords={{ x: 0, y: 0 }}
             contentContainerStyle={{flex : 1}}
-            scrollEnabled={false}
+            scrollEnabled={true}
         >
             <ImageBackground
                 // source={require('../assets/Bitmap.jpg')}
