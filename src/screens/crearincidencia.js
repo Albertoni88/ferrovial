@@ -44,40 +44,6 @@ const CAPTURE_SIZE = Math.floor(WINDOW_HEIGHT * 0.08);
 export default function CrearIncidencia({ navigation, props }) {
   //const [hasPermission, setHasPermission] = useState(null);
 
-<<<<<<< HEAD
-    //const [hasPermission, setHasPermission] = useState(null);
-
-    const [habilitar, setHabilitar] = useState(false);
-    const [type, setType] = useState(Camera.Constants.Type.back);
-    const [camera, showCamera] = useState(false);
-    const [creada, setCreada] = useState(false);
-    const myRef = createRef();
-    const cameraRef = useRef();
-    //const cameraRef = createRef();
-    const [hasPermission, setHasPermission] = useState(null);
-    const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
-    const [isPreview, setIsPreview] = useState(false);
-    const [isCameraReady, setIsCameraReady] = useState(false);
-    const [photo, setPhoto] = useState('');
-    const [titulo, setTitulo] = useState('');
-    const [descripcion, setDescripcion] = useState('');
-    const [direccion, setDireccion] = useState('');
-    const [geo, setGeo] = useState({});
-    const [address, setAddress] = useState('');
-
-
-    const dispatch = useReduxDispatch();
-    const token = useReduxSelector((state) => state.user.access_token);
-    const locationUser = useReduxSelector((state) => state.user.location);
-    const idArchivo = useReduxSelector((state) => state.user.idArchivo);
-    const [creadaIncidencia, setCreadaIncidencia] = useState(false);
-    const incidenciasRedux = useReduxSelector((state) => state.incidencia.incidencias);
-    const [location, setLocation] = useState(null);
-    const [mapa, setMapa] = useState(false);
-    const [geoGuardada, setgeoGuardada] = useState(false);
-    const [tomadaFoto, setTomadaFoto] = useState(false);
-    const [were, setWere] = useState('back');
-=======
   const [habilitar, setHabilitar] = useState(false);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [camera, showCamera] = useState(false);
@@ -94,7 +60,6 @@ export default function CrearIncidencia({ navigation, props }) {
   const [descripcion, setDescripcion] = useState("");
   const [direccion, setDireccion] = useState("");
   const [geo, setGeo] = useState({});
->>>>>>> develop
 
   const dispatch = useReduxDispatch();
   const token = useReduxSelector((state) => state.user.access_token);
@@ -104,6 +69,7 @@ export default function CrearIncidencia({ navigation, props }) {
   const incidenciasRedux = useReduxSelector(
     (state) => state.incidencia.incidencias
   );
+  const [address, setAddress] = useState('');
   const [location, setLocation] = useState(null);
   const [mapa, setMapa] = useState(false);
   const [geoGuardada, setgeoGuardada] = useState(false);
@@ -154,19 +120,6 @@ export default function CrearIncidencia({ navigation, props }) {
     onHandlePermission();
   }, []);
 
-<<<<<<< HEAD
-    const setCurrentLocation = async () => {
-        let { status } = await Location.requestForegroundPermissionsAsync();
-        if (status !== 'granted') {
-            setErrorMsg('Permission to access location was denied');
-            return;
-        }
-        let location = await Location.getCurrentPositionAsync({});
-        dispatch(saveLocation(location));
-        setLocation(location);
-        
-    };
-=======
   const setCurrentLocation = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
@@ -177,7 +130,6 @@ export default function CrearIncidencia({ navigation, props }) {
     dispatch(saveLocation(location));
     setLocation(location);
   };
->>>>>>> develop
 
   const guardarInc = async () => {
     setHabilitar(true);
@@ -263,157 +215,6 @@ export default function CrearIncidencia({ navigation, props }) {
           setTomadaFoto(true);
         });
     }
-<<<<<<< HEAD
-    return (
-        <View style={styles.container}>
-            <HeaderCrearIncidencia were={were} closemap={closeMap} navigation={navigation} />
-            {
-                mapa === false &&
-                <KeyboardAwareScrollView
-                    style={{ backgroundColor: 'transparent' }}
-                    resetScrollToCoords={{ x: 0, y: 0 }}
-                    contentContainerStyle={{ flex: 1 }}
-                    scrollEnabled={true}
-                >
-                    <ScrollView style={{ flex: 1 }}>
-                        <View style={{}}>
-                            <Text style={{
-                                textAlign: 'left',
-                                marginTop: (windowHeight * 10) / 100,
-                                marginLeft: (windowWidth * 4.3) / 100,
-                                width: 55,
-                                height: 22,
-                                fontFamily: 'nunito-semibold',
-                                fontSize: 16,
-                                fontWeight: "600",
-                                fontStyle: "normal",
-                                letterSpacing: 0,
-                                color: 'white',
-
-
-                            }}>
-                                *Título
-                            </Text>
-                            <TextInput
-                                onSubmitEditing={() => { dos.focus(); }}
-                                blurOnSubmit={false}
-                                returnKeyType="next"
-
-                                value={titulo}
-                                placeholder={'Pon un título corto y conciso...'}
-                                placeholderTextColor={COLORS.primary}
-                                style={styles.inputtitulo}
-                                placeholderStyle={{
-                                    width: 342,
-                                    height: 17,
-                                    fontSize: 14,
-                                    fontWeight: "normal",
-                                    fontStyle: "normal",
-                                    letterSpacing: 0,
-                                    color: "#9d9d9d"
-                                }}
-                                onChangeText={(titulo) => {
-                                    setTitulo(titulo)
-                                }}
-                            />
-                            <Text style={{
-                                // marginTop: 15,
-                                // fontSize: 15,
-                                // fontWeight: 'bold',
-                                // color: 'white'
-                                textAlign: 'left',
-                                marginTop: (windowHeight * 1.47) / 100,
-                                marginLeft: (windowWidth * 4.3) / 100,
-                                width: 95,
-                                height: 22,
-                                fontFamily: 'nunito-semibold',
-                                fontSize: 16,
-                                fontWeight: "600",
-                                fontStyle: "normal",
-                                letterSpacing: 0,
-                                color: 'white',
-                            }}>
-                                *Descripción
-                            </Text>
-                            <TextInput
-                                ref={(input) => { dos = input; }}
-                                // onBlur={()=>{
-                                //     if(descripcion === ''){
-                                //         setDescripcion('Describe la incidencia de forma clara...') 
-                                //         dos.current.reset();                            
-                                //         alert("des " + descripcion)
-                                //     }
-                                //     //tres.focus();
-                                // }}
-                                onSubmitEditing={() => {
-                                    // if(descripcion === ''){
-                                    //     setDescripcion('Describe la incidencia de forma clara...')                             
-                                    // }                  
-                                    // dos.clear();              
-                                    // setDescripcion('Describe la incidencia de forma clara...') 
-                                    tres.focus();
-                                }}
-                                blurOnSubmit={false}
-                                returnKeyType="next"
-
-                                value={descripcion}
-                                multiline={true}
-                                numberOfLines={3}
-                                placeholder={'Describe la incidencia de forma clara...'}
-                                placeholderTextColor={COLORS.primary}
-                                style={styles.descripcion}
-                                onChangeText={(descripcion) => {
-                                    setDescripcion(descripcion)
-                                }}
-                            />
-                            <Text style={{
-                                // marginTop: 15,
-                                // fontSize: 15,
-                                // fontWeight: 'bold',
-                                // color: 'white'
-                                width: 115,
-                                height: 22,
-                                fontFamily: 'nunito-semibold',
-                                fontSize: 16,
-                                fontWeight: "600",
-                                fontStyle: "normal",
-                                letterSpacing: 0,
-                                color: 'white',
-                                marginTop: (windowHeight * 1.47) / 100,
-                                marginLeft: (windowWidth * 4.3) / 100,
-                            }}>
-                                *Sube una foto
-                            </Text>
-                            <View
-
-                                style={tomadaFoto === true ? styles.descripcion1 : styles.descripcion}
-                            >
-                                {
-                                    tomadaFoto === true &&
-                                    // <AntDesign name='checkcircleo' size={32} color={'rgba(0, 0, 0, 0.26)'} />
-                                    <View
-                                        // ref={(input) => { tres = input; }}
-                                        // onSubmitEditing={() => { cuatro.focus(); }}
-                                        // blurOnSubmit={false}
-                                        // returnKeyType="next"
-
-                                        style={{
-                                            position: 'absolute',
-                                            width: '100%',
-                                            height: '100%',
-                                            // flex : 1
-                                        }}>
-                                        <ImageBackground style={{
-                                            width: '100%',
-                                            height: '100%',
-                                            resizeMode: 'cover',
-                                            borderRadius: 5
-                                            // flex: 1
-                                        }}
-                                            imageStyle={{ borderRadius: 8, width: '100%', height: '100%' }}
-                                            // source={{ uri: photo }} />
-                                            source={{ uri: `data:image/jpeg;base64,${photo}` }}
-=======
   };
   const cancelPreview = async () => {
     await cameraRef.current.resumePreview();
@@ -587,7 +388,6 @@ export default function CrearIncidencia({ navigation, props }) {
                     // onSubmitEditing={() => { cuatro.focus(); }}
                     // blurOnSubmit={false}
                     // returnKeyType="next"
->>>>>>> develop
 
                     style={{
                       position: "absolute",
@@ -633,83 +433,6 @@ export default function CrearIncidencia({ navigation, props }) {
                             name="camera-outline" size={75}
                             color={'rgba(0, 0, 0, 0.26)'}
                         /> */}
-<<<<<<< HEAD
-                                <View
-                                    style={{
-                                        width: 73,
-                                        height: 58,
-                                        //alignContent : 'center',
-                                        alignItems: 'center',
-                                        //justifyContent : 'center',
-                                        alignSelf: 'center'
-                                    }}>
-                                    {
-                                        tomadaFoto === false &&
-
-                                        < TouchableOpacity
-                                            ref={(input) => { tres = input; }}
-                                            onSubmitEditing={() => { cuatro.focus(); }}
-                                            blurOnSubmit={false}
-                                            returnKeyType="next"
-
-                                            disabled={hasPermission === null || hasPermission === false}
-                                            onPress={() => {
-                                                //if(hasPermission ===)                                            
-                                                showCamera(true);
-                                            }}
-                                        >
-
-                                            <SVG nombre={'Camara'} width={73} height={58} />
-                                        </TouchableOpacity>
-                                    }
-
-                                </View>
-                            </View>
-                            <View
-                            //style={styles.localizacion}
-                            >
-                                <Text style={{
-                                    width: 212,
-                                    height: 22,
-                                    fontFamily: 'nunito-semibold',
-                                    fontSize: 16,
-                                    fontWeight: "600",
-                                    fontStyle: "normal",
-                                    letterSpacing: 0,
-                                    color: 'white',
-                                    marginTop: (windowHeight * 1.47) / 100,
-                                    marginLeft: (windowWidth * 4.3) / 100,
-                                }}>
-                                    Donde ha sido la incidencia?
-                                </Text>
-                                <View
-
-                                    ref={(input) => { cuatro = input; }}
-                                    onSubmitEditing={() => { cinco.focus(); }}
-                                    blurOnSubmit={false}
-                                    returnKeyType="next"
-                                    // blurOnSubmit={false}
-                                    // returnKeyType="next"
-                                    style={styles.localizacion}
-                                >
-                                    <Text style={{
-                                        marginLeft: 10,
-                                        textAlign: 'left',
-                                        // fontSize: 15,
-                                        // color: 'brown'
-                                        // width: 342,
-                                        // height: 17,
-                                        //fontFamily: "VarelaRound",
-                                        fontSize: 14,
-                                        fontWeight: "normal",
-                                        fontStyle: "normal",
-                                        letterSpacing: 0,
-                                        color: "#9d9d9d"
-                                    }}>
-                                        {geoGuardada === false ? 'Geolocalización de la ubicación' : address}
-                                    </Text>
-                                    {/* <Icon
-=======
                 <View
                   style={{
                     width: 73,
@@ -791,12 +514,9 @@ export default function CrearIncidencia({ navigation, props }) {
                       color: "#9d9d9d",
                     }}
                   >
-                    {geoGuardada === false
-                      ? "Geolocalización de la ubicación"
-                      : "Ubicación guardada"}
+                    {geoGuardada === false ? 'Geolocalización de la ubicación' : address}
                   </Text>
                   {/* <Icon
->>>>>>> develop
                                 style={{
                                     // justifyContent: 'center',
                                     // alignItems: 'center',
@@ -971,206 +691,6 @@ export default function CrearIncidencia({ navigation, props }) {
                                 }}>
                                     Sigue el estado de las propuestas en cualquier momento.
                                 </Text> */}
-<<<<<<< HEAD
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        //setCreada(false);
-                                        navigation.navigate('Main');
-                                        setCreadaIncidencia(false);
-                                    }}
-                                    style={styles.salir}>
-                                    <Text style={{
-                                        width: 40,
-                                        height: 24,
-                                        fontFamily: "nunito-bold",
-                                        fontSize: 18,
-                                        fontWeight: "bold",
-                                        fontStyle: "normal",
-                                        letterSpacing: 0.45,
-                                        textAlign: "center",
-                                        color: COLORS.primary,
-                                    }}>
-                                        Salir
-                                    </Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-
-                    </View>
-                </Modal>)
-            }
-            {
-                mapa === true && (location === null || location == undefined) &&
-                <ActivityIndicator
-                    size="large"
-                    color={'white'}
-                    style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}
-                />
-            }
-            {
-                mapa === true && location &&
-                <View style={{ flex: 1, marginTop: 80, zIndex: 11111 }}>
-                    <MapView
-                        ref={myRef}
-                        style={{
-                            flex: 1,
-                            width: '100%',
-                            // borderWidth : 3
-                        }}
-                        provider={PROVIDER_GOOGLE}
-                        //onMapReady={() => this._onMapReady()}
-                        // onLayout={ ()=> this._onMapReady()}
-                        loadingEnabled={true}
-                        loadingIndicatorColor={'brown'}
-                        initialRegion={{
-                            "latitude": location.coords.latitude,
-                            "longitude": location.coords.longitude,
-                            "latitudeDelta": 0.0922,
-                            "longitudeDelta": 0.0421,
-                        }}
-                    // onRegionChange={this.onRegionChange}                    
-                    >
-
-
-                        <MapView.Marker
-                            onDragEnd={async (e) => {
-                                //console.log("e.nativeEvent ", e.nativeEvent);
-
-                                setLocation({
-                                    "coords": {
-                                        "latitude": e.nativeEvent.coordinate.latitude,
-                                        "longitude": e.nativeEvent.coordinate.longitude
-                                    }
-                                });
-                                
-                                let address = await Location.reverseGeocodeAsync({
-                                    "latitude": location.coords.latitude,
-                                    "longitude": location.coords.longitude
-                                });
-                                console.log("asdasdasd ", address);
-                                var city = address[0].city;
-                                var district = address[0].district;
-                                var street = address[0].street;
-                                var final = '';
-                                if (city !== null && city !== undefined) {
-                                    final += city + " ";
-                                }
-                                if (district !== null && district !== undefined) {
-                                    final += district + " ";
-                                }
-                                if (street !== null && street !== undefined) {
-                                    final += street;
-                                }
-                                //alert(final)
-                                setAddress(final)
-                                setMapa(false);
-                                setgeoGuardada(true);
-                                setWere('back');
-                                //setLocation(location);
-                                // Alert.alert(
-                                //     'Ubicación',
-                                //     'Desea esta ubicación?',
-                                //     [
-                                //         { text: 'No', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-                                //         // { text: 'Yes', onPress: () => BackHandler.exitApp() },
-                                //         {
-                                //             text: 'Si', onPress: async () => {
-                                //                 //setLocation(location);
-                                //                 setgeoGuardada(true);
-                                //                 setWere('back');
-                                //                 let address = await Location.reverseGeocodeAsync({
-                                //                     "latitude": location.coords.latitude,
-                                //                     "longitude": location.coords.longitude
-                                //                 });
-                                //                 var city = address[0].city;
-                                //                 var district = address[0].district;
-                                //                 var street = address[0].street;
-                                //                 var final = '';
-                                //                 if (city !== null && city !== undefined) {
-                                //                     final += city + " ";
-                                //                 }
-                                //                 if (district !== null && district !== undefined) {
-                                //                     final += district + " ";
-                                //                 }
-                                //                 if (street !== null && street !== undefined) {
-                                //                     final += street;
-                                //                 }
-                                //                 //alert(final)
-                                //                 setAddress(final)
-                                //                 setMapa(false);
-                                //             }
-                                //         },
-                                //     ],
-                                //     { cancelable: false });
-                            }
-                            }
-                            draggable
-                            onPress={() => {
-                            }}
-                            tracksViewChanges={false}
-                            coordinate={{ latitude: location.coords.latitude, longitude: location.coords.longitude }}
-                        >
-                            {/* <View style={{ zIndex: 1111, justifyContent: 'center', alignItems: 'center', height: 35, width: 35, borderWidth: 3 }}>
-                                <Image source={require('../assets/navigate-icon.png')} style={{ zIndex : 11111, borderWidth: 3, height: 35, width: 35 }} />
-                            </View> */}
-                            <MaterialCommunityIcons name="map-marker-radius-outline" size={40} color={COLORS.primary} />
-                        </MapView.Marker>
-                    </MapView>
-                    <TouchableOpacity
-                        onPress={async () => {
-                            //setLocation(location);
-                            
-                            
-                            
-                            //alert("location " + JSON.stringify(location))
-                            let address = await Location.reverseGeocodeAsync({
-                                "latitude": location.coords.latitude,
-                                "longitude": location.coords.longitude
-                            });
-                            // var city = address[0].city;
-                            var district = address[0].district;
-                            var street = address[0].street;
-                            var final = '';
-                            // if (city !== null && city !== undefined) {
-                            //     final += city + " ";
-                            // }
-                            if (district !== null && district !== undefined) {
-                                final += district + " ";
-                            }
-                            if (street !== null && street !== undefined) {
-                                final += street;
-                            }
-                            //alert(final)
-                            setAddress(final);
-                            setMapa(false);
-                            setgeoGuardada(true);
-                            setWere('back');
-                            setLocation(location);
-                        }}
-                        style={styles.save}>
-                        <Text style={{
-                            alignItems: 'center',
-                            alignSelf: 'center',
-                            textAlign: 'center',
-                            alignItems: 'center',
-                            width: 175,
-                            height: 24,
-                            fontFamily: "nunito-bold",
-                            fontSize: 18,
-                            fontWeight: "bold",
-                            fontStyle: "normal",
-                            letterSpacing: 0.45,
-                            textAlign: "center",
-                            color: 'white'
-                        }}>
-                            Guardar ubicación
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-            }
-        </View >
-    );
-=======
                 <TouchableOpacity
                   onPress={() => {
                     //setCreada(false);
@@ -1227,10 +747,10 @@ export default function CrearIncidencia({ navigation, props }) {
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}
-            // onRegionChange={this.onRegionChange}
+          // onRegionChange={this.onRegionChange}
           >
             <MapView.Marker
-              onDragEnd={(e) => {
+              onDragEnd={async (e) => {
                 console.log("e.nativeEvent ", e.nativeEvent);
 
                 setLocation({
@@ -1239,31 +759,53 @@ export default function CrearIncidencia({ navigation, props }) {
                     longitude: e.nativeEvent.coordinate.longitude,
                   },
                 });
-
-                Alert.alert(
-                  "Ubicación",
-                  "Desea esta ubicación?",
-                  [
-                    {
-                      text: "No",
-                      onPress: () => console.log("Cancel Pressed"),
-                      style: "cancel",
-                    },
-                    // { text: 'Yes', onPress: () => BackHandler.exitApp() },
-                    {
-                      text: "Si",
-                      onPress: () => {
-                        setgeoGuardada(true);
-                        setMapa(false);
-                        setWere("back");
-                      },
-                    },
-                  ],
-                  { cancelable: false }
-                );
+                let address = await Location.reverseGeocodeAsync({
+                  "latitude": location.coords.latitude,
+                  "longitude": location.coords.longitude
+                });
+                console.log("asdasdasd ", address);
+                var city = address[0].city;
+                var district = address[0].district;
+                var street = address[0].street;
+                var final = '';
+                if (city !== null && city !== undefined) {
+                  final += city + " ";
+                }
+                if (district !== null && district !== undefined) {
+                  final += district + " ";
+                }
+                if (street !== null && street !== undefined) {
+                  final += street;
+                }
+                //alert(final)
+                setAddress(final)
+                setMapa(false);
+                setgeoGuardada(true);
+                setWere('back');
+                // Alert.alert(
+                //   "Ubicación",
+                //   "Desea esta ubicación?",
+                //   [
+                //     {
+                //       text: "No",
+                //       onPress: () => console.log("Cancel Pressed"),
+                //       style: "cancel",
+                //     },
+                //     // { text: 'Yes', onPress: () => BackHandler.exitApp() },
+                //     {
+                //       text: "Si",
+                //       onPress: () => {
+                //         setgeoGuardada(true);
+                //         setMapa(false);
+                //         setWere("back");
+                //       },
+                //     },
+                //   ],
+                //   { cancelable: false }
+                // );
               }}
               draggable
-              onPress={() => {}}
+              onPress={() => { }}
               tracksViewChanges={false}
               coordinate={{
                 latitude: location.coords.latitude,
@@ -1281,10 +823,30 @@ export default function CrearIncidencia({ navigation, props }) {
             </MapView.Marker>
           </MapView>
           <TouchableOpacity
-            onPress={() => {
-              setgeoGuardada(true);
+            onPress={async () => {
+              let address = await Location.reverseGeocodeAsync({
+                "latitude": location.coords.latitude,
+                "longitude": location.coords.longitude
+              });
+              // var city = address[0].city;
+              var district = address[0].district;
+              var street = address[0].street;
+              var final = '';
+              // if (city !== null && city !== undefined) {
+              //     final += city + " ";
+              // }
+              if (district !== null && district !== undefined) {
+                final += district + " ";
+              }
+              if (street !== null && street !== undefined) {
+                final += street;
+              }
+              //alert(final)
+              setAddress(final);
               setMapa(false);
-              setWere("back");
+              setgeoGuardada(true);
+              setWere('back');
+              setLocation(location);
             }}
             style={styles.save}
           >
@@ -1365,7 +927,6 @@ export default function CrearIncidencia({ navigation, props }) {
       </View>
     </View>
   );
->>>>>>> develop
 }
 const styles = StyleSheet.create({
   text: {

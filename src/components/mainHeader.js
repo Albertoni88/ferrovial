@@ -77,67 +77,8 @@ export default function MainHeader({ navigation, props }) {
   const [end, setEnd] = useState(true);
   const [load, setLoad] = useState(true);
 
-    const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
-        const paddingToBottom = 20;
-        return layoutMeasurement.height + contentOffset.y >=
-            contentSize.height - paddingToBottom;
-    };
-
-    const memoIncidencias = React.useMemo(() =>
-        // listOfItems.map(item => ({
-        //     ...item,
-        //     itemProp1: expensiveFunction(props.first),
-        //     itemProp2: anotherPriceyFunction(props.second)
-        // }))
-        mapeoIncidencias
-        , [incidencias]
-    )
-    const scrollRef = createRef();
-    const dispatch = useReduxDispatch();
-    const [open, setOpen] = useState(false);
-    const [find, setFind] = useState(false);
-    const [map, setMap] = useState(false);
-    const [showBody, setShowBody] = useState(true);
-    const [searchString, setSearchString] = useState('');
-    const myRef = createRef();
-    const incidencias = useReduxSelector((state) => state.incidencia.incidencias);
-    const incidenciasOriginals = useReduxSelector((state) => state.incidencia.incidenciasOriginals);
-    const token = useReduxSelector((state) => state.user.access_token);
-    const user = useReduxSelector((state) => state.user.userInfo);
-    const [end, setEnd] = useState(true);
-    const [load, setLoad] = useState(true)
-
-
-    useEffect(() => {
-
-        dispatch(guardarUsuario(token));
-
-        loadSecciones()
-            .then(response => {
-                dispatch(guardarSeccionesPerfil(response.data));
-            })
-            .catch(error => {
-            });
-
-        loadIncidencias(token)
-            .then(response => {
-                dispatch(guardarIncidencias(response.data.rows));
-                var favoritosRe = [];
-                response.data.rows.forEach(element => {
-                    favoritosRe.push(element.favorito);
-                });
-                dispatch(initialFavoritos(favoritosRe));
-                dispatch(guardarIncidenciasOriginals(response.data.rows));
-                setLoad(false);
-            })
-            .catch(error => {
-            });
-    }, []);
-
-    const handleScroll = (event) => {
-        console.log(event)
-    }
-    const mapeoIncidencias = () => {
+  useEffect(() => {
+    dispatch(guardarUsuario(token));
 
     loadSecciones()
       .then((response) => {
@@ -157,10 +98,9 @@ export default function MainHeader({ navigation, props }) {
         setLoad(false);
       })
       .catch((error) => {});
-  }
+  }, []);
 
   const handleScroll = (event) => {
-    alert(1);
     console.log(event);
   };
   const mapeoIncidencias = () => {
