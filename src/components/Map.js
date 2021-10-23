@@ -29,7 +29,7 @@ export default function Map({ navigation, cantidadIncidencias, incidencias, filt
 
     useEffect(() => {
         const dir = navigator.geolocation.getCurrentPosition({"latitude": 21.84, "longitude" : -78.76194})
-        alert("dir " + JSON.stringify(dir));
+        
         setCurrentLocation();
     }, []);
     const MarkerChoice = async (choice) => {

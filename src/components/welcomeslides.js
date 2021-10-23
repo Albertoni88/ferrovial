@@ -169,7 +169,7 @@ export default function WelcomeSlides({ navigation }) {
                                             }
                                         })
                                         .catch(error => {
-                                            alert("error1 " + error)
+                                            
                                         });
                                 } else {
                                     navigation.navigate('Login');

@@ -61,6 +61,7 @@ export default function CrearIncidencia({ navigation, props }) {
     const [descripcion, setDescripcion] = useState('');
     const [direccion, setDireccion] = useState('');
     const [geo, setGeo] = useState({});
+    const [address, setAddress] = useState('');
 
 
     const dispatch = useReduxDispatch();
@@ -129,6 +130,7 @@ export default function CrearIncidencia({ navigation, props }) {
         let location = await Location.getCurrentPositionAsync({});
         dispatch(saveLocation(location));
         setLocation(location);
+        
     };
 
     const guardarInc = async () => {
@@ -483,7 +485,7 @@ export default function CrearIncidencia({ navigation, props }) {
                                         letterSpacing: 0,
                                         color: "#9d9d9d"
                                     }}>
-                                        {geoGuardada === false ? 'Geolocalización de la ubicación' : 'Ubicación guardada'}
+                                        {geoGuardada === false ? 'Geolocalización de la ubicación' : address}
                                     </Text>
                                     {/* <Icon
                                 style={{
@@ -741,8 +743,8 @@ export default function CrearIncidencia({ navigation, props }) {
 
 
                         <MapView.Marker
-                            onDragEnd={(e) => {
-                                console.log("e.nativeEvent ", e.nativeEvent);
+                            onDragEnd={async (e) => {
+                                //console.log("e.nativeEvent ", e.nativeEvent);
 
                                 setLocation({
                                     "coords": {
@@ -750,23 +752,68 @@ export default function CrearIncidencia({ navigation, props }) {
                                         "longitude": e.nativeEvent.coordinate.longitude
                                     }
                                 });
-
-                                Alert.alert(
-                                    'Ubicación',
-                                    'Desea esta ubicación?',
-                                    [
-                                        { text: 'No', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-                                        // { text: 'Yes', onPress: () => BackHandler.exitApp() },
-                                        {
-                                            text: 'Si', onPress: () => {
-                                                setgeoGuardada(true);
-                                                setMapa(false);
-                                                setWere('back');
-                                            }
-                                        },
-                                    ],
-                                    { cancelable: false });
-                            }}
+                                
+                                let address = await Location.reverseGeocodeAsync({
+                                    "latitude": location.coords.latitude,
+                                    "longitude": location.coords.longitude
+                                });
+                                console.log("asdasdasd ", address);
+                                var city = address[0].city;
+                                var district = address[0].district;
+                                var street = address[0].street;
+                                var final = '';
+                                if (city !== null && city !== undefined) {
+                                    final += city + " ";
+                                }
+                                if (district !== null && district !== undefined) {
+                                    final += district + " ";
+                                }
+                                if (street !== null && street !== undefined) {
+                                    final += street;
+                                }
+                                //alert(final)
+                                setAddress(final)
+                                setMapa(false);
+                                setgeoGuardada(true);
+                                setWere('back');
+                                //setLocation(location);
+                                // Alert.alert(
+                                //     'Ubicación',
+                                //     'Desea esta ubicación?',
+                                //     [
+                                //         { text: 'No', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                                //         // { text: 'Yes', onPress: () => BackHandler.exitApp() },
+                                //         {
+                                //             text: 'Si', onPress: async () => {
+                                //                 //setLocation(location);
+                                //                 setgeoGuardada(true);
+                                //                 setWere('back');
+                                //                 let address = await Location.reverseGeocodeAsync({
+                                //                     "latitude": location.coords.latitude,
+                                //                     "longitude": location.coords.longitude
+                                //                 });
+                                //                 var city = address[0].city;
+                                //                 var district = address[0].district;
+                                //                 var street = address[0].street;
+                                //                 var final = '';
+                                //                 if (city !== null && city !== undefined) {
+                                //                     final += city + " ";
+                                //                 }
+                                //                 if (district !== null && district !== undefined) {
+                                //                     final += district + " ";
+                                //                 }
+                                //                 if (street !== null && street !== undefined) {
+                                //                     final += street;
+                                //                 }
+                                //                 //alert(final)
+                                //                 setAddress(final)
+                                //                 setMapa(false);
+                                //             }
+                                //         },
+                                //     ],
+                                //     { cancelable: false });
+                            }
+                            }
                             draggable
                             onPress={() => {
                             }}
@@ -780,10 +827,35 @@ export default function CrearIncidencia({ navigation, props }) {
                         </MapView.Marker>
                     </MapView>
                     <TouchableOpacity
-                        onPress={() => {
-                            setgeoGuardada(true);
+                        onPress={async () => {
+                            //setLocation(location);
+                            
+                            
+                            
+                            //alert("location " + JSON.stringify(location))
+                            let address = await Location.reverseGeocodeAsync({
+                                "latitude": location.coords.latitude,
+                                "longitude": location.coords.longitude
+                            });
+                            // var city = address[0].city;
+                            var district = address[0].district;
+                            var street = address[0].street;
+                            var final = '';
+                            // if (city !== null && city !== undefined) {
+                            //     final += city + " ";
+                            // }
+                            if (district !== null && district !== undefined) {
+                                final += district + " ";
+                            }
+                            if (street !== null && street !== undefined) {
+                                final += street;
+                            }
+                            //alert(final)
+                            setAddress(final);
                             setMapa(false);
+                            setgeoGuardada(true);
                             setWere('back');
+                            setLocation(location);
                         }}
                         style={styles.save}>
                         <Text style={{

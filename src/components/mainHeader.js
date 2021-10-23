@@ -97,7 +97,6 @@ export default function MainHeader({ navigation, props }) {
     }, []);
 
     const handleScroll = (event) => {
-        alert(1)
         console.log(event)
     }
     const mapeoIncidencias = () => {

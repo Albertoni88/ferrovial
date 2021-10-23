@@ -93,7 +93,7 @@ export default function CreateAccount({ navigation, props }) {
                                             }
                                         })
                                         .catch(error => {
-                                            alert("error1 " + error)
+                                            //alert("error1 " + error)
                                         });
                                     //navigation.navigate('Login');
                                 }
