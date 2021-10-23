@@ -248,7 +248,7 @@ export default function CrearIncidencia({ navigation, props }) {
                     style={{ backgroundColor: 'transparent' }}
                     resetScrollToCoords={{ x: 0, y: 0 }}
                     contentContainerStyle={{ flex: 1 }}
-                    scrollEnabled={false}
+                    scrollEnabled={true}
                 >
                     <ScrollView style={{ flex: 1 }}>
                         <View style={{}}>
