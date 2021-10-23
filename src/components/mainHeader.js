@@ -66,7 +66,7 @@ export default function MainHeader({ navigation, props }) {
     const incidenciasOriginals = useReduxSelector((state) => state.incidencia.incidenciasOriginals);
     const token = useReduxSelector((state) => state.user.access_token);
     const user = useReduxSelector((state) => state.user.userInfo);
-    const [end, setEnd] = useState(false);
+    const [end, setEnd] = useState(true);
     const [load, setLoad] = useState(true)
 
 
