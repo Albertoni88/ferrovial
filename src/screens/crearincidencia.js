@@ -9,7 +9,8 @@ import MapView, {
     PROVIDER_GOOGLE,
 } from 'react-native-maps';
 import * as Location from 'expo-location';
-
+// import Geocoder from 'react-native-geocoding';
+import Geocoder from 'react-native-geocoder';
 import { Button, ScrollView, Permission, ActivityIndicator, Dimensions, Image, ImageBackground, TextInput, View, Text, TouchableOpacity, Modal, Alert, Platform, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import HeaderCrearIncidencia from '../components/headerCrearIncidencia';
@@ -27,7 +28,11 @@ import {
     guardarIncidenciaRedux,
     cargarIncidenciaDetalles
 } from '../store/actions/incidenciaActions';
+import { saveLocation } from '../store/actions/userActions';
+
 import SVG from '../components/svg';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -57,6 +62,7 @@ export default function CrearIncidencia({ navigation, props }) {
 
     const dispatch = useReduxDispatch();
     const token = useReduxSelector((state) => state.user.access_token);
+    const locationUser = useReduxSelector((state) => state.user.location);
     const idArchivo = useReduxSelector((state) => state.user.idArchivo);
     const [creadaIncidencia, setCreadaIncidencia] = useState(false);
     const incidenciasRedux = useReduxSelector((state) => state.incidencia.incidencias);
@@ -64,14 +70,50 @@ export default function CrearIncidencia({ navigation, props }) {
     const [mapa, setMapa] = useState(false);
     const [geoGuardada, setgeoGuardada] = useState(false);
     const [tomadaFoto, setTomadaFoto] = useState(false);
+    const [were, setWere] = useState('back');
 
     var uno = createRef();
     var dos = createRef();
     var tres = createRef();
     var cuatro = createRef();
     var cinco = createRef();
-
+    const NY = {
+        lat: 40.7809261,
+        lng: -73.9637594
+      };
     useEffect(() => {
+        //Geocoder.init("AIzaSyAqkCacdKeQKy_A3lmqlrZforWvMTLtp64");
+//Geocoder.fallbackToGoogle("AIzaSyAqkCacdKeQKy_A3lmqlrZforWvMTLtp64");
+
+        
+          
+          Geocoder.geocodePosition(NY).then(res => {
+              console.log("res ", res)
+              // res is an Array of geocoding object (see below)
+          })
+          .catch(err => console.log(err))
+        // Geocoder.from(21.84, -78.76194)
+        // .then(json => {
+        // 	var location = json.results[0].geometry.location;
+        // 	console.log(location);
+        // })
+        // .catch(error => console.warn(error));
+
+        // Geocoder.from(21.84, -78.76194)
+        // .then(json => {
+        //     console.log(json);
+        //     var addressComponent = json.results[0].address_components;
+            
+        //     console.log(addressComponent);
+        // })
+        // .catch(error => console.warn(error));
+
+        if (locationUser === null || locationUser === undefined) {
+            setCurrentLocation();
+        } else {
+            setLocation(locationUser);
+        }
+
         onHandlePermission();
     }, []);
 
@@ -82,7 +124,7 @@ export default function CrearIncidencia({ navigation, props }) {
             return;
         }
         let location = await Location.getCurrentPositionAsync({});
-
+        dispatch(saveLocation(location));
         setLocation(location);
     };
 
@@ -91,8 +133,8 @@ export default function CrearIncidencia({ navigation, props }) {
         var n = d.getMilliseconds();
         const generatedNombre = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) + n;
 
-        if (titulo === '' || descripcion === '') {
-            alert("El título y la descrición son obligatorios");
+        if (titulo === '' || descripcion === '' || photo === null || photo === undefined || photo === '') {
+            alert("El título, la descrición y la foto son obligatorios");
         } else {
             var imagenes = [];
             imagenes.push({
@@ -187,9 +229,13 @@ export default function CrearIncidencia({ navigation, props }) {
                 : Camera.Constants.Type.back
         );
     };
+    const closeMap = () => {
+        setMapa(false);
+        setWere('back');
+    }
     return (
         <View style={styles.container}>
-            <HeaderCrearIncidencia navigation={navigation} />
+            <HeaderCrearIncidencia were={were} closemap={closeMap} navigation={navigation} />
             {
                 mapa === false &&
                 <ScrollView style={{ flex: 1 }}>
@@ -198,7 +244,7 @@ export default function CrearIncidencia({ navigation, props }) {
                             textAlign: 'left',
                             marginTop: (windowHeight * 10) / 100,
                             marginLeft: (windowWidth * 4.3) / 100,
-                            width: 42,
+                            width: 55,
                             height: 22,
                             fontFamily: 'nunito-semibold',
                             fontSize: 16,
@@ -209,7 +255,7 @@ export default function CrearIncidencia({ navigation, props }) {
 
 
                         }}>
-                            Título
+                            *Título
                         </Text>
                         <TextInput
                             onSubmitEditing={() => { dos.focus(); }}
@@ -217,7 +263,7 @@ export default function CrearIncidencia({ navigation, props }) {
                             returnKeyType="next"
 
                             value={titulo}
-                            placeholder={'*Pon un título corto y conciso...'}
+                            placeholder={'Pon un título corto y conciso...'}
                             placeholderTextColor={COLORS.primary}
                             style={styles.inputtitulo}
                             placeholderStyle={{
@@ -241,7 +287,7 @@ export default function CrearIncidencia({ navigation, props }) {
                             textAlign: 'left',
                             marginTop: (windowHeight * 1.47) / 100,
                             marginLeft: (windowWidth * 4.3) / 100,
-                            width: 85,
+                            width: 95,
                             height: 22,
                             fontFamily: 'nunito-semibold',
                             fontSize: 16,
@@ -250,18 +296,33 @@ export default function CrearIncidencia({ navigation, props }) {
                             letterSpacing: 0,
                             color: 'white',
                         }}>
-                            Descripción
+                            *Descripción
                         </Text>
                         <TextInput
                             ref={(input) => { dos = input; }}
-                            onSubmitEditing={() => { tres.focus(); }}
+                            // onBlur={()=>{
+                            //     if(descripcion === ''){
+                            //         setDescripcion('Describe la incidencia de forma clara...') 
+                            //         dos.current.reset();                            
+                            //         alert("des " + descripcion)
+                            //     }
+                            //     //tres.focus();
+                            // }}
+                            onSubmitEditing={() => { 
+                                // if(descripcion === ''){
+                                //     setDescripcion('Describe la incidencia de forma clara...')                             
+                                // }                  
+                                // dos.clear();              
+                                // setDescripcion('Describe la incidencia de forma clara...') 
+                                tres.focus(); 
+                            }}
                             blurOnSubmit={false}
                             returnKeyType="next"
 
                             value={descripcion}
                             multiline={true}
                             numberOfLines={3}
-                            placeholder={'*Describe la incidencia de forma clara...'}
+                            placeholder={'Describe la incidencia de forma clara...'}
                             placeholderTextColor={COLORS.primary}
                             style={styles.descripcion}
                             onChangeText={(descripcion) => {
@@ -273,7 +334,7 @@ export default function CrearIncidencia({ navigation, props }) {
                             // fontSize: 15,
                             // fontWeight: 'bold',
                             // color: 'white'
-                            width: 102,
+                            width: 115,
                             height: 22,
                             fontFamily: 'nunito-semibold',
                             fontSize: 16,
@@ -284,29 +345,35 @@ export default function CrearIncidencia({ navigation, props }) {
                             marginTop: (windowHeight * 1.47) / 100,
                             marginLeft: (windowWidth * 4.3) / 100,
                         }}>
-                            Sube una foto
+                            *Sube una foto
                         </Text>
                         <View
 
-                            style={ tomadaFoto === true ? styles.descripcion1 : styles.descripcion}
+                            style={tomadaFoto === true ? styles.descripcion1 : styles.descripcion}
                         >
                             {
                                 tomadaFoto === true &&
                                 // <AntDesign name='checkcircleo' size={32} color={'rgba(0, 0, 0, 0.26)'} />
-                                <View style={{
-                                    position: 'absolute',
-                                    width: '100%',
-                                    height: '100%',
-                                    // flex : 1
-                                }}>
+                                <View
+                                    // ref={(input) => { tres = input; }}
+                                    // onSubmitEditing={() => { cuatro.focus(); }}
+                                    // blurOnSubmit={false}
+                                    // returnKeyType="next"
+
+                                    style={{
+                                        position: 'absolute',
+                                        width: '100%',
+                                        height: '100%',
+                                        // flex : 1
+                                    }}>
                                     <ImageBackground style={{
                                         width: '100%',
                                         height: '100%',
                                         resizeMode: 'cover',
-                                        borderRadius : 5
+                                        borderRadius: 5
                                         // flex: 1
                                     }}
-                                    imageStyle = {{ borderRadius : 8, width : '100%', height : '100%' }}
+                                        imageStyle={{ borderRadius: 8, width: '100%', height: '100%' }}
                                         // source={{ uri: photo }} />
                                         source={{ uri: `data:image/jpeg;base64,${photo}` }}
 
@@ -332,7 +399,8 @@ export default function CrearIncidencia({ navigation, props }) {
                             name="camera-outline" size={75}
                             color={'rgba(0, 0, 0, 0.26)'}
                         /> */}
-                            <View style={{
+                            <View                             
+                            style={{
                                 width: 73,
                                 height: 58,
                                 //alignContent : 'center',
@@ -342,8 +410,14 @@ export default function CrearIncidencia({ navigation, props }) {
                             }}>
                                 {
                                     tomadaFoto === false &&
+
                                     < TouchableOpacity
-                                        disabled = {hasPermission === null || hasPermission === false}
+                                        ref={(input) => { tres = input; }}
+                                        onSubmitEditing={() => { cuatro.focus(); }}
+                                        blurOnSubmit={false}
+                                        returnKeyType="next"
+
+                                        disabled={hasPermission === null || hasPermission === false}
                                         onPress={() => {
                                             //if(hasPermission ===)                                            
                                             showCamera(true);
@@ -374,8 +448,11 @@ export default function CrearIncidencia({ navigation, props }) {
                                 Donde ha sido la incidencia?
                             </Text>
                             <View
+
                                 ref={(input) => { cuatro = input; }}
                                 onSubmitEditing={() => { cinco.focus(); }}
+                                blurOnSubmit={false}
+                                returnKeyType="next"
                                 // blurOnSubmit={false}
                                 // returnKeyType="next"
                                 style={styles.localizacion}
@@ -418,8 +495,9 @@ export default function CrearIncidencia({ navigation, props }) {
                                     position: 'absolute'
                                 }}>
                                     <TouchableOpacity onPress={() => {
-                                        setCurrentLocation();
+                                        // setCurrentLocation();
                                         setMapa(true);
+                                        setWere('map');
                                     }}>
                                         <SVG nombre={'Ubicacion'} width={30} height={30} ></SVG>
                                     </TouchableOpacity>
@@ -650,7 +728,7 @@ export default function CrearIncidencia({ navigation, props }) {
                         <MapView.Marker
                             onDragEnd={(e) => {
                                 console.log("e.nativeEvent ", e.nativeEvent);
-                                
+
                                 setLocation({
                                     "coords": {
                                         "latitude": e.nativeEvent.coordinate.latitude,
@@ -668,6 +746,7 @@ export default function CrearIncidencia({ navigation, props }) {
                                             text: 'Si', onPress: () => {
                                                 setgeoGuardada(true);
                                                 setMapa(false);
+                                                setWere('back');
                                             }
                                         },
                                     ],
@@ -678,8 +757,38 @@ export default function CrearIncidencia({ navigation, props }) {
                             }}
                             tracksViewChanges={false}
                             coordinate={{ latitude: location.coords.latitude, longitude: location.coords.longitude }}
-                        />
+                        >
+                            {/* <View style={{ zIndex: 1111, justifyContent: 'center', alignItems: 'center', height: 35, width: 35, borderWidth: 3 }}>
+                                <Image source={require('../assets/navigate-icon.png')} style={{ zIndex : 11111, borderWidth: 3, height: 35, width: 35 }} />
+                            </View> */}
+                            <MaterialCommunityIcons name="map-marker-radius-outline" size={40} color={COLORS.primary} />
+                        </MapView.Marker>
                     </MapView>
+                    <TouchableOpacity
+                        onPress={() => {
+                            setgeoGuardada(true);
+                            setMapa(false);
+                            setWere('back');
+                        }}
+                        style={styles.save}>
+                        <Text style={{
+                            alignItems: 'center',
+                            alignSelf: 'center',
+                            textAlign: 'center',
+                            alignItems: 'center',
+                            width: 175,
+                            height: 24,
+                            fontFamily: "nunito-bold",
+                            fontSize: 18,
+                            fontWeight: "bold",
+                            fontStyle: "normal",
+                            letterSpacing: 0.45,
+                            textAlign: "center",
+                            color: 'white'
+                        }}>
+                            Guardar ubicación
+                        </Text>
+                    </TouchableOpacity>
                 </View>
             }
         </View >
@@ -850,6 +959,24 @@ const styles = StyleSheet.create({
         height: 44,
         borderRadius: 22,
         backgroundColor: 'white',
+        shadowColor: "rgba(0, 0, 0, 0.1)",
+        shadowOffset: {
+            width: 0,
+            height: 4
+        },
+        shadowRadius: 10,
+        shadowOpacity: 1
+    },
+    save: {
+        bottom: 20,
+        position: 'absolute',
+        alignItems: 'center',
+        justifyContent: 'center',
+        alignSelf: 'center',
+        width: 210,
+        height: 44,
+        borderRadius: 22,
+        backgroundColor: COLORS.primary,
         shadowColor: "rgba(0, 0, 0, 0.1)",
         shadowOffset: {
             width: 0,

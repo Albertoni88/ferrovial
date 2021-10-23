@@ -16,6 +16,9 @@ import {
     Alert,
     Platform,
     StyleSheet,
+    KeyboardAvoidingView,
+    Keyboard,
+    TouchableWithoutFeedback,
 } from 'react-native';
 import { COLORS } from '../constants';
 import {
@@ -31,6 +34,7 @@ const windowHeight = Dimensions.get('window').height;
 import Svg, { Path } from 'react-native-svg';
 import LOGO from '../components/logo';
 import SVG from '../components/svg';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default function Login({ props, navigation }) {
     const [name, setName] = useState('');
@@ -76,173 +80,198 @@ export default function Login({ props, navigation }) {
         // <Fragment>
         //     <SafeAreaView style={{ flex: 0, backgroundColor: COLORS.primary }} />
         //     <SafeAreaView style={{ flex: 1, }}>
-                
-                <ImageBackground
-                    // source={require('../assets/Bitmap.jpg')}
-                    source={require('../assets/fondo-login.jpg')}
+
+
+        // <KeyboardAvoidingView
+        //     style={{ flex: 1, backgroundColor: '#fff' }}
+        //     behavior={Platform.OS === "ios" ? "padding" : "height"}
+        //     //keyboardVerticalOffset={200}
+        //     enabled = {true}>
+        <KeyboardAwareScrollView
+            style={{ backgroundColor: '#4c69a5' }}
+            resetScrollToCoords={{ x: 0, y: 0 }}
+            contentContainerStyle={{flex : 1}}
+            scrollEnabled={false}
+        >
+            <ImageBackground
+                // source={require('../assets/Bitmap.jpg')}
+                source={require('../assets/fondo-login.jpg')}
+                style={{
+                    flex: 1,
+                    height: '100%',
+                }}
+                imageStyle={{ height: '100%' }}>
+                {/* <ScrollView style={{ flex: 1, }}> */}
+
+                <View
                     style={{
+                        textAlign: 'center',
+                        alignItems: 'center',
                         flex: 1,
-                        height: '100%',
-                    }}
-                    imageStyle={{ height: '100%' }}>
-                    <ScrollView style={{ flex: 1, height: '100%' }}>
+                        height: windowHeight,
+                    }}>
+                    <View
+                        style={{
+                            alignContent: 'center',
+                            // marginTop: 100,
+                            marginTop: (windowHeight * 12) / 100,
+                            flexDirection: 'row',
+                            // height: 64,
+                            height: (windowHeight * 7.8) / 100,
+                            // width: 228
+                            width: (windowWidth * 60.8) / 100,
+                            marginLeft: 72,
+                            marginRight: 74,
+                        }}>
                         <View
                             style={{
+                                zIndex: 1111111,
+                                width: (windowWidth * 61) / 100,
+                                height: (windowHeight * 12.9) / 100,
+                            }}>
+                            {/* <LOGO /> */}
+                            <SVG
+                                nombre={'Logo'}
+                                width={(windowWidth * 61) / 100}
+                                height={(windowHeight * 12.9) / 100}
+                            />
+                        </View>
+                        {/* <Image style={styles.logo} source={require('../assets/group9.png')}></Image> */}
+                    </View>
+                    {/* <KeyboardAvoidingView
+                    behavior={Platform.OS === "ios" ? "padding" : "height"}
+                    style={{flex : 1}}
+                >
+                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */}
+                    <View
+                        style={{
+                            // marginTop: 219,
+                            marginTop: (windowHeight * 26.97) / 100,
+                            flexDirection: 'column',
+                            flex: 1
+                        }}>
+                        <TextInput
+                            keyboardType="email-address"
+                            autoCapitalize='none'
+                            placeholder={'email'}
+                            onSubmitEditing={() => {
+                                dos.focus();
+                            }}
+                            blurOnSubmit={false}
+                            returnKeyType="next"
+                            placeholderTextColor={'white'}
+                            style={styles.inputuser}
+                            onChangeText={(name) => {
+                                setName(name);
+                            }}
+                        />
+                        <TextInput
+                            ref={(input) => {
+                                dos = input;
+                            }}
+                            secureTextEntry={true}
+                            placeholder={'contraseña'}
+                            placeholderTextColor={'white'}
+                            style={styles.inputpass}
+                            onChangeText={(pass) => {
+                                setPass(pass);
+                            }}
+                        />
+                        <TouchableOpacity
+                            onPress={() => {
+                                //navigation.navigate('Main');
+                                logIn();
+                            }}
+                            style={styles.session}>
+                            <Text
+                                style={{
+                                    alignSelf: 'center',
+                                    textAlign: 'center',
+                                    alignItems: 'center',
+                                    // width: 231,
+                                    // height: 18,
+                                    height:
+                                        Platform.OS === 'ios' ? (windowHeight * 2.2) / 100 : 22,
+                                    width: (windowWidth * 61.6) / 100,
+                                    fontFamily: 'montserrat-bold',
+                                    fontSize: 14,
+                                    fontWeight: 'bold',
+                                    fontStyle: 'normal',
+                                    letterSpacing: 0,
+                                    textAlign: 'center',
+                                    color: '#57233b',
+                                }}>
+                                Iniciar sesión
+                            </Text>
+                        </TouchableOpacity>
+                        <Text
+                            onPress={() => {
+                                navigation.navigate('ResetPassword');
+                            }}
+                            style={{
+                                fontFamily: 'montserrat-medium',
+                                // fontSize: 14,
+                                fontSize: (windowHeight * 1.72) / 100,
+                                fontWeight: '500',
+                                fontStyle: 'normal',
+                                letterSpacing: 0,
+                                textAlign: 'center',
+                                color: 'white',
+                                marginTop: (windowHeight * 2.9) / 100,
+                                //marginBottom: (windowHeight * 15) / 121
+                                marginBottom: (windowHeight * 14.9) / 100,
+                            }}>
+                            No recuerdo mi contraseña...
+                        </Text>
+                        <Text
+                            style={{
+                                fontFamily: 'montserrat-medium',
+                                // fontSize: 14,
+                                fontSize: (windowHeight * 1.72) / 100,
+                                fontWeight: '500',
+                                fontStyle: 'normal',
+                                letterSpacing: 0,
+                                textAlign: 'center',
+                                alignSelf: 'center',
+                                fontSize: 15,
                                 textAlign: 'center',
                                 alignItems: 'center',
-                                flex: 1,
-                                height: windowHeight,
+                                color: 'white',
                             }}>
-                            <View
+                            ¿Aún no tienes cuenta?
+                        </Text>
+                        <TouchableOpacity
+                            onPress={() => {
+                                navigation.navigate('CreateAccount');
+                            }}
+                            style={styles.crear}>
+                            <Text
                                 style={{
-                                    alignContent: 'center',
-                                    // marginTop: 100,
-                                    marginTop: (windowHeight * 12) / 100,
-                                    flexDirection: 'row',
-                                    // height: 64,
-                                    height: (windowHeight * 7.8) / 100,
-                                    // width: 228
-                                    width: (windowWidth * 60.8) / 100,
-                                    marginLeft: 72,
-                                    marginRight: 74,
+                                    // width: 105,
+                                    // height: 18,
+                                    height:
+                                        Platform.OS === 'ios' ? (windowHeight * 2.2) / 100 : 22,
+                                    width: (windowWidth * 28) / 100,
+                                    fontFamily: 'montserrat-bold',
+                                    fontSize: 14,
+                                    fontWeight: 'bold',
+                                    fontStyle: 'normal',
+                                    letterSpacing: 0,
+                                    textAlign: 'center',
+                                    color: '#57233b',
                                 }}>
-                                <View
-                                    style={{
-                                        zIndex: 1111111,
-                                        width: (windowWidth * 61) / 100,
-                                        height: (windowHeight * 12.9) / 100,
-                                    }}>
-                                    {/* <LOGO /> */}
-                                    <SVG
-                                        nombre={'Logo'}
-                                        width={(windowWidth * 61) / 100}
-                                        height={(windowHeight * 12.9) / 100}
-                                    />
-                                </View>
-                                {/* <Image style={styles.logo} source={require('../assets/group9.png')}></Image> */}
-                            </View>
-                            <View
-                                style={{
-                                    // marginTop: 219,
-                                    marginTop: (windowHeight * 26.97) / 100,
-                                    flexDirection: 'column',
-                                }}>
-                                <TextInput
-                                    placeholder={'email'}
-                                    onSubmitEditing={() => {
-                                        dos.focus();
-                                    }}
-                                    blurOnSubmit={false}
-                                    returnKeyType="next"
-                                    placeholderTextColor={'white'}
-                                    style={styles.inputuser}
-                                    onChangeText={(name) => {
-                                        setName(name);
-                                    }}
-                                />
-                                <TextInput
-                                    ref={(input) => {
-                                        dos = input;
-                                    }}
-                                    secureTextEntry={true}
-                                    placeholder={'contraseña'}
-                                    placeholderTextColor={'white'}
-                                    style={styles.inputpass}
-                                    onChangeText={(pass) => {
-                                        setPass(pass);
-                                    }}
-                                />
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        //navigation.navigate('Main');
-                                        logIn();
-                                    }}
-                                    style={styles.session}>
-                                    <Text
-                                        style={{
-                                            alignSelf: 'center',
-                                            textAlign: 'center',
-                                            alignItems: 'center',
-                                            // width: 231,
-                                            // height: 18,
-                                            height:
-                                                Platform.OS === 'ios' ? (windowHeight * 2.2) / 100 : 22,
-                                            width: (windowWidth * 61.6) / 100,
-                                            fontFamily: 'montserrat-bold',
-                                            fontSize: 14,
-                                            fontWeight: 'bold',
-                                            fontStyle: 'normal',
-                                            letterSpacing: 0,
-                                            textAlign: 'center',
-                                            color: '#57233b',
-                                        }}>
-                                        Iniciar sesión
-                                    </Text>
-                                </TouchableOpacity>
-                                <Text
-                                    onPress={() => {
-                                        navigation.navigate('ResetPassword');
-                                    }}
-                                    style={{
-                                        fontFamily: 'montserrat-medium',
-                                        // fontSize: 14,
-                                        fontSize: (windowHeight * 1.72) / 100,
-                                        fontWeight: '500',
-                                        fontStyle: 'normal',
-                                        letterSpacing: 0,
-                                        textAlign: 'center',
-                                        color: 'white',
-                                        marginTop: (windowHeight * 2.9) / 100,
-                                        //marginBottom: (windowHeight * 15) / 121
-                                        marginBottom: (windowHeight * 14.9) / 100,
-                                    }}>
-                                    No recuerdo mi contraseña...
-                                </Text>
-                                <Text
-                                    style={{
-                                        fontFamily: 'montserrat-medium',
-                                        // fontSize: 14,
-                                        fontSize: (windowHeight * 1.72) / 100,
-                                        fontWeight: '500',
-                                        fontStyle: 'normal',
-                                        letterSpacing: 0,
-                                        textAlign: 'center',
-                                        alignSelf: 'center',
-                                        fontSize: 15,
-                                        textAlign: 'center',
-                                        alignItems: 'center',
-                                        color: 'white',
-                                    }}>
-                                    ¿Aún no tienes cuenta?
-                                </Text>
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        navigation.navigate('CreateAccount');
-                                    }}
-                                    style={styles.crear}>
-                                    <Text
-                                        style={{
-                                            // width: 105,
-                                            // height: 18,
-                                            height:
-                                                Platform.OS === 'ios' ? (windowHeight * 2.2) / 100 : 22,
-                                            width: (windowWidth * 28) / 100,
-                                            fontFamily: 'montserrat-bold',
-                                            fontSize: 14,
-                                            fontWeight: 'bold',
-                                            fontStyle: 'normal',
-                                            letterSpacing: 0,
-                                            textAlign: 'center',
-                                            color: '#57233b',
-                                        }}>
-                                        {' '}
-                                        Crear cuenta{' '}
-                                    </Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    </ScrollView>
-                </ImageBackground>
+                                {' '}
+                                Crear cuenta{' '}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                    {/* </TouchableWithoutFeedback>
+                </KeyboardAvoidingView> */}
+                </View>
+                {/* </ScrollView> */}
+            </ImageBackground>
+        </KeyboardAwareScrollView>
+        // </KeyboardAvoidingView>
         //     </SafeAreaView>
         // </Fragment>
     );

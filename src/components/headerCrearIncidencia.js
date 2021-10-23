@@ -11,7 +11,7 @@ import SVG from '../components/svg';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-export default function HeaderCrearIncidencia({ navigation }) {
+export default function HeaderCrearIncidencia({ navigation, were, closemap }) {
 
     return (
         <View style={styles.containerWebView}>
@@ -23,7 +23,11 @@ export default function HeaderCrearIncidencia({ navigation }) {
                     <View style={styles.containerSVG}>
                         <TouchableOpacity
                             onPress={() => {
-                                navigation.goBack();
+                                if(were === 'back'){
+                                    navigation.goBack();
+                                } else {
+                                    closemap();
+                                }
                             }}
                         >
                             <SVG nombre={'VolverBlanco'} width={20} height={20} />
@@ -45,7 +49,7 @@ export default function HeaderCrearIncidencia({ navigation }) {
                 justifyContent: 'center',
                 alignSelf: 'center',
                 color: 'white',
-                marginTop: 50,
+                marginTop: 47,
                 position: 'absolute'
             }}>
                 Crear incidencia

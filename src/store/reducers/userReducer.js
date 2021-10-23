@@ -13,7 +13,8 @@ const initialState = {
   creadaIncidencia: false,
   favoritosRedux: [],
   pass: '',
-  userlogin: ''
+  userlogin: '',
+  location : null,
 };
 
 const userReducer = (state, action) => {
@@ -36,6 +37,10 @@ const userReducer = (state, action) => {
       newState.userInfo = null;
       newState.userlogin = null;
       newState.pass = null;
+      break;
+    }
+    case actionTypes.SAVE_LOCATION: {
+      newState.location = action.payload
       break;
     }
     case actionTypes.GUARDAR_CREADA: {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, createRef } from 'react';
 import { Button, ScrollView, ImageBackground, Dimensions, SafeAreaView, Image, TextInput, View, Text, TouchableOpacity, Alert, Platform, StyleSheet } from 'react-native';
 import { COLORS } from '../constants';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
@@ -44,102 +45,111 @@ export default function ResetPassword({ navigation, props }) {
     }
     return (
         // <SafeAreaView style={{ flex: 1 }}>
-        <ImageBackground
-            // source={require('../assets/Bitmap.jpg')}
-            source={require('../assets/fondo-login.jpg')}
-            style={{
-                flex: 1
-            }}
-        // imageStyle={styles.image}
+        <KeyboardAwareScrollView
+            style={{ backgroundColor: '#4c69a5' }}
+            resetScrollToCoords={{ x: 0, y: 0 }}
+            contentContainerStyle={{ flex: 1 }}
+            scrollEnabled={false}
         >
-            <ScrollView style={{ flex: 1 }}>
-                <View style={{ flex: 1, height: windowHeight - 20 }}>
-                    <View style={styles.goBack}>
-                        <View style={styles.containerSVG}>
+            <ImageBackground
+                // source={require('../assets/Bitmap.jpg')}
+                source={require('../assets/fondo-login.jpg')}
+                style={{
+                    flex: 1
+                }}
+            // imageStyle={styles.image}
+            >
+                <ScrollView style={{ flex: 1 }}>
+                    <View style={{ flex: 1, height: windowHeight - 20 }}>
+                        <View style={styles.goBack}>
+                            <View style={styles.containerSVG}>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        navigation.goBack();
+                                    }}
+                                    style={{
+                                        //borderWidth: 3,
+                                        height: 30,
+                                        width: 30
+                                    }}
+                                >
+                                    <SVG nombre={'VolverBlanco'} width={20} height={20} />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+
+                        <View style={{
+                            alignContent: 'center',
+                            flexDirection: 'row',
+                            marginTop: 20,
+                            height: (windowHeight * 7.8) / 100,
+                            width: (windowWidth * 60.8) / 100,
+                            marginLeft: 78,
+                            marginRight: 74
+                        }}>
+                            {/* <Image style={styles.logo} source={require('../assets/group9.png')}></Image> */}
+                            <View style={{ zIndex: 1111111, width: (windowWidth * 61) / 100, height: (windowHeight * 12.9) / 100 }}>
+                                {/* <LOGO /> */}
+                                <SVG nombre={'Logo'} width={(windowWidth * 61) / 100} height={(windowHeight * 12.9) / 100} />
+                            </View>
+                        </View>
+                        <View style={{ flexDirection: 'column' }}>
+                            <TextInput
+                                keyboardType="email-address"
+                                autoCapitalize='none'
+                                value={correo}
+                                placeholder={'email'}
+                                placeholderTextColor={'white'}
+                                style={styles.inputuser}
+                                onChangeText={(email) => {
+                                    setCorreo(email);
+                                }}
+                            />
                             <TouchableOpacity
                                 onPress={() => {
-                                    navigation.goBack();
+                                    Recuperar();
                                 }}
                                 style={{
-                                    //borderWidth: 3,
-                                    height: 30,
-                                    width: 30
-                                }}
-                            >
-                                <SVG nombre={'VolverBlanco'} width={20} height={20} />
+                                    width: 290,
+                                    height: 44,
+                                    borderRadius: 8,
+                                    backgroundColor: 'white',
+                                    justifyContent: 'center',
+                                    shadowColor: "rgba(0, 0, 0, 0.05)",
+                                    shadowOffset: {
+                                        width: 0,
+                                        height: 5
+                                    },
+                                    shadowRadius: 15,
+                                    shadowOpacity: 1,
+                                    borderStyle: "solid",
+                                    borderWidth: 1,
+                                    borderColor: "#dfdfdf",
+                                    textAlign: 'center',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    alignSelf: 'center',
+                                }}>
+                                <Text style={{
+                                    width: 231,
+                                    height: 18,
+                                    fontFamily: 'montserrat-bold',
+                                    fontSize: 14,
+                                    fontWeight: "bold",
+                                    fontStyle: "normal",
+                                    letterSpacing: 0,
+                                    textAlign: "center",
+                                    color: "#57233b",
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    alignSelf: 'center'
+                                }}> Recibir clave </Text>
                             </TouchableOpacity>
                         </View>
                     </View>
-
-                    <View style={{
-                        alignContent: 'center',
-                        flexDirection: 'row',
-                        marginTop: 20,
-                        height: (windowHeight * 7.8) / 100,
-                        width: (windowWidth * 60.8) / 100,
-                        marginLeft: 78,
-                        marginRight: 74
-                    }}>
-                        {/* <Image style={styles.logo} source={require('../assets/group9.png')}></Image> */}
-                        <View style={{ zIndex: 1111111, width: (windowWidth * 61) / 100, height: (windowHeight * 12.9) / 100 }}>
-                            {/* <LOGO /> */}
-                            <SVG nombre={'Logo'} width={(windowWidth * 61) / 100} height={(windowHeight * 12.9) / 100} />
-                        </View>
-                    </View>
-                    <View style={{ flexDirection: 'column' }}>
-                        <TextInput
-                            value={correo}
-                            placeholder={'email'}
-                            placeholderTextColor={'white'}
-                            style={styles.inputuser}
-                            onChangeText={(email) => {
-                                setCorreo(email);
-                            }}
-                        />
-                        <TouchableOpacity
-                            onPress={() => {
-                                Recuperar();
-                            }}
-                            style={{
-                                width: 290,
-                                height: 44,
-                                borderRadius: 8,
-                                backgroundColor: 'white',
-                                justifyContent: 'center',
-                                shadowColor: "rgba(0, 0, 0, 0.05)",
-                                shadowOffset: {
-                                    width: 0,
-                                    height: 5
-                                },
-                                shadowRadius: 15,
-                                shadowOpacity: 1,
-                                borderStyle: "solid",
-                                borderWidth: 1,
-                                borderColor: "#dfdfdf",
-                                textAlign: 'center',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                alignSelf: 'center',
-                            }}>
-                            <Text style={{
-                                width: 231,
-                                height: 18,
-                                fontFamily: 'montserrat-bold',
-                                fontSize: 14,
-                                fontWeight: "bold",
-                                fontStyle: "normal",
-                                letterSpacing: 0,
-                                textAlign: "center",
-                                color: "#57233b",
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                alignSelf: 'center'
-                            }}> Recibir clave </Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </ScrollView>
-        </ImageBackground>
+                </ScrollView>
+            </ImageBackground>
+        </KeyboardAwareScrollView>
         // </SafeAreaView>
     );
 }

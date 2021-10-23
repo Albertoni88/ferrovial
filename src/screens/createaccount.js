@@ -10,7 +10,7 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { registerAccount, getCSRFToken, loginUser, guardarToken } from '../store/actions/userActions';
 import { correoValidar } from '../constants/validation';
@@ -117,6 +117,12 @@ export default function CreateAccount({ navigation, props }) {
     }
     return (
         // <SafeAreaView style={{ flex: 1 }}>
+        <KeyboardAwareScrollView
+            style={{ backgroundColor: '#4c69a5' }}
+            resetScrollToCoords={{ x: 0, y: 0 }}
+            contentContainerStyle={{ flex: 1 }}
+            scrollEnabled={false}
+        >
             <ImageBackground
                 // source={require('../assets/Bitmap.jpg')}
                 source={require('../assets/fondo-login.jpg')}
@@ -126,7 +132,7 @@ export default function CreateAccount({ navigation, props }) {
             // imageStyle={styles.image}
             >
                 <ScrollView style={{ flex: 1 }}>
-                    <View style={{ flex: 1, height : windowHeight -20 }}>
+                    <View style={{ flex: 1, height: windowHeight - 20 }}>
                         <View style={styles.goBack}>
                             <View style={styles.containerSVG}>
                                 <TouchableOpacity
@@ -186,7 +192,8 @@ export default function CreateAccount({ navigation, props }) {
                                 blurOnSubmit={false}
                                 returnKeyType="next"
 
-                                keyboardType={'email-address'}
+                                keyboardType="email-address"
+                                autoCapitalize='none'
                                 placeholder={'email'}
                                 placeholderTextColor={'white'}
                                 style={styles.apellidos}
@@ -305,6 +312,7 @@ export default function CreateAccount({ navigation, props }) {
                     </View>
                 </ScrollView>
             </ImageBackground>
+        </KeyboardAwareScrollView>
         // </SafeAreaView>
     );
 }

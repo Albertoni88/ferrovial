@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createRef } from "react";
 import {
   useDispatch as useReduxDispatch,
   useSelector as useReduxSelector,
@@ -36,12 +36,16 @@ export default function EditarPerfil({ navigation, props }) {
   const [email, setEmail] = useState(user?.email);
   const [CSRF, setCSRF] = useState("");
 
+  var uno = createRef();
+  var dos = createRef();
+  var tres = createRef();
+
   useEffect(() => {
     getCSRFToken()
       .then((response) => {
         setCSRF(response.data);
       })
-      .catch((error) => {});
+      .catch((error) => { });
   }, []);
 
   const editarPerfil = async () => {
@@ -116,6 +120,12 @@ export default function EditarPerfil({ navigation, props }) {
             <TextInput
               // value={name}
               // value={user?.username}
+              onSubmitEditing={() => {
+                dos.focus();
+              }}
+              blurOnSubmit={false}
+              returnKeyType="next"
+
               value={name}
               placeholder={"Nombre"}
               placeholderTextColor={"white"}
@@ -129,6 +139,15 @@ export default function EditarPerfil({ navigation, props }) {
                         apellidos !== null && apellidos !== undefined && */}
             <TextInput
               // value={apellidos}
+              ref={(input) => {
+                dos = input;
+              }}
+              onSubmitEditing={() => {
+                tres.focus();
+              }}
+              blurOnSubmit={false}
+              returnKeyType="next"
+
               value={apellidos}
               placeholder={"Apellidos"}
               placeholderTextColor={"white"}
@@ -142,6 +161,9 @@ export default function EditarPerfil({ navigation, props }) {
                         email !== null && email !== undefined && */}
             <TextInput
               // value={email}
+              ref={(input) => {
+                tres = input;
+              }}
               value={email}
               placeholder={"Email"}
               placeholderTextColor={"white"}

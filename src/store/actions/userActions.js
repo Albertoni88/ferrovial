@@ -1,4 +1,4 @@
-import { GUARDAR_TOKEN, SET_FAVORITO, INITIAL_FAVORITOS, GUARDAR_SECCIONES_PERFIL, GUARDAR_FILTROS, GUARDAR_FILTROS_ORIGINALS, TOMAR_TOKEN, GUARDAR_MARCADOS, GUARDAR_MARCADOS_ARRAY, GUARDAR_MARCADOS_ORIGINALS, GUARDAR_USUARIO, GUARDAR_ARCHIVO, GUARDAR_CREADA, GUARDAR_INCIDENCIA_REDUX, LOGOUT } from "../types/userTypes";
+import { GUARDAR_TOKEN, SET_FAVORITO, INITIAL_FAVORITOS, GUARDAR_SECCIONES_PERFIL, GUARDAR_FILTROS, GUARDAR_FILTROS_ORIGINALS, TOMAR_TOKEN, GUARDAR_MARCADOS, GUARDAR_MARCADOS_ARRAY, GUARDAR_MARCADOS_ORIGINALS, GUARDAR_USUARIO, GUARDAR_ARCHIVO, GUARDAR_CREADA, GUARDAR_INCIDENCIA_REDUX, LOGOUT, SAVE_LOCATION } from "../types/userTypes";
 import axios from 'axios';
 import { URL_SERVER } from '../../constants/urls';
 
@@ -189,6 +189,10 @@ export const initialFavoritos = (value) => ({
 export const guardarSeccionesPerfil = (secciones) => ({
     type: GUARDAR_SECCIONES_PERFIL,
     payload: secciones
+})
+export const saveLocation = (location) => ({
+    type: SAVE_LOCATION,
+    payload: location
 })
 export const guardarFiltros = (filtros) => ({
     type: GUARDAR_FILTROS,

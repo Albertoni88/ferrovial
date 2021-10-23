@@ -75,8 +75,8 @@ export default function CarIncidencia({ navigation, props, incidencia, indice })
                     style={styles.imageContainer}
                     imageStyle={styles.image}>
                     {/* <LinearGradient
-                        colors={['transparent', 'transparent', 'white']}
-                        start={{ x: 0, y: 0.6 }}
+                        colors={['transparent', 'transparent', '#cbccd2']}
+                        start={{ x: 0, y: 0.7}}
                         end={{ x: 0, y: 1 }}
                         style={styles.linearGradient}
                     > */}

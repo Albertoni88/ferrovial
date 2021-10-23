@@ -28,6 +28,8 @@ export default function Map({ navigation, cantidadIncidencias, incidencias, filt
     const myRef = createRef();
 
     useEffect(() => {
+        const dir = navigator.geolocation.getCurrentPosition({"latitude": 21.84, "longitude" : -78.76194})
+        alert("dir " + JSON.stringify(dir));
         setCurrentLocation();
     }, []);
     const MarkerChoice = async (choice) => {
@@ -135,7 +137,7 @@ export default function Map({ navigation, cantidadIncidencias, incidencias, filt
                                         setRenderCard(true);
                                         MarkerChoice(i);
                                         //filtroMapa(marker.nombre);
-                                    }}
+                                    }}                                    
                                     tracksViewChanges={false}
                                     // coordinate={marker.geo}
                                     // coordinate={{latitude : 21.84, longitude : -78.76194}}

@@ -39,6 +39,12 @@ import Svg, { Path } from "react-native-svg";
 export default function MainHeader({ navigation, props }) {
 
 
+    const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
+        const paddingToBottom = 20;
+        return layoutMeasurement.height + contentOffset.y >=
+            contentSize.height - paddingToBottom;
+    };
+
     const memoIncidencias = React.useMemo(() =>
         // listOfItems.map(item => ({
         //     ...item,
@@ -48,6 +54,7 @@ export default function MainHeader({ navigation, props }) {
         mapeoIncidencias
         , [incidencias]
     )
+    const scrollRef = createRef();
     const dispatch = useReduxDispatch();
     const [open, setOpen] = useState(false);
     const [find, setFind] = useState(false);
@@ -89,7 +96,10 @@ export default function MainHeader({ navigation, props }) {
             });
     }, []);
 
-
+    const handleScroll = (event) => {
+        alert(1)
+        console.log(event)
+    }
     const mapeoIncidencias = () => {
 
         return incidencias.map((incidencia, indice) => {
@@ -148,7 +158,8 @@ export default function MainHeader({ navigation, props }) {
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 flex: 1,
-                                marginTop: 34
+                                marginTop: 55,
+                                // position : 'relative'
                             }}>
                                 {/* <View style={styles.containerSVGLogo}>
                                     <SVG nombre={'Logo'} width={200} height={50} />
@@ -386,7 +397,7 @@ export default function MainHeader({ navigation, props }) {
                             textAlign: 'left',
                             alignSelf: 'center',
                             marginLeft: -5,
-                            marginTop: 47,
+                            marginTop: 40,
                             //borderWidth : 3
                         }}>
                             Valdepeñas
@@ -463,6 +474,7 @@ export default function MainHeader({ navigation, props }) {
             {(showBody && map === false) &&
                 <View style={{ flex: 1 }}>
                     <ScrollView
+                        ref={scrollRef}
                         // onScrollEndDrag={() => {
                         //     setEnd(true);
                         // }}
@@ -472,9 +484,21 @@ export default function MainHeader({ navigation, props }) {
                         // onTouchEnd={() => {
                         //     setEnd(true);
                         // }}
-                        // onScrollBeginDrag={() => {
-                        //     setEnd(false);
-                        // }}
+                        // onScroll = {handleScroll} 
+                        onScroll={event => {
+                            console.log(event.nativeEvent.contentOffset.y)
+                        }}
+                        onScrollBeginDrag={() => {
+                            setEnd(false);
+                            console.log("being")
+                        }}
+                        onScroll={({ nativeEvent }) => {
+                            if (isCloseToBottom(nativeEvent)) {
+                                setEnd(true)
+                                console.log("end")
+                            }
+                        }}
+                        scrollEventThrottle={400}
                         style={{ flex: 1, opacity: find === false ? 1 : 0.3, }}
                         persistentScrollbar={true}
                         indicatorStyle={{ color: 'grey', }}
@@ -516,12 +540,12 @@ export default function MainHeader({ navigation, props }) {
             {(showBody && map === false) &&
 
                 <View style={{ position: 'absolute', bottom: 0, height: 100, width: '100%', zIndex: 0, backgroundColor: 'transparent' }}>
-                    {/* <LinearGradient
+                    <LinearGradient
                         colors={['transparent', 'transparent', end === true ? 'transparent' : COLORS.PALE_GREY]}
-                        start={{ x: 0, y: 0 }}
+                        start={{ x: 0, y: 0.2 }}
                         end={{ x: 0, y: 1 }}
                         style={styles.linearGradient}
-                    > */}
+                    >
                         <TouchableOpacity
                             onPress={() => {
                                 navigation.navigate('CrearIncidencia');
@@ -561,7 +585,7 @@ export default function MainHeader({ navigation, props }) {
                                 color: 'white'
                             }}> Crear incidencia </Text>
                         </TouchableOpacity>
-                    {/* </LinearGradient> */}
+                    </LinearGradient>
                 </View>
             }
             {/* </View> */}
@@ -657,8 +681,8 @@ const styles = StyleSheet.create({
         position: 'absolute',
         // marginTop: 30,
         // marginLeft: 12,
-        marginLeft: 12,
-        marginTop: 30,
+        marginLeft: 15,
+        marginTop: 51,
         width: 20,
         height: 20,
         zIndex: 111111
